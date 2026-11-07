@@ -46,7 +46,7 @@ Visual components are our own code. Behavior-heavy ones (dialogs, menus, popover
 
 ## Using it
 
-Import from `@/design-system`:
+The components live in your app, at `src/design-system/` (the shadcn CLI copies them there), so you import them from your own source through the `@/` alias. The `@sandilya/ui` npm package holds only the tokens, themes and Tailwind preset; never import components from it.
 
 ```tsx
 import { Card, CardContent, CardHeader, CardTitle } from '@/design-system';

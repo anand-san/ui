@@ -1,0 +1,10 @@
+// Cloudflare Workers static site for ui.sandilya.dev: Storybook, the
+// registry (/r) and llms.txt, built into dist/ by `bun run build`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ui",
+  "compatibility_date": "2026-11-07",
+  "assets": {
+    "directory": "./dist",
+  },
+}

@@ -56,7 +56,7 @@ bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json
 bunx shadcn@latest add https://ui.sandilya.dev/r/button.json
 ```
 
-Files land at `src/design-system/`, at the same paths as in this repo, and npm dependencies are installed for you. Import from the barrel:
+Files land at `src/design-system/`, at the same paths as in this repo, and npm dependencies are installed for you. The components are now your app's own source, so import them through your `@/` alias, never from `@sandilya/ui` (which holds only tokens, themes and the preset):
 
 ```tsx
 import {
@@ -122,7 +122,7 @@ The rules, the component guide and the migration table are in [`src/design-syste
 
 ### Releasing
 
-- **Site and registry**: Cloudflare Pages builds `main` with `bun run build` and serves `dist/` at ui.sandilya.dev.
+- **Site and registry**: Cloudflare Workers builds `main` with `bun run build`, then `npx wrangler deploy` serves `dist/` (see `wrangler.jsonc`) at ui.sandilya.dev.
 - **Tokens**: bump `packages/tokens/package.json`, then `cd packages/tokens && npm publish`. If a component needs the new tokens, the registry's `foundations` item picks up the new version range on the next build.
 - **Plugin**: bump `plugins/san-ui/.claude-plugin/plugin.json` when the skill changes.
 
