@@ -30,8 +30,8 @@ export const SemanticTokens: Story = {
           Use semantic tokens in components and screens. Each one names a job
           and has a light and a dark value. Switch the theme in the toolbar to
           see both. Every token lives in{' '}
-          <Code>src/design-system/tokens.css</Code>, with Tailwind names in{' '}
-          <Code>tailwind.preset.js</Code>.
+          <Code>packages/tokens/tokens.css</Code>, with Tailwind names in{' '}
+          <Code>packages/tokens/theme.css</Code>.
         </>
       }
     >
