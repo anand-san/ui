@@ -1,0 +1,27 @@
+/*
+ * san-ui base element styles. Import it with the other @imports at
+ * the top of the app's CSS; `@layer base` puts it after Tailwind's preflight.
+ * Components assume borders default to the border token and the page sits
+ * on the background token.
+ */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: hsl(var(--border));
+  }
+
+  html,
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: hsl(var(--highlight) / 0.55);
+    color: hsl(var(--highlight-foreground));
+  }
+}

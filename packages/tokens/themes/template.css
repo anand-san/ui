@@ -1,0 +1,61 @@
+/*
+ * Starting point for a new app's theme. Copy it into the app, rename it,
+ * and replace the values. It works as is, with a teal brand, a lemon
+ * highlighter and system fonts.
+ *
+ * Import after tokens.css. Everything else (surfaces, feedback colors,
+ * lines, radius) comes from the base and follows these hues.
+ *
+ * Checks before shipping a theme:
+ * - --brand-600 on white and white on --brand-600 are at least 4.5:1.
+ * - --highlight-300 behind --highlight-950 text is at least 4.5:1.
+ * - --tint-hue is the brand hue, or near it, so greys feel related.
+ * - Look at every Storybook story in light and dark.
+ */
+
+:root,
+.force-light-mode,
+.dark .force-light-mode {
+  /* Neutrals lean toward this hue; text and light shadows use --ink-hue */
+  --tint-hue: 190;
+  --ink-hue: 195;
+
+  /* Optional. Load the font files in the app. */
+  /* --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif; */
+  /* --font-display: 'Fraunces Variable', var(--font-sans); */
+
+  /* Brand ramp. --brand-600 is the primary button. */
+  --brand-50: 185 45% 96%;
+  --brand-100: 186 45% 91%;
+  --brand-200: 187 42% 82%;
+  --brand-300: 188 40% 69%;
+  --brand-400: 189 38% 53%;
+  --brand-500: 190 45% 40%;
+  --brand-600: 191 55% 31%;
+  --brand-700: 192 55% 25%;
+  --brand-800: 193 52% 20%;
+  --brand-900: 194 50% 16%;
+  --brand-950: 196 55% 9%;
+
+  /* Highlight ramp. --highlight-300 is the marker fill. */
+  --highlight-50: 60 100% 96%;
+  --highlight-100: 58 97% 88%;
+  --highlight-200: 56 95% 78%;
+  --highlight-300: 54 92% 66%;
+  --highlight-400: 51 90% 55%;
+  --highlight-500: 48 88% 47%;
+  --highlight-600: 44 85% 39%;
+  --highlight-700: 40 80% 32%;
+  --highlight-800: 36 70% 26%;
+  --highlight-900: 32 64% 21%;
+  --highlight-950: 30 70% 11%;
+}
+
+.dark {
+  --tint-hue: 195;
+  --ink-hue: 190;
+
+  /* Optional: the base uses brand-300 and highlight-300 here */
+  /* --primary: 188 50% 70%; */
+  /* --ring: 188 50% 64%; */
+}

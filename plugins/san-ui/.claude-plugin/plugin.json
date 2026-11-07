@@ -1,0 +1,11 @@
+{
+  "name": "san-ui",
+  "version": "0.1.0",
+  "description": "Build UI with san-ui: setup, themes, rules and the component catalog",
+  "author": {
+    "name": "Anand Sandilya"
+  },
+  "homepage": "https://ui.sandilya.dev",
+  "repository": "https://github.com/anand-san/ui",
+  "license": "MIT"
+}

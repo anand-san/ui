@@ -1,0 +1,16 @@
+{
+  "name": "san-ui",
+  "owner": {
+    "name": "Anand Sandilya"
+  },
+  "metadata": {
+    "description": "The san-ui design system for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "san-ui",
+      "source": "./plugins/san-ui",
+      "description": "Build UI with san-ui: setup, themes, rules and the component catalog"
+    }
+  ]
+}

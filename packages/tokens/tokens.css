@@ -1,0 +1,129 @@
+/*
+ * san-ui base tokens: every color role, light and dark.
+ *
+ * Values are bare HSL channels so Tailwind opacity modifiers keep working
+ * (bg-success/10, text-brand/80). Tailwind names for them live in
+ * tailwind.preset.js.
+ *
+ * This file holds what every app shares: the neutral surfaces, feedback
+ * colors, lines, radius and the paper reset. The brand comes from a theme
+ * (themes/*.css), imported after this file. A theme supplies:
+ *
+ *   --brand-50 … --brand-950       the primary color ramp
+ *   --highlight-50 … --highlight-950 the highlighter ramp
+ *   --tint-hue                     the hue neutrals lean toward
+ *   --ink-hue                      the hue of text and light-mode shadows
+ *   --font-sans, --font-display    optional, system fonts otherwise
+ *
+ * and may override any role below, usually primary, brand, highlight and
+ * ring in dark mode.
+ */
+
+/*
+ * Light values. `.dark .force-light-mode` is listed here so printed pages
+ * stay light inside dark mode; its specificity beats `.dark`.
+ */
+:root,
+.force-light-mode,
+.dark .force-light-mode {
+  color-scheme: light;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-sans);
+
+  /* Surfaces: a tinted canvas, white cards that sit on it */
+  --background: var(--tint-hue) 33% 99%;
+  --foreground: var(--ink-hue) 30% 13%; /* ink */
+  --surface: var(--tint-hue) 26% 96.5%; /* soft section cards */
+  --card: 0 0% 100%; /* outline cards */
+  --card-foreground: var(--ink-hue) 30% 13%;
+  --popover: 0 0% 100%; /* menus, popovers, dialogs */
+  --popover-foreground: var(--ink-hue) 30% 13%;
+  --muted: var(--tint-hue) 20% 93.5%;
+  --muted-foreground: var(--tint-hue) 10% 42%; /* secondary text, 5.6:1 on the canvas */
+
+  /* Actions and brand */
+  --primary: var(--brand-600); /* main buttons, selection, child card tints */
+  --primary-foreground: 0 0% 100%;
+  --brand: var(--brand-600);
+  --brand-foreground: 0 0% 100%;
+  --highlight: var(--highlight-300); /* highlighter fill */
+  --highlight-foreground: var(--highlight-950);
+  --destructive: 2 58% 47%; /* brick red, 5.6:1 on white */
+  --destructive-foreground: 0 0% 100%;
+
+  /* Feedback */
+  --success: 152 62% 27%; /* leaf green */
+  --success-foreground: 0 0% 100%;
+  --warning: 26 90% 36%; /* burnt orange, kept apart from a yellow highlight */
+  --warning-foreground: 0 0% 100%;
+  --info: 214 72% 44%; /* ink blue */
+  --info-foreground: 0 0% 100%;
+
+  /* Lines */
+  --border: var(--tint-hue) 20% 90%;
+  --input: var(--tint-hue) 16% 84%; /* a step darker than border, so fields read as fields */
+  --ring: var(--brand-500);
+
+  /* Shadows are tinted with ink, never pure black */
+  --shadow-color: var(--ink-hue) 30% 20%;
+
+  --radius: 0.625rem;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Surfaces: deep ink, not charcoal */
+  --background: var(--tint-hue) 20% 8%;
+  --foreground: var(--ink-hue) 22% 92%;
+  --surface: var(--tint-hue) 17% 11%;
+  --card: var(--tint-hue) 17% 11%;
+  --card-foreground: var(--ink-hue) 22% 92%;
+  --popover: var(--tint-hue) 17% 12.5%;
+  --popover-foreground: var(--ink-hue) 22% 92%;
+  --muted: var(--tint-hue) 14% 16%;
+  --muted-foreground: var(--ink-hue) 10% 66%;
+
+  /* Light brand steps with dark text on them; themes usually tune these */
+  --primary: var(--brand-300);
+  --primary-foreground: var(--brand-950);
+  --brand: var(--brand-300);
+  --brand-foreground: var(--brand-950);
+  --highlight: var(--highlight-300);
+  --highlight-foreground: var(--highlight-950);
+  --destructive: 2 62% 67%;
+  --destructive-foreground: 2 70% 14%;
+
+  --success: 150 46% 58%;
+  --success-foreground: 152 60% 10%;
+  --warning: 30 88% 62%;
+  --warning-foreground: 24 80% 12%;
+  --info: 214 85% 70%;
+  --info-foreground: 220 60% 14%;
+
+  --border: var(--tint-hue) 14% 18%;
+  --input: var(--tint-hue) 13% 25%;
+  --ring: var(--brand-400);
+
+  --shadow-color: var(--tint-hue) 40% 2%;
+}
+
+/*
+ * Printed pages (resumes, documents) are paper, not app: plain neutral
+ * greys and a print font, so the preview matches the download.
+ */
+.force-light-mode,
+.dark .force-light-mode {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --surface: 0 0% 98%;
+  --card-foreground: 0 0% 3.9%;
+  --popover-foreground: 0 0% 3.9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+
+  font-family: Helvetica, Arial, sans-serif;
+}

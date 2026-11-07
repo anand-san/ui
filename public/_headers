@@ -1,0 +1,8 @@
+# Cloudflare Pages headers for ui.sandilya.dev
+/r/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *

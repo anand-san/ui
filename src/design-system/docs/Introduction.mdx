@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# san-ui
+
+Shared foundations and components, built for Eloovor and meant for any app. The base (neutrals, feedback colors, type, spacing, radius and every component) is shared; each app brings its brand as a theme. Use the **Brand** toolbar to see the stories in the Eloovor theme or the teal template theme.
+
+The base is the tracker home page: soft section cards on the page canvas, tinted item cards inside them.
+
+## Ink and highlighter (the Eloovor theme)
+
+The look comes from the logo and from what job seekers already do on paper: mark up a job ad with a pen and a highlighter.
+
+- **Ink** is the logo violet. It carries the main actions, focus rings, checked controls and selection. The greys are the same ink, thinned, so nothing on screen is a dead neutral grey.
+- **Highlighter** is marigold, the second brand color. It is a fill, never text: matched keywords (`Mark`), "New" badges, Elo suggestions and text selection. If it is everywhere it stops meaning anything.
+- **Type** pairs Bricolage Grotesque for display, title and heading with Figtree for everything people read and operate. Figtree's round, even strokes echo the logo's lettering; Bricolage brings the personality, so it stays at heading sizes.
+- **Shape**: buttons are pills, like the logo's ring. Fields are softly rounded, cards a little more, dialogs most. Shadows are tinted with ink and only used on things that float.
+
+Resume previews and documents stay plain paper: neutral greys and Helvetica, the same font as the PDF.
+
+## Foundations
+
+- **Colors**: semantic tokens with light and dark values, three tint steps, and the supported ramps.
+- **Typography**: ten roles, from `display` to `code`. Pick the role, not the size.
+- **Spacing**: ten steps on the 4px grid, plus named roles like page gutter and card padding.
+
+## Components
+
+- **Text**: renders any type scale role. `Mark` is the highlighter.
+- **Card**: soft, tinted, outline and brand cards in three sizes, with header, title, count, description, action, content and footer parts.
+- **Button**: eight variants (including `inverse` for brand banners), five sizes, pill shape and a loading state.
+- **Badge**: seven tones (including `highlight`) in soft, solid and outline.
+- **Avatar**: an image with an initials fallback.
+- **Forms**: Field (label, control and message wired together), Input, Textarea, Label, Select, Checkbox, Switch, DatePicker and Calendar.
+- **PageHeader**: the title block of a page or a step.
+- **Overlays**: Dialog, AlertDialog, Sheet, Popover, DropdownMenu and Tooltip.
+- **Navigation**: Tabs, Accordion and NavigationMenu.
+- **Feedback**: Alert, Progress, ScoreRing, Skeleton, EmptyState and Toaster.
+- **Layout**: Separator and ScrollArea.
+
+Visual components are our own code. Behavior-heavy ones (dialogs, menus, popovers) wrap Radix primitives; see the README for why.
+
+## Using it
+
+Import from `@/design-system`:
+
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from '@/design-system';
+
+<Card>
+  <CardHeader>
+    <CardTitle icon={<History />} count={4}>
+      Recent
+    </CardTitle>
+  </CardHeader>
+  <CardContent>…</CardContent>
+</Card>;
+```
+
+Use the toolbar to switch between light and dark mode, and between brands. Every story should look right in all of them.
+
+To add it to an app:
+
+```bash
+bun add @sandilya/ui
+bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json
+```
+
+The color tokens, themes and Tailwind preset come from `@sandilya/ui`; the components are copied into the app at `src/design-system/`. The repository README at [github.com/anand-san/ui](https://github.com/anand-san/ui) has the full setup, the rules and the migration guide.

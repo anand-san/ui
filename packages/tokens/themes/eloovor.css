@@ -1,0 +1,62 @@
+/*
+ * Eloovor theme: "ink and highlighter".
+ *
+ * The logo violet does the work of a pen: primary actions, focus,
+ * selection. Neutrals are that same ink, thinned, so greys lean slightly
+ * violet instead of reading as dead grey. Marigold is the highlighter: a
+ * fill for the few things that should jump out, like matched keywords or
+ * Elo's suggestions. It is never used for text on white.
+ *
+ * Import after tokens.css. Fonts are loaded by the app
+ * (@fontsource-variable/figtree, @fontsource-variable/bricolage-grotesque).
+ */
+
+:root,
+.force-light-mode,
+.dark .force-light-mode {
+  --tint-hue: 252;
+  --ink-hue: 255;
+
+  --font-sans:
+    'Figtree Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+  --font-display:
+    'Bricolage Grotesque Variable', 'Figtree Variable', ui-sans-serif,
+    system-ui, sans-serif;
+
+  /* Brand ramp, built around the logo violet #574a7d (brand-600) */
+  --brand-50: 255 33% 97%;
+  --brand-100: 255 33% 94%;
+  --brand-200: 255 30% 87%;
+  --brand-300: 255 29% 77%;
+  --brand-400: 255 26% 64%;
+  --brand-500: 255 24% 51%;
+  --brand-600: 255 26% 39%;
+  --brand-700: 255 28% 32%;
+  --brand-800: 255 30% 25%;
+  --brand-900: 255 32% 19%;
+  --brand-950: 255 36% 12%;
+
+  /* Highlight ramp: marigold */
+  --highlight-50: 46 100% 96%;
+  --highlight-100: 45 97% 89%;
+  --highlight-200: 44 95% 79%;
+  --highlight-300: 42 93% 68%;
+  --highlight-400: 40 91% 58%;
+  --highlight-500: 37 88% 50%;
+  --highlight-600: 33 85% 42%;
+  --highlight-700: 29 80% 35%;
+  --highlight-800: 26 70% 29%;
+  --highlight-900: 24 64% 23%;
+  --highlight-950: 22 70% 12%;
+}
+
+.dark {
+  --tint-hue: 255;
+  --ink-hue: 250;
+
+  --primary: 255 48% 78%; /* lavender, dark text on it */
+  --brand: 255 44% 74%;
+  --highlight: 42 86% 62%;
+  --ring: 255 48% 72%;
+}

@@ -1,0 +1,8 @@
+@import '@fontsource-variable/figtree';
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
+@import '@sandilya/ui/tokens.css';
+@import '@sandilya/ui/base.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
