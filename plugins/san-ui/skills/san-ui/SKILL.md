@@ -5,9 +5,9 @@ description: Build and review React UI with the san-ui design system (tokens fro
 
 # san-ui
 
-A shared base (neutral surfaces, feedback colors, type scale, spacing, radius, about 30 React components on Tailwind CSS 3 and Radix) with each app's brand on top as a theme. Docs: https://ui.sandilya.dev.
+A shared base (neutral surfaces, feedback colors, type scale, spacing, radius, about 30 React components on Tailwind CSS 4 and Radix) with each app's brand on top as a theme. Docs: https://ui.sandilya.dev.
 
-- Tokens, themes, base styles and the Tailwind preset: the `@sandilya/ui` npm package.
+- Tokens, themes, base styles and the Tailwind theme: the `@sandilya/ui` npm package.
 - Components: copied into the app at `src/design-system/` from the shadcn registry at `https://ui.sandilya.dev/r/<item>.json`. The app owns these files; read them for props instead of guessing.
 
 ## First, find out where you are
@@ -51,7 +51,7 @@ The full component guide, the Card size table and the migration table (old class
 
 ## Themes
 
-A new app gets its own brand by copying `themes/template.css` from the tokens package and setting `--brand-*` and `--highlight-*` ramps, `--tint-hue`, `--ink-hue` and optionally `--font-sans` / `--font-display`. Values are bare HSL channels. Check 4.5:1 contrast for `brand-600` on white and `highlight-950` on `highlight-300`. Domain colors (like a pipeline status) go in the app's own CSS and `tailwind.config.js`, not in the theme. Details: [references/setup.md](references/setup.md#themes).
+A new app gets its own brand by copying `themes/template.css` from the tokens package and setting `--brand-*` and `--highlight-*` ramps, `--tint-hue`, `--ink-hue` and optionally `--font-sans` / `--font-display`. Values are bare HSL channels. Check 4.5:1 contrast for `brand-600` on white and `highlight-950` on `highlight-300`. Domain colors (like a pipeline status) go in the app's own CSS and its `@theme inline` block, not in the theme. Details: [references/setup.md](references/setup.md#themes).
 
 ## Before you finish
 

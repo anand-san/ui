@@ -4,7 +4,7 @@
 
 Shared foundations and components, extracted from Eloovor and meant for any app: a shared base (neutrals, feedback colors, type scale, spacing, radius, components) with each app's brand on top as a theme. Components are built and reviewed in Storybook first; screens are then moved onto them one at a time.
 
-Apps get this folder through the shadcn registry at ui.sandilya.dev (it lands at the same path, `src/design-system/`), and the tokens, themes and Tailwind preset from the `@sandilya/ui` npm package. Setup is in the repository README. Nothing here imports app code: domain UI built on it lives in the app. The Storybook guide **Guides / Used in Eloovor** shows one app doing that.
+Apps get this folder through the shadcn registry at ui.sandilya.dev (it lands at the same path, `src/design-system/`), and the tokens, themes and Tailwind theme from the `@sandilya/ui` npm package. Setup is in the repository README. Nothing here imports app code: domain UI built on it lives in the app. The Storybook guide **Guides / Used in Eloovor** shows one app doing that.
 
 ```bash
 bun run dev    # Storybook at http://localhost:6006; the Brand toolbar switches themes
@@ -35,10 +35,10 @@ packages/tokens/
 ├── themes/
 │   ├── eloovor.css       # the Eloovor brand: ramps, hues, fonts
 │   └── template.css      # a working starting point for a new app's theme
-└── tailwind-preset.js    # Tailwind names for the tokens
+└── theme.css            # Tailwind names for the tokens
 ```
 
-An app's CSS imports its fonts, `tokens.css`, one theme and `base.css`; its `tailwind.config.js` uses the preset and adds only its own domain colors and motion. App code never defines colors of its own; it uses the token classes.
+An app's CSS imports Tailwind, its fonts, `tokens.css`, one theme, `theme.css` and `base.css`, then adds only its own domain colors and motion in an `@theme inline` block. App code never defines colors of its own; it uses the token classes.
 
 ## Themes
 
@@ -54,7 +54,7 @@ An app's CSS imports its fonts, `tokens.css`, one theme and `base.css`; its `tai
 
 Set the hues and ramps for light mode on `:root, .force-light-mode, .dark .force-light-mode`, and the dark-mode hues on `.dark`. A theme may also override any role, usually `primary`, `brand`, `highlight` and `ring` in dark mode. Start a new app from `themes/template.css`, and check every story in both themes.
 
-Domain colors, like the statuses of an app's own workflow, belong to the app: define the variables in the app's CSS and their Tailwind names in its `tailwind.config.js`, then pass the classes to components like `StatusMenu`.
+Domain colors, like the statuses of an app's own workflow, belong to the app: define the variables in the app's CSS and their Tailwind names in its `@theme inline` block, then pass the classes to components like `StatusMenu`.
 
 ## Direction: pen and highlighter
 

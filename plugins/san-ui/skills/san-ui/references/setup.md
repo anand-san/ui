@@ -5,44 +5,34 @@
 The design system behind [Eloovor](https://www.eloovor.com), shared across apps: one base (neutrals, feedback colors, type scale, spacing, radius and about 30 React components) with each app's brand on top as a theme.
 
 - **Docs and Storybook**: [ui.sandilya.dev](https://ui.sandilya.dev)
-- **Tokens, themes and Tailwind preset**: [`@sandilya/ui`](https://www.npmjs.com/package/@sandilya/ui) on npm
+- **Tokens, themes and Tailwind theme**: [`@sandilya/ui`](https://www.npmjs.com/package/@sandilya/ui) on npm
 - **Components**: a [shadcn registry](https://ui.sandilya.dev/r/registry.json). The source is copied into your app, so you own it and AI tools can read it
 - **AI**: a Claude Code plugin with a skill that knows the rules (see [AI assistants](#ai-assistants))
 
-Stack: React 18, Tailwind CSS 3, Radix primitives, class-variance-authority, lucide-react.
+Stack: React 18, Tailwind CSS 4, Radix primitives, class-variance-authority, lucide-react.
 
 ## Add it to an app
 
-The app needs React, Tailwind CSS 3 and an `@/` alias that points at `src/` (in `tsconfig.json` and the bundler).
+The app needs React, Tailwind CSS 4 and an `@/` alias that points at `src/` (in `tsconfig.json` and the bundler).
 
-**1. Tokens and preset**
+**1. Tokens**
 
 ```bash
 bun add @sandilya/ui
-```
-
-```js
-// tailwind.config.js
-import preset from '@sandilya/ui';
-
-export default {
-  presets: [preset],
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
-};
 ```
 
 **2. A theme.** Copy [`themes/template.css`](https://github.com/anand-san/ui/blob/main/packages/tokens/themes/template.css) into the app as `src/theme.css` and set your brand (see [Themes](#themes)). Or use the Eloovor theme as is.
 
 ```css
 /* src/index.css */
+@import 'tailwindcss';
 @import '@sandilya/ui/tokens.css';
 @import './theme.css'; /* or '@sandilya/ui/themes/eloovor.css' */
+@import '@sandilya/ui/theme.css';
 @import '@sandilya/ui/base.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 ```
+
+`@sandilya/ui/theme.css` gives Tailwind the token names (`bg-primary`, `text-muted-foreground`, `rounded-xl`, `shadow-lg`…), the `dark:` variant, and the `tw-animate-css` animations the components use.
 
 Load your fonts in the app (the Eloovor theme expects `@fontsource-variable/figtree` and `@fontsource-variable/bricolage-grotesque`).
 
@@ -56,7 +46,7 @@ bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json
 bunx shadcn@latest add https://ui.sandilya.dev/r/button.json
 ```
 
-Files land at `src/design-system/`, at the same paths as in this repo, and npm dependencies are installed for you. The components are now your app's own source, so import them through your `@/` alias, never from `@sandilya/ui` (which holds only tokens, themes and the preset):
+Files land at `src/design-system/`, at the same paths as in this repo, and npm dependencies are installed for you. The components are now your app's own source, so import them through your `@/` alias, never from `@sandilya/ui` (which holds only tokens, themes and the Tailwind theme):
 
 ```tsx
 import {
@@ -84,7 +74,7 @@ To take updates later, run the same `add` command with `--overwrite` and review 
 
 Values are bare HSL channels (`191 55% 31%`) so Tailwind opacity modifiers work. Set light values on `:root, .force-light-mode, .dark .force-light-mode` and dark-mode hues on `.dark`; a theme may override any role, usually `primary`, `brand`, `highlight` and `ring` in dark mode. Check `brand-600` against white and `highlight-950` on `highlight-300` for at least 4.5:1 contrast.
 
-App-specific colors (Eloovor's pipeline statuses, say) belong to the app: define the variables in its CSS and their Tailwind names in its `tailwind.config.js`.
+App-specific colors (Eloovor's pipeline statuses, say) belong to the app: define the variables in its CSS and their Tailwind names in an `@theme inline` block in the same file.
 
 Dark mode is the `dark` class on an ancestor, usually `<html>`. `.force-light-mode` keeps a subtree light, for printed pages.
 
@@ -112,7 +102,7 @@ bun run build      # Storybook, registry and llms.txt in dist/
 
 ```
 src/design-system/      the components and foundations, as apps receive them
-packages/tokens/        @sandilya/ui: tokens.css, base.css, themes, Tailwind preset
+packages/tokens/        @sandilya/ui: tokens.css, theme.css, base.css, themes
 scripts/                registry.json and skill/llms.txt generators
 plugins/san-ui/ the Claude Code plugin and its skill
 .storybook/             the docs site, with a Brand toolbar to switch themes
