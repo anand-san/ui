@@ -11,12 +11,12 @@ import {
 import { cn } from '@/design-system/lib/cn';
 
 /**
- * Card, modelled on the tracker home page.
+ * Card: the building block of a dashboard page.
  *
- * A `soft` card is a section of a page (Recent, Your pipeline). A `tinted`
- * card is an item inside a section (one opportunity). `outline` is for cards
+ * A `soft` card is a section of a page (Recent, Your projects). A `tinted`
+ * card is an item inside a section (one project). `outline` is for cards
  * that sit directly on the page canvas where a soft fill would disappear.
- * `brand` is a promo banner in the brand purple, with white text in both
+ * `brand` is a promo banner in the brand color, with white text in both
  * themes; pair it with `inverse` buttons.
  *
  * Padding lives on the card and the parts are spaced by a gap, so a card

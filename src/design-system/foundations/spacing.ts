@@ -1,6 +1,6 @@
 /**
  * Spacing is Tailwind's 4px grid, limited to the steps below. Roles are the
- * named jobs those steps do across the app, taken from the tracker home page.
+ * named jobs those steps do across an app, taken from a dashboard page.
  * Components use the roles; screens can use the scale directly.
  */
 export const spacingScale = [
@@ -25,13 +25,13 @@ export const spacingScale = [
 ] as const;
 
 export const spacing = {
-  /** Page gutter and max width, as on the tracker home page */
+  /** Page gutter and max width */
   page: 'mx-auto w-full max-w-6xl p-4 md:p-8',
   /** Between section cards in a page grid or stack */
   section: 'gap-4',
   /**
    * Inside a card, by card size: padding around the card and gap between its
-   * parts. Modelled on Fit by dimension in the job fit report.
+   * parts.
    */
   card: {
     lg: { inset: 'p-4 md:p-6', gap: 'gap-4' },

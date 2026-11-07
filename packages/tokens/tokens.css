@@ -110,7 +110,7 @@
 }
 
 /*
- * Printed pages (resumes, documents) are paper, not app: plain neutral
+ * Printed pages (documents, invoices, resumes) are paper, not app: plain neutral
  * greys and a print font, so the preview matches the download.
  */
 .force-light-mode,

@@ -34,9 +34,9 @@ export const Playground: Story = {};
 export const WithDescription: Story = {
   name: 'With a description',
   args: {
-    title: 'Your target job details',
+    title: 'Project details',
     description:
-      'Provide accurate job title and description to help us analyze your fit for this role.',
+      'Give the project a clear name and goal so the team knows what done looks like.',
   },
 };
 
@@ -57,34 +57,33 @@ export const WithIconAndActions: Story = {
 };
 
 export const AddForm: Story = {
-  name: 'Analyzer add form',
+  name: 'Create form',
   parameters: {
     docs: {
       description: {
-        story:
-          'The layout the five analyzer add pages share: a PageHeader, then the fields.',
+        story: 'The layout of a create page: a PageHeader, then the fields.',
       },
     },
   },
   render: () => (
     <div className="flex max-w-3xl flex-col gap-6">
       <PageHeader
-        title="Prepare for your interview"
-        description="Provide accurate job title and description to help us prepare you for the interview. We'll analyze the role requirements and create a guide tailored to your profile."
+        title="Create a project"
+        description="Name the project and describe its goal. You can invite people and add tasks once it exists."
       />
       <hr />
       <div className="flex flex-col gap-4">
-        <Field label="Job title" required>
-          <Input placeholder="e.g. Sales Manager" />
+        <Field label="Project name" required>
+          <Input placeholder="e.g. Website redesign" />
         </Field>
-        <Field label="Job description" required>
+        <Field label="Goal" required>
           <Textarea
-            placeholder="Paste job description here"
+            placeholder="What should be true when this project is done?"
             className="min-h-[200px]"
           />
         </Field>
         <Button size="lg" className="self-start">
-          Prepare
+          Create project
         </Button>
       </div>
     </div>
@@ -97,8 +96,8 @@ export const StepInAFlow: Story = {
     <Card variant="outline" className="max-w-xl">
       <PageHeader
         as="h2"
-        title="Paste the job post into Eloovor"
-        description="Copy and paste the company name, job title, and job description into your tracker."
+        title="Invite your team"
+        description="Add people by email. They get access to every project in the workspace."
       />
     </Card>
   ),

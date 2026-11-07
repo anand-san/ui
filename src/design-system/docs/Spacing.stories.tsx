@@ -85,7 +85,7 @@ export const Roles: Story = {
       title="Spacing roles"
       intro={
         <>
-          The named jobs spacing does on the tracker home page, exported as{' '}
+          The named jobs spacing does on a dashboard page, exported as{' '}
           <Code>spacing</Code> from the design system. Card uses these
           internally, so most screens get them for free.
         </>
@@ -150,17 +150,17 @@ export const Roles: Story = {
               label="items gap-2"
               className={cn('flex flex-col px-2 pb-2 pt-5', spacing.items)}
             >
-              {['Linear', 'Vercel'].map(company => (
+              {['Website redesign', 'Billing migration'].map(project => (
                 <div
-                  key={company}
+                  key={project}
                   className={cn(
                     'flex flex-col rounded-xl bg-primary/5',
                     spacing.card.sm.inset,
                     spacing.card.sm.gap,
                   )}
                 >
-                  <Text variant="caption">Product Designer</Text>
-                  <Text variant="body-strong">{company}</Text>
+                  <Text variant="caption">Design</Text>
+                  <Text variant="body-strong">{project}</Text>
                 </div>
               ))}
             </Outline>

@@ -30,11 +30,11 @@ export const SeparatorStory: Story = {
       </div>
       <Separator />
       <div className="flex h-5 items-center gap-3">
-        <Text tone="muted">Remote</Text>
+        <Text tone="muted">Design</Text>
         <Separator orientation="vertical" />
-        <Text tone="muted">Full time</Text>
+        <Text tone="muted">4 people</Text>
         <Separator orientation="vertical" />
-        <Text tone="muted">Applied 3 days ago</Text>
+        <Text tone="muted">Updated 3 days ago</Text>
       </div>
     </div>
   ),

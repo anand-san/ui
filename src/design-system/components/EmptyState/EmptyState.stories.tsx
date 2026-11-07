@@ -32,8 +32,8 @@ const meta = {
   },
   args: {
     icon: <Search />,
-    title: 'No opportunities yet',
-    description: 'Jobs you add or update show up here for 14 days',
+    title: 'No projects yet',
+    description: 'Projects you create or update show up here for 14 days',
   },
 } satisfies Meta<typeof EmptyState>;
 
@@ -48,15 +48,15 @@ export const InACard: Story = {
     <Card className="max-w-md">
       <CardHeader>
         <CardTitle icon={<FileText />} count={0}>
-          Analyses
+          Reports
         </CardTitle>
       </CardHeader>
       <CardContent>
         <EmptyState
           icon={<Search />}
-          title="No analyses yet"
-          description="Analyses you run show up here"
-          action={<Button size="sm">Analyze a job</Button>}
+          title="No reports yet"
+          description="Reports you create show up here"
+          action={<Button size="sm">New report</Button>}
         />
       </CardContent>
     </Card>
@@ -69,19 +69,19 @@ export const WithIllustration: Story = {
     docs: {
       description: {
         story:
-          'Analysis in progress, out of date, quota reached and missing profile all use this layout.',
+          'For pages that need the user to act first: work in progress, a limit reached, setup to finish.',
       },
     },
   },
   render: () => (
     <EmptyState
       image="/images/drawing.png"
-      title="Analysis regeneration possible"
-      description="We failed to generate analyses last time as you reached the monthly quota. It seems that you have some quota available at the moment. Would you like to regenerate this analysis?"
+      title="Your report can be generated again"
+      description="Last time the report stopped because you reached your monthly limit. You have some of it back now. Would you like to generate the report again?"
       action={
         <Button size="lg">
           <Brain />
-          Regenerate analysis
+          Generate report
         </Button>
       }
     />
@@ -92,20 +92,20 @@ export const WithANote: Story = {
   name: 'With a note',
   render: () => (
     <EmptyState
-      image="/images/outdated-resume-update.png"
-      imageAlt="Outdated analysis"
-      title="This resume is out of date"
-      description="Your profile changed since this resume was generated. Regenerate it to include your latest experience."
+      image="/images/documents.png"
+      imageAlt="Outdated documents"
+      title="This report is out of date"
+      description="The data changed since this report was generated. Generate it again to include the latest numbers."
       action={
         <Button size="lg">
           <RefreshCw />
-          Regenerate resume
+          Update report
         </Button>
       }
     >
       <Text variant="caption" tone="default">
-        <strong className="font-medium">Important:</strong> Regenerating uses
-        one analysis from your monthly quota.
+        <strong className="font-medium">Important:</strong> Updating uses one
+        report from your monthly limit.
       </Text>
     </EmptyState>
   ),

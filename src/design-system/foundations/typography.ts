@@ -86,7 +86,7 @@ export const typeScale: {
   {
     variant: 'display',
     size: '24px → 30px, display face, bold, tabular figures',
-    usage: 'Key numbers and metrics, like the counts in Your pipeline.',
+    usage: 'Key numbers and metrics, like the counts on a dashboard.',
     replaces: 'text-2xl/3xl/4xl font-bold',
   },
   {
@@ -122,13 +122,13 @@ export const typeScale: {
   {
     variant: 'body-strong',
     size: '14px, medium',
-    usage: 'Titles of child cards and list items, like a company name.',
+    usage: 'Titles of child cards and list items, like a project name.',
     replaces: 'CONFIG_ITEM_TITLE_CLASS, text-sm font-medium',
   },
   {
     variant: 'caption',
     size: '12px, muted',
-    usage: 'Metadata and secondary lines: job title, dates, counts.',
+    usage: 'Metadata and secondary lines: owner, dates, counts.',
     replaces: 'text-xs text-gray-500, text-[11px], text-[10px]',
   },
   {

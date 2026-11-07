@@ -84,13 +84,13 @@ export const DialogStory: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit opportunity details</DialogTitle>
+          <DialogTitle>Edit project details</DialogTitle>
           <DialogDescription>
-            Changes are saved to your tracker.
+            Changes are saved to your workspace.
           </DialogDescription>
         </DialogHeader>
-        <Field label="Title">
-          <Input defaultValue="Senior Product Designer" />
+        <Field label="Name">
+          <Input defaultValue="Website redesign" />
         </Field>
         <DialogFooter>
           <Button variant="ghost">Cancel</Button>
@@ -113,9 +113,9 @@ export const ConfirmDelete: Story = {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete this opportunity?</AlertDialogTitle>
+          <AlertDialogTitle>Delete this project?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. All of its analysis is deleted too.
+            This action cannot be undone. All of its tasks are deleted too.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -136,7 +136,7 @@ export const Menu: Story = {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-44">
-        <DropdownMenuLabel>Opportunity</DropdownMenuLabel>
+        <DropdownMenuLabel>Project</DropdownMenuLabel>
         <DropdownMenuItem>
           <Pencil />
           Edit details
@@ -152,7 +152,7 @@ export const Menu: Story = {
 };
 
 function SelectionMenuDemo() {
-  const [status, setStatus] = useState('applied');
+  const [status, setStatus] = useState('in-progress');
   const [showClosed, setShowClosed] = useState(false);
   const [showArchived, setShowArchived] = useState(true);
   return (
@@ -163,11 +163,11 @@ function SelectionMenuDemo() {
       <DropdownMenuContent align="start" className="w-52">
         <DropdownMenuLabel>Move to</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
-          <DropdownMenuRadioItem value="saved">Saved</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="applied">Applied</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="interview">
-            Interview
+          <DropdownMenuRadioItem value="planned">Planned</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="in-progress">
+            In progress
           </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="done">Done</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Columns</DropdownMenuLabel>
@@ -188,7 +188,7 @@ function SelectionMenuDemo() {
           <DropdownMenuSubTrigger>Sort by</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuItem>Last updated</DropdownMenuItem>
-            <DropdownMenuItem>Company</DropdownMenuItem>
+            <DropdownMenuItem>Name</DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
       </DropdownMenuContent>
@@ -238,14 +238,12 @@ export const SheetStory: Story = {
   render: () => (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Resume defaults</Button>
+        <Button variant="outline">Report defaults</Button>
       </SheetTrigger>
       <SheetContent showClose>
         <SheetHeader>
-          <SheetTitle>Resume defaults</SheetTitle>
-          <SheetDescription>
-            Used when creating a new resume analysis.
-          </SheetDescription>
+          <SheetTitle>Report defaults</SheetTitle>
+          <SheetDescription>Used when creating a new report.</SheetDescription>
         </SheetHeader>
       </SheetContent>
     </Sheet>

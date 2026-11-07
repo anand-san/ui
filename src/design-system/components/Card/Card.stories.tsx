@@ -6,10 +6,14 @@ import {
   Search,
   Target,
 } from 'lucide-react';
+import { useState } from 'react';
 
 import { Avatar } from '@/design-system/components/Avatar/Avatar';
-import { Badge, type BadgeTone } from '@/design-system/components/Badge/Badge';
 import { Button } from '@/design-system/components/Button/Button';
+import {
+  type StatusOption,
+  StatusMenu,
+} from '@/design-system/components/StatusMenu/StatusMenu';
 import { Text } from '@/design-system/components/Text/Text';
 import { spacing } from '@/design-system/foundations/spacing';
 import { cn } from '@/design-system/lib/cn';
@@ -32,7 +36,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Modelled on the tracker home page. A soft card is a section of a page; a tinted card is an item inside a section; outline is for cards straight on the page canvas. Size sets padding, the gap between parts and the title role. Compose it from CardHeader (CardTitle, CardDescription, CardAction), CardContent and CardFooter.',
+          'The building block of a dashboard page. A soft card is a section of a page; a tinted card is an item inside a section; outline is for cards straight on the page canvas. Size sets padding, the gap between parts and the title role. Compose it from CardHeader (CardTitle, CardDescription, CardAction), CardContent and CardFooter.',
       },
     },
   },
@@ -53,76 +57,80 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Sample data for the tracker stories
+// Sample data: a small project workspace
 
-const opportunities: {
+const projects: {
   id: string;
-  title: string;
-  company: string;
+  team: string;
+  name: string;
   description: string;
-  status: string;
-  tone: BadgeTone;
+  status: TaskStatus;
 }[] = [
   {
     id: '1',
-    title: 'Senior Product Designer',
-    company: 'Linear',
+    team: 'Design',
+    name: 'Website redesign',
     description:
-      'Shape the planning tools used by thousands of product teams, working closely with engineering on every release.',
-    status: 'Interviewing',
-    tone: 'warning',
+      'New landing page, pricing and docs navigation, shipped in three steps with engineering.',
+    status: 'In review',
   },
   {
     id: '2',
-    title: 'Staff Frontend Engineer, Design Systems',
-    company: 'Vercel',
+    team: 'Platform',
+    name: 'Billing migration',
     description:
-      'Own the component library behind the dashboard and help teams ship consistent interfaces faster.',
-    status: 'Applied',
-    tone: 'info',
+      'Move every plan to the new billing provider without interrupting renewals.',
+    status: 'In progress',
   },
   {
     id: '3',
-    title: 'Product Engineer',
-    company: 'Raycast',
-    description:
-      'Build extensions and core features for a fast, keyboard-first launcher.',
-    status: 'To Apply',
-    tone: 'brand',
+    team: 'Growth',
+    name: 'Onboarding emails',
+    description: 'A five-email welcome series for new workspaces.',
+    status: 'Planned',
   },
   {
     id: '4',
-    title: 'Design Engineer',
-    company: 'Figma',
-    description:
-      'Prototype and ship new editor interactions with the design and research teams.',
-    status: 'Offer',
-    tone: 'success',
+    team: 'Mobile',
+    name: 'Offline mode',
+    description: 'Read and edit notes without a connection, then sync.',
+    status: 'Done',
   },
 ];
 
-function OpportunityItem({
-  opportunity,
-}: {
-  opportunity: (typeof opportunities)[number];
-}) {
+type TaskStatus = 'Planned' | 'In progress' | 'In review' | 'Done' | 'Blocked';
+
+const statuses: StatusOption<TaskStatus>[] = [
+  { value: 'Planned', tone: 'neutral' },
+  { value: 'In progress', tone: 'info' },
+  { value: 'In review', tone: 'warning' },
+  { value: 'Done', tone: 'success' },
+  { value: 'Blocked', tone: 'destructive' },
+];
+
+function ProjectItem({ project }: { project: (typeof projects)[number] }) {
+  const [status, setStatus] = useState(project.status);
   return (
     <Card variant="tinted" interactive asChild>
-      <a href={`#opportunity-${opportunity.id}`}>
+      <a href={`#project-${project.id}`}>
         <CardHeader>
           <Text variant="caption" truncate>
-            {opportunity.title}
+            {project.team}
           </Text>
           <CardAction>
-            <Badge tone={opportunity.tone}>{opportunity.status}</Badge>
+            <StatusMenu
+              value={status}
+              options={statuses}
+              onValueChange={setStatus}
+            />
           </CardAction>
         </CardHeader>
         <CardContent className="flex items-start gap-3">
-          <Avatar name={opportunity.company} tone="info" />
+          <Avatar name={project.name} tone="info" />
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <CardTitle>{opportunity.company}</CardTitle>
+            <CardTitle>{project.name}</CardTitle>
             <CardDescription className="line-clamp-2">
-              {opportunity.description}
+              {project.description}
             </CardDescription>
           </div>
         </CardContent>
@@ -137,7 +145,7 @@ function ViewButton() {
       variant="ghost"
       size="sm"
       shape="pill"
-      aria-label="Change opportunities shown"
+      aria-label="Change projects shown"
     >
       View
       <ChevronsUpDown className="size-3.5" />
@@ -145,12 +153,8 @@ function ViewButton() {
   );
 }
 
-function OpportunityListCard({
-  count = opportunities.length,
-}: {
-  count?: number;
-}) {
-  const items = opportunities.slice(0, count);
+function ProjectListCard({ count = projects.length }: { count?: number }) {
+  const items = projects.slice(0, count);
   return (
     <Card>
       <CardHeader>
@@ -167,15 +171,15 @@ function OpportunityListCard({
             <span className="mb-2 flex size-12 items-center justify-center rounded-full bg-muted">
               <Search className="size-6 text-muted-foreground" />
             </span>
-            <Text variant="body-strong">No opportunities yet</Text>
+            <Text variant="body-strong">No projects yet</Text>
             <Text variant="caption">
-              Jobs you add or update show up here for 14 days
+              Projects you create or update show up here for 14 days
             </Text>
           </div>
         ) : (
           <div className={cn('flex flex-col', spacing.items)}>
-            {items.map(opportunity => (
-              <OpportunityItem key={opportunity.id} opportunity={opportunity} />
+            {items.map(project => (
+              <ProjectItem key={project.id} project={project} />
             ))}
           </div>
         )}
@@ -184,24 +188,23 @@ function OpportunityListCard({
   );
 }
 
-const pipeline: { status: string; count: number; className: string }[] = [
-  { status: 'To Apply', count: 8, className: 'text-brand' },
-  { status: 'Applied', count: 12, className: 'text-info' },
-  { status: 'Interviewing', count: 3, className: 'text-warning' },
-  { status: 'Negotiating', count: 1, className: 'text-primary' },
-  { status: 'Offer', count: 1, className: 'text-success' },
-  { status: 'Rejected', count: 5, className: 'text-destructive' },
+const workload: { status: TaskStatus; count: number; className: string }[] = [
+  { status: 'Planned', count: 8, className: 'text-brand' },
+  { status: 'In progress', count: 12, className: 'text-info' },
+  { status: 'In review', count: 3, className: 'text-warning' },
+  { status: 'Done', count: 21, className: 'text-success' },
+  { status: 'Blocked', count: 2, className: 'text-destructive' },
 ];
 
-function PipelineCard() {
+function WorkloadCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle icon={<BarChart3 />}>Your pipeline</CardTitle>
+        <CardTitle icon={<BarChart3 />}>Tasks by status</CardTitle>
       </CardHeader>
       <CardContent>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
-          {pipeline.map(({ status, count, className }) => (
+          {workload.map(({ status, count, className }) => (
             <div key={status} className="flex flex-col-reverse">
               <Text as="dt" tone="muted">
                 {status}
@@ -222,7 +225,7 @@ export const Playground: Story = {
     <div className="max-w-md">
       <Card {...args}>
         <CardHeader>
-          <CardTitle icon={<Target className="text-amber-500" />} count={2}>
+          <CardTitle icon={<Target className="text-warning" />} count={2}>
             Today’s focus
           </CardTitle>
           <CardDescription>
@@ -233,10 +236,10 @@ export const Playground: Story = {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <Text>Add 3 jobs to the board, then send one application.</Text>
+          <Text>Review two pull requests, then plan tomorrow.</Text>
         </CardContent>
         <CardFooter>
-          <Button size="sm">Add a job</Button>
+          <Button size="sm">Start</Button>
           <Button size="sm" variant="ghost">
             Later
           </Button>
@@ -246,43 +249,43 @@ export const Playground: Story = {
   ),
 };
 
-export const OpportunityList: Story = {
-  name: 'Tracker: opportunity list',
+export const ProjectList: Story = {
+  name: 'Dashboard: project list',
   parameters: {
     docs: {
       description: {
         story:
-          'The Recent card from the tracker home page, rebuilt with the design system: a soft section card holding tinted, linked item cards.',
+          'A Recent card on a dashboard: a soft section card holding tinted, linked item cards. Each status is a StatusMenu, which works inside the linked card.',
       },
     },
   },
   render: () => (
     <div className="max-w-xl">
-      <OpportunityListCard />
+      <ProjectListCard />
     </div>
   ),
 };
 
 export const EmptyList: Story = {
-  name: 'Tracker: empty list',
+  name: 'Dashboard: empty list',
   render: () => (
     <div className="max-w-xl">
-      <OpportunityListCard count={0} />
+      <ProjectListCard count={0} />
     </div>
   ),
 };
 
-export const Pipeline: Story = {
-  name: 'Tracker: pipeline',
+export const Workload: Story = {
+  name: 'Dashboard: counts',
   render: () => (
     <div className="max-w-md">
-      <PipelineCard />
+      <WorkloadCard />
     </div>
   ),
 };
 
 export const Dashboard: Story = {
-  name: 'Tracker: home layout',
+  name: 'Dashboard: layout',
   parameters: { layout: 'fullscreen' },
   render: () => (
     <div className={spacing.page}>
@@ -292,8 +295,8 @@ export const Dashboard: Story = {
           spacing.section,
         )}
       >
-        <OpportunityListCard />
-        <PipelineCard />
+        <ProjectListCard />
+        <WorkloadCard />
       </div>
     </div>
   ),
@@ -323,7 +326,7 @@ export const Variants: Story = {
         <CardHeader>
           <CardTitle>brand</CardTitle>
           <p className="text-sm text-white/85">
-            A promo banner, like Board view on the tracker home.
+            A promo banner, like a new feature announcement.
           </p>
         </CardHeader>
         <CardFooter>
@@ -375,20 +378,20 @@ export const InsideSheet: Story = {
     docs: {
       description: {
         story:
-          'Medium cards with tinted items, the pattern the resume defaults sheet already uses.',
+          'Medium cards with tinted items, the pattern for a settings sheet.',
       },
     },
   },
   render: () => (
     <div className="flex max-w-sm flex-col gap-4 rounded-xl border bg-background p-4 shadow-sm">
-      <Text variant="heading">Resume defaults</Text>
+      <Text variant="heading">Report defaults</Text>
       <Card size="md">
         <CardHeader>
           <CardTitle count={3}>Sections</CardTitle>
-          <CardDescription>Order used for new resumes.</CardDescription>
+          <CardDescription>Order used for new reports.</CardDescription>
         </CardHeader>
         <CardContent className={cn('flex flex-col', spacing.items)}>
-          {['Experience', 'Education', 'Skills'].map(section => (
+          {['Summary', 'Highlights', 'Next steps'].map(section => (
             <Card key={section} variant="tinted">
               <CardTitle>{section}</CardTitle>
             </Card>

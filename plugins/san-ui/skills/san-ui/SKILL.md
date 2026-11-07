@@ -27,23 +27,25 @@ A shared base (neutral surfaces, feedback colors, type scale, spacing, radius, a
 7. **One `primary` button per view.** Quiet actions inside cards are `ghost`; form submit buttons need `type="submit"` (Button defaults to `type="button"`).
 8. **Both themes.** Everything must work with `dark` on `<html>`. Tokens handle it; a `dark:` override usually means a raw color slipped in.
 9. **Use the component, not its look.** `<Card>` (not a styled div), `<Field label hint error required>` around every form control (put `id` on the Field), `<PageHeader>` for page titles, `<EmptyState>` for empty lists, `<Alert>` for inline feedback, `<Button loading>` instead of a spinner icon. Screens import `Dialog`, `Select` and the rest from `@/design-system`, never from `@radix-ui/*`.
+10. **Domain in the app, look in san-ui.** App components (an order status dropdown, a project card) wrap san-ui components and add the data, types and mutations. Don't edit `src/design-system/` for one app's needs; if something is missing for every app, it belongs in the san-ui repo.
 
 ## Picking a component
 
-| Need                               | Use                                                                                             |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------- |
-| A page section                     | `<Card>` (soft, size `lg`) with `CardHeader`, `CardTitle icon count`, `CardContent`             |
-| An item inside a section           | `<Card variant="tinted">` (size `sm`), `interactive` + `asChild` for a link                     |
-| A card straight on the page canvas | `<Card variant="outline">`                                                                      |
-| A promo banner                     | `<Card variant="brand">` with `Button variant="inverse"`                                        |
-| A status or label pill             | `<Badge tone variant dot>`                                                                      |
-| A form                             | `Field` + `Input` / `Textarea` / `Select` / `DatePicker`; `Checkbox`/`Switch` with `Label`      |
-| A modal                            | `Dialog` (bottom sheet on phones); `AlertDialog variant="destructive"` for deletes              |
-| A side panel                       | `Sheet`                                                                                         |
-| Menus and hints                    | `DropdownMenu` (`variant="destructive"` items), `Popover`, `Tooltip` (inside `TooltipProvider`) |
-| Switching views                    | `Tabs`                                                                                          |
-| Progress or a score                | `Progress`, `ScoreRing`                                                                         |
-| Loading                            | `Skeleton`, `Button loading`                                                                    |
+| Need                               | Use                                                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| A page section                     | `<Card>` (soft, size `lg`) with `CardHeader`, `CardTitle icon count`, `CardContent`                           |
+| An item inside a section           | `<Card variant="tinted">` (size `sm`), `interactive` + `asChild` for a link                                   |
+| A card straight on the page canvas | `<Card variant="outline">`                                                                                    |
+| A promo banner                     | `<Card variant="brand">` with `Button variant="inverse"`                                                      |
+| A status or label pill             | `<Badge tone variant dot>`                                                                                    |
+| A status the user can change       | `<StatusMenu value options onValueChange>`; options take a `tone`, or the app's color classes via `className` |
+| A form                             | `Field` + `Input` / `Textarea` / `Select` / `DatePicker`; `Checkbox`/`Switch` with `Label`                    |
+| A modal                            | `Dialog` (bottom sheet on phones); `AlertDialog variant="destructive"` for deletes                            |
+| A side panel                       | `Sheet`                                                                                                       |
+| Menus and hints                    | `DropdownMenu` (`variant="destructive"` items), `Popover`, `Tooltip` (inside `TooltipProvider`)               |
+| Switching views                    | `Tabs`                                                                                                        |
+| Progress or a score                | `Progress`, `ScoreRing`                                                                                       |
+| Loading                            | `Skeleton`, `Button loading`                                                                                  |
 
 The full component guide, the Card size table and the migration table (old class or component → new) are in [references/design-system.md](references/design-system.md).
 

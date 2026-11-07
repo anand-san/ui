@@ -6,18 +6,20 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 Shared foundations and components, built for Eloovor and meant for any app. The base (neutrals, feedback colors, type, spacing, radius and every component) is shared; each app brings its brand as a theme. Use the **Brand** toolbar to see the stories in the Eloovor theme or the teal template theme.
 
-The base is the tracker home page: soft section cards on the page canvas, tinted item cards inside them.
+The base is a dashboard page: soft section cards on the page canvas, tinted item cards inside them.
 
-## Ink and highlighter (the Eloovor theme)
+## Pen and highlighter
 
-The look comes from the logo and from what job seekers already do on paper: mark up a job ad with a pen and a highlighter.
+The base sets a structure every theme fills in:
 
-- **Ink** is the logo violet. It carries the main actions, focus rings, checked controls and selection. The greys are the same ink, thinned, so nothing on screen is a dead neutral grey.
-- **Highlighter** is marigold, the second brand color. It is a fill, never text: matched keywords (`Mark`), "New" badges, Elo suggestions and text selection. If it is everywhere it stops meaning anything.
-- **Type** pairs Bricolage Grotesque for display, title and heading with Figtree for everything people read and operate. Figtree's round, even strokes echo the logo's lettering; Bricolage brings the personality, so it stays at heading sizes.
-- **Shape**: buttons are pills, like the logo's ring. Fields are softly rounded, cards a little more, dialogs most. Shadows are tinted with ink and only used on things that float.
+- **Ink** is the brand color. It carries the main actions, focus rings, checked controls and selection. The greys are tinted toward it (`--tint-hue`), so nothing on screen is a dead neutral grey, and dark mode is deep ink rather than charcoal.
+- **Highlighter** is the second color. It is a fill, never text: marked words (`Mark`), "New" badges, suggestions and text selection. If it is everywhere it stops meaning anything.
+- **Type** pairs a display face for display, title and heading with a sans for everything people read and operate.
+- **Shape**: buttons are pills. Fields are softly rounded, cards a little more, dialogs most. Shadows are tinted with ink and only used on things that float.
 
-Resume previews and documents stay plain paper: neutral greys and Helvetica, the same font as the PDF.
+Printed pages (`.force-light-mode`) stay plain paper: neutral greys and Helvetica, so a preview matches its PDF.
+
+See **Guides / Used in Eloovor** for how one app puts it together: its theme, its own status colors and its app-level components.
 
 ## Foundations
 
@@ -31,6 +33,7 @@ Resume previews and documents stay plain paper: neutral greys and Helvetica, the
 - **Card**: soft, tinted, outline and brand cards in three sizes, with header, title, count, description, action, content and footer parts.
 - **Button**: eight variants (including `inverse` for brand banners), five sizes, pill shape and a loading state.
 - **Badge**: seven tones (including `highlight`) in soft, solid and outline.
+- **StatusMenu**: a status badge that opens a menu to change the status, with tones or the app's own colors.
 - **Avatar**: an image with an initials fallback.
 - **Forms**: Field (label, control and message wired together), Input, Textarea, Label, Select, Checkbox, Switch, DatePicker and Calendar.
 - **PageHeader**: the title block of a page or a step.

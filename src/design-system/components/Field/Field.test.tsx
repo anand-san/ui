@@ -16,19 +16,19 @@ describe('Field', () => {
   test('links the label to the control by id', () => {
     const { attr } = parse(
       renderToStaticMarkup(
-        <Field label="Job title" id="job-title">
+        <Field label="Project name" id="project-name">
           <Input />
         </Field>,
       ),
     );
-    expect(attr('label', 'for')).toBe('job-title');
-    expect(attr('input', 'id')).toBe('job-title');
+    expect(attr('label', 'for')).toBe('project-name');
+    expect(attr('input', 'id')).toBe('project-name');
   });
 
   test('generates an id when none is given', () => {
     const { attr } = parse(
       renderToStaticMarkup(
-        <Field label="Job title">
+        <Field label="Project name">
           <Input />
         </Field>,
       ),
@@ -39,16 +39,16 @@ describe('Field', () => {
 
   test('marks the control invalid and describes it with the error', () => {
     const html = renderToStaticMarkup(
-      <Field label="Company" id="company" error="Company is required">
+      <Field label="Email" id="email" error="Email is required">
         <Input />
       </Field>,
     );
     const { attr } = parse(html);
     expect(attr('input', 'aria-invalid')).toBe('true');
-    expect(attr('input', 'aria-describedby')).toBe('company-message');
-    expect(attr('p', 'id')).toBe('company-message');
+    expect(attr('input', 'aria-describedby')).toBe('email-message');
+    expect(attr('p', 'id')).toBe('email-message');
     expect(attr('p', 'role')).toBe('alert');
-    expect(html).toContain('Company is required');
+    expect(html).toContain('Email is required');
   });
 
   test('shows the hint without marking the control invalid', () => {
@@ -75,7 +75,7 @@ describe('Field', () => {
 
   test('required adds an asterisk and aria-required', () => {
     const html = renderToStaticMarkup(
-      <Field label="Job title" required>
+      <Field label="Project name" required>
         <Input />
       </Field>,
     );

@@ -32,8 +32,8 @@ export const Alerts: Story = {
       <Alert>
         <Info />
         <AlertDescription>
-          Sometimes the company name alone is not enough to find the right
-          company.
+          Imports match people by email, so check the column with email
+          addresses.
         </AlertDescription>
       </Alert>
       <Alert tone="info">
@@ -48,8 +48,8 @@ export const Alerts: Story = {
       </Alert>
       <Alert tone="destructive">
         <Info />
-        <AlertTitle>We couldn&apos;t find much about this company</AlertTitle>
-        <AlertDescription>Double-check the data yourself.</AlertDescription>
+        <AlertTitle>We couldn&apos;t import 3 rows</AlertTitle>
+        <AlertDescription>They are missing an email address.</AlertDescription>
       </Alert>
     </div>
   ),
@@ -87,9 +87,9 @@ export const LoadingAndEmpty: Story = {
       <div className="rounded-xl bg-surface p-4">
         <EmptyState
           icon={<Search />}
-          title="No opportunities yet"
-          description="Jobs you add or update show up here for 14 days"
-          action={<Button size="sm">Add a job</Button>}
+          title="No projects yet"
+          description="Projects you create or update show up here for 14 days"
+          action={<Button size="sm">New project</Button>}
         />
       </div>
     </div>
@@ -111,7 +111,7 @@ export const Toasts: Story = {
       </Button>
       <Button
         variant="outline"
-        onClick={() => toast.error('Failed to delete analysis')}
+        onClick={() => toast.error('Failed to delete the report')}
       >
         Error
       </Button>

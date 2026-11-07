@@ -20,7 +20,7 @@ export interface FieldProps extends Omit<
   /** Error text under the control. Any truthy value marks the control invalid. */
   error?: React.ReactNode;
   /**
-   * `sm` for dense editors like the resume block forms: a small muted label
+   * `sm` for dense editors, like a form inside a list of entries: a small muted label
    * and 32px controls. Defaults to `md`.
    */
   size?: 'sm' | 'md';

@@ -39,6 +39,7 @@ const preview: Preview = {
           'Foundations',
           ['Colors', 'Typography', 'Spacing'],
           'Components',
+          'Guides',
         ],
       },
     },

@@ -8,8 +8,8 @@ export interface MarkProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 /**
- * A highlighter mark over a few words: keywords a resume matches, the part
- * of a job ad Elo is talking about. Use it sparingly; if half a paragraph is
+ * A highlighter mark over a few words: the terms a search matched, the part
+ * of a text an assistant is talking about. Use it sparingly; if half a paragraph is
  * marked, nothing is.
  */
 export const Mark = React.forwardRef<HTMLElement, MarkProps>(

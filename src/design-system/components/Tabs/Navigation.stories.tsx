@@ -36,7 +36,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Tabs are a pill segmented control on the child card tint; when they overflow, the list scrolls and shows arrow buttons. Accordions are for optional detail, like the extra company fields in the add forms. NavigationMenu is the desktop header: pill items, with a panel of links for Tools.',
+          'Tabs are a pill segmented control on the child card tint; when they overflow, the list scrolls and shows arrow buttons. Accordions are for optional detail, like the advanced fields of a form. NavigationMenu is the desktop header: pill items, with a panel of links for Tools.',
       },
     },
   },
@@ -60,17 +60,17 @@ export const TabsStory: Story = {
         </TabsTrigger>
         <TabsTrigger value="experience">
           <Briefcase />
-          Experience
+          Work
         </TabsTrigger>
       </TabsList>
       <TabsContent value="summary">
-        <Text tone="muted">Profile summary and analysis.</Text>
+        <Text tone="muted">Profile summary.</Text>
       </TabsContent>
       <TabsContent value="basic">
         <Text tone="muted">Name, email and links.</Text>
       </TabsContent>
       <TabsContent value="experience">
-        <Text tone="muted">Work experience.</Text>
+        <Text tone="muted">Teams and projects.</Text>
       </TabsContent>
     </Tabs>
   ),
@@ -95,10 +95,10 @@ export const AccordionStory: Story = {
   render: () => (
     <Accordion type="single" collapsible className="max-w-md">
       <AccordionItem value="accuracy">
-        <AccordionTrigger>Improve result accuracy</AccordionTrigger>
+        <AccordionTrigger>Advanced settings</AccordionTrigger>
         <AccordionContent>
           <Text tone="muted">
-            Add the company website and location so we find the right company.
+            Set a custom domain and the time zone used for due dates.
           </Text>
         </AccordionContent>
       </AccordionItem>
@@ -114,21 +114,20 @@ export const AccordionStory: Story = {
 
 const TOOLS = [
   {
-    title: 'Personalized resume',
-    description:
-      'Create ATS-friendly resumes based on the job description and your profile',
+    title: 'Reports',
+    description: 'Weekly progress for every project, ready to share',
   },
   {
-    title: 'Cover letter',
-    description: 'Write a cover letter that tells your story for this job',
+    title: 'Roadmap',
+    description: 'Plan milestones across teams on one timeline',
   },
   {
-    title: 'Interview prep',
-    description: 'Practice questions and research tailored to the role',
+    title: 'Automations',
+    description: 'Move tasks and notify people when something changes',
   },
   {
-    title: 'Company research',
-    description: 'Culture, values and reviews for the company you applied to',
+    title: 'Integrations',
+    description: 'Connect your calendar, chat and code hosting',
   },
 ];
 

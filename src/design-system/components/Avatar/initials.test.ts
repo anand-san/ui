@@ -4,7 +4,7 @@ import { getInitials } from './initials';
 
 describe('getInitials', () => {
   test('uses the first two letters of a single word', () => {
-    expect(getInitials('Linear')).toBe('LI');
+    expect(getInitials('Northwind')).toBe('NO');
   });
 
   test('uses the first letter of the first two words', () => {

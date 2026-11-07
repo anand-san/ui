@@ -47,8 +47,8 @@ export const Scale: Story = {
                 {row.variant === 'display'
                   ? '24'
                   : row.variant === 'code'
-                    ? '#574a7d'
-                    : 'Senior Product Designer at Linear'}
+                    ? '#1f6f7a'
+                    : 'Website redesign, owned by the Design team'}
               </Text>
               <div className="flex flex-col gap-1">
                 <Text variant="caption" tone="default">
@@ -87,7 +87,9 @@ export const Tones: Story = {
               <Text variant="code" tone="muted" className="w-24">
                 {tone}
               </Text>
-              <Text tone={tone}>Application sent to Linear two days ago</Text>
+              <Text tone={tone}>
+                Invite sent to the Design team two days ago
+              </Text>
             </div>
           ))}
         </div>
@@ -101,41 +103,41 @@ export const InContext: Story = {
   render: () => (
     <DocPage
       title="In context"
-      intro="The roles together, the way a tracker screen uses them."
+      intro="The roles together, the way a dashboard uses them."
     >
       <div className="flex max-w-xl flex-col gap-4">
-        <Text variant="title">Good morning, Anand</Text>
+        <Text variant="title">Good morning, Ada</Text>
         <div className="flex flex-col gap-3 rounded-xl bg-surface p-4 md:p-6">
-          <Text variant="heading">Your pipeline</Text>
+          <Text variant="heading">This week</Text>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <Text variant="display" className="text-info">
                 12
               </Text>
-              <Text tone="muted">Applied</Text>
+              <Text tone="muted">In progress</Text>
             </div>
             <div>
               <Text variant="display" className="text-warning">
                 3
               </Text>
-              <Text tone="muted">Interviewing</Text>
+              <Text tone="muted">In review</Text>
             </div>
             <div>
               <Text variant="display" className="text-success">
                 1
               </Text>
-              <Text tone="muted">Offer</Text>
+              <Text tone="muted">Done</Text>
             </div>
           </div>
           <div className="flex flex-col gap-1 rounded-xl bg-primary/5 px-3 py-3 md:px-4">
-            <Text variant="caption">Senior Product Designer</Text>
-            <Text variant="body-strong">Linear</Text>
+            <Text variant="caption">Design</Text>
+            <Text variant="body-strong">Website redesign</Text>
             <Text variant="caption" className="line-clamp-2">
-              Shape the planning tools used by thousands of product teams.
+              New landing page, pricing and docs navigation.
             </Text>
           </div>
           <label className="flex flex-col gap-1.5">
-            <Text variant="label">Follow-up date</Text>
+            <Text variant="label">Due date</Text>
             <span className={textVariants({ variant: 'body' })}>
               Thursday, 16 October
             </span>

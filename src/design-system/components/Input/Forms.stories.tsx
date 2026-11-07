@@ -37,19 +37,16 @@ type Story = StoryObj<typeof meta>;
 export const Fields: Story = {
   render: () => (
     <div className="flex max-w-md flex-col gap-4">
-      <Field label="Job title" required>
-        <Input placeholder="e.g. Sales Manager" />
+      <Field label="Project name" required>
+        <Input placeholder="e.g. Website redesign" />
       </Field>
-      <Field label="Company name" required error="Company name is required">
+      <Field label="Owner email" required error="Owner email is required">
         <Input />
       </Field>
-      <Field
-        label="Job description"
-        hint="Used to tailor your resume and cover letter."
-      >
-        <Textarea placeholder="Paste the job description here" />
+      <Field label="Description" hint="Shown to everyone in the workspace.">
+        <Textarea placeholder="What is this project about?" />
       </Field>
-      <Field label="Company location">
+      <Field label="Region">
         <Select>
           <SelectTrigger>
             <SelectValue placeholder="Select a country" />
@@ -64,8 +61,8 @@ export const Fields: Story = {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          aria-label="Search opportunities"
-          placeholder="Search opportunities..."
+          aria-label="Search projects"
+          placeholder="Search projects..."
           className="pl-9"
         />
       </div>
@@ -107,18 +104,18 @@ export const DenseEditor: Story = {
     docs: {
       description: {
         story:
-          '`size="sm"` is for dense panels like the resume block forms: a small muted label and 32px controls. The controls pick up the size from the Field.',
+          '`size="sm"` is for dense panels, like a form inside a list of entries: a small muted label and 32px controls. The controls pick up the size from the Field.',
       },
     },
   },
   render: () => (
     <div className="flex max-w-sm flex-col gap-3 rounded-xl bg-surface p-3">
       <div className="grid grid-cols-2 gap-2">
-        <Field label="Position" size="sm">
-          <Input placeholder="e.g. Software Engineer" />
+        <Field label="Milestone" size="sm">
+          <Input placeholder="e.g. Beta launch" />
         </Field>
-        <Field label="Company" size="sm">
-          <Input placeholder="e.g. Google" />
+        <Field label="Owner" size="sm">
+          <Input placeholder="e.g. Ada" />
         </Field>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -172,8 +169,8 @@ function SelectionDemo() {
         error="End date must be after the start date"
       />
       <div className="flex items-center gap-2">
-        <Checkbox id="analysis" defaultChecked />
-        <Label htmlFor="analysis">Generate resume and cover letter</Label>
+        <Checkbox id="notify" defaultChecked />
+        <Label htmlFor="notify">Notify the team when it changes</Label>
       </div>
       <div className="flex items-center gap-3">
         <Switch id="updates" defaultChecked />

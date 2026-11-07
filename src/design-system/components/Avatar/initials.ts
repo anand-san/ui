@@ -1,6 +1,6 @@
 /**
  * Up to two letters for an avatar: the first letter of the first two words,
- * or the first two letters of a single word. "Linear" → "LI",
+ * or the first two letters of a single word. "Northwind" → "NO",
  * "Acme Robotics Inc" → "AR".
  */
 export function getInitials(name: string) {

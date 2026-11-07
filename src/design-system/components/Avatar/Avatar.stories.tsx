@@ -15,7 +15,7 @@ const meta = {
     },
   },
   args: {
-    name: 'Linear',
+    name: 'Northwind',
     tone: 'info',
     size: 'md',
   },
@@ -80,7 +80,7 @@ export const ImageAndFallback: Story = {
   },
   render: () => (
     <div className="flex items-center gap-3">
-      <Avatar name="Eloovor" src="/images/logo.png" size="lg" />
+      <Avatar name="Sketchbook" src="/images/drawing.png" size="lg" />
       <Avatar
         name="Broken Image"
         src="/does-not-exist.png"

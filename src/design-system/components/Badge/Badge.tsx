@@ -7,8 +7,8 @@ import { cn } from '@/design-system/lib/cn';
 /**
  * Badge: a short label in a pill. `soft` (a 10% tint behind colored text) is
  * the default and reads well on any surface; `solid` is for the rare badge
- * that must stand out; `outline` is the quietest. `highlight` is the marigold
- * marker, for "New" and Elo suggestions.
+ * that must stand out; `outline` is the quietest. `highlight` is the
+ * highlighter, for "New" and suggestions.
  */
 
 export type BadgeTone =

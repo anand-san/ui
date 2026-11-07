@@ -8,8 +8,8 @@ import { cn } from '@/design-system/lib/cn';
 /**
  * Button. `primary` is the one main action in a view; `secondary` uses the
  * same tint as child cards; `ghost` is for quiet actions inside cards, like
- * the tracker's View switcher. `inverse` and `inverse-soft` sit on a brand
- * colored banner, like the board promo, where the theme colors would vanish.
+ * a view switcher in a card header. `inverse` and `inverse-soft` sit on a
+ * brand colored banner, where the theme colors would vanish.
  */
 
 export type ButtonVariant =
@@ -66,7 +66,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: ButtonVariant;
   /** Defaults to `md`. Icon sizes are square, for a lone icon with an aria-label. */
   size?: ButtonSize;
-  /** Buttons are pills, like the logo's ring and the marketing site. `rounded` squares them off to sit flush in a toolbar or segmented group. Defaults to `pill`. */
+  /** Buttons are pills. `rounded` squares them off to sit flush in a toolbar or segmented group. Defaults to `pill`. */
   shape?: 'rounded' | 'pill';
   /** Shows a spinner in place of the leading icon and disables the button */
   loading?: boolean;

@@ -33,7 +33,7 @@ export const semanticColors: ColorGroup[] = [
       {
         name: 'surface',
         className: 'bg-surface',
-        usage: 'Soft section cards, like the tracker home cards',
+        usage: 'Soft section cards on a dashboard page',
       },
       {
         name: 'card',
@@ -77,7 +77,7 @@ export const semanticColors: ColorGroup[] = [
       {
         name: 'brand',
         className: 'bg-brand',
-        usage: 'Logo, Elo chat and promo banners',
+        usage: 'Logo, assistant and promo banners',
         onColor: 'brand-foreground',
       },
       {

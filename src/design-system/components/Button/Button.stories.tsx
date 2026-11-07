@@ -73,17 +73,17 @@ export const OnABrandBanner: Story = {
     docs: {
       description: {
         story:
-          'Inverse buttons keep their white look in both themes, for banners in the brand color like the board promo.',
+          'Inverse buttons keep their white look in both themes, for banners in the brand color, like a feature announcement.',
       },
     },
   },
   render: () => (
     <div className="flex flex-wrap items-center gap-3 rounded-xl bg-brand-600 p-6 dark:bg-brand-800">
       <Button variant="inverse" size="lg">
-        Open board
+        Try it now
       </Button>
       <Button variant="inverse-soft" size="lg">
-        Tailored resume
+        Learn more
       </Button>
     </div>
   ),
@@ -131,8 +131,7 @@ export const HeaderAction: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'The View switcher from the tracker home page: small, ghost and pill.',
+        story: 'A view switcher in a card header: small, ghost and pill.',
       },
     },
   },
@@ -151,7 +150,7 @@ export const Loading: Story = {
     <div className="flex flex-wrap items-center gap-3">
       <Button loading>Saving</Button>
       <Button variant="secondary" loading>
-        Generating resume
+        Generating report
       </Button>
     </div>
   ),

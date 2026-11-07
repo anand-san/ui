@@ -176,6 +176,11 @@ export {
   SheetTrigger,
 } from './components/Sheet/Sheet';
 export { Skeleton } from './components/Skeleton/Skeleton';
+export {
+  StatusMenu,
+  type StatusMenuProps,
+  type StatusOption,
+} from './components/StatusMenu/StatusMenu';
 export { Switch } from './components/Switch/Switch';
 export {
   Tabs,
