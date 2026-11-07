@@ -20,9 +20,10 @@
   --tint-hue: 190;
   --ink-hue: 195;
 
-  /* Optional. Load the font files in the app. */
-  /* --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif; */
-  /* --font-display: 'Fraunces Variable', var(--font-sans); */
+  /* System fonts. To use your own, load the files in the app and name them
+     here, e.g. 'Inter Variable', ui-sans-serif, system-ui, sans-serif */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-sans);
 
   /* Brand ramp. --brand-600 is the primary button. */
   --brand-50: 185 45% 96%;

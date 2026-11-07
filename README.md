@@ -120,9 +120,10 @@ The rules, the component guide and the migration table are in [`src/design-syste
 
 ### Releasing
 
-- **Site and registry**: Cloudflare Workers builds `main` with `bun run build`, then `npx wrangler deploy` serves `dist/` (see `wrangler.jsonc`) at ui.sandilya.dev.
-- **Tokens**: bump `packages/tokens/package.json`, then `cd packages/tokens && npm publish`. If a component needs the new tokens, the registry's `foundations` item picks up the new version range on the next build.
+- **Site and registry**: Cloudflare Workers builds `main` with `bun run build`, then `npx wrangler deploy` serves `dist/` (see `wrangler.jsonc`) at ui.sandilya.dev. Apps pick up component changes with `bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json --overwrite`.
+- **Tokens package**: bump `version` in `packages/tokens/package.json` and merge to `main`. The Release workflow (`.github/workflows/release.yml`) runs the checks and publishes `@sandilya/ui` with npm trusted publishing, only when that version isn't on npm yet. The registry's `foundations` item picks up the new version range on the same build.
 - **Plugin**: bump `plugins/san-ui/.claude-plugin/plugin.json` when the skill changes.
+- **Claude Design**: `.design-sync/` holds the pipeline that syncs the components to claude.ai/design; see its `NOTES.md`.
 
 ## License
 
