@@ -42,7 +42,7 @@ const cardVariants = cva('flex flex-col rounded-xl text-card-foreground', {
       sm: cn(spacing.card.sm.inset, spacing.card.sm.gap),
     },
     interactive: {
-      true: 'cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+      true: 'cursor-pointer transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
       false: '',
     },
   },

@@ -3,7 +3,7 @@
  *
  * Values are bare HSL channels so Tailwind opacity modifiers keep working
  * (bg-success/10, text-brand/80). Tailwind names for them live in
- * tailwind.preset.js.
+ * theme.css.
  *
  * This file holds what every app shares: the neutral surfaces, feedback
  * colors, lines, radius and the paper reset. The brand comes from a theme

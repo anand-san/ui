@@ -46,7 +46,7 @@ Visual components are our own code. Behavior-heavy ones (dialogs, menus, popover
 
 ## Using it
 
-The components live in your app, at `src/design-system/` (the shadcn CLI copies them there), so you import them from your own source through the `@/` alias. The `@sandilya/ui` npm package holds only the tokens, themes and Tailwind preset; never import components from it.
+The components live in your app, at `src/design-system/` (the shadcn CLI copies them there), so you import them from your own source through the `@/` alias. The `@sandilya/ui` npm package holds only the tokens, themes and Tailwind theme; never import components from it.
 
 ```tsx
 import { Card, CardContent, CardHeader, CardTitle } from '@/design-system';
@@ -70,4 +70,4 @@ bun add @sandilya/ui
 bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json
 ```
 
-The color tokens, themes and Tailwind preset come from `@sandilya/ui`; the components are copied into the app at `src/design-system/`. The repository README at [github.com/anand-san/ui](https://github.com/anand-san/ui) has the full setup, the rules and the migration guide.
+The color tokens, themes and Tailwind theme come from `@sandilya/ui`; the components are copied into the app at `src/design-system/`. The repository README at [github.com/anand-san/ui](https://github.com/anand-san/ui) has the full setup, the rules and the migration guide.

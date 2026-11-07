@@ -1,7 +1,7 @@
 {
   "name": "@sandilya/ui",
-  "version": "0.1.1",
-  "description": "Design tokens, themes and the Tailwind preset for san-ui",
+  "version": "0.2.0",
+  "description": "Design tokens, themes and the Tailwind CSS 4 theme for san-ui",
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -13,12 +13,11 @@
   "keywords": [
     "design-tokens",
     "tailwindcss",
-    "tailwind-preset",
+    "tailwind-theme",
     "design-system"
   ],
   "exports": {
-    ".": "./tailwind-preset.js",
-    "./tailwind-preset": "./tailwind-preset.js",
+    "./theme.css": "./theme.css",
     "./tokens.css": "./tokens.css",
     "./themes/*": "./themes/*",
     "./base.css": "./base.css"
@@ -26,8 +25,8 @@
   "files": [
     "tokens.css",
     "base.css",
+    "theme.css",
     "themes",
-    "tailwind-preset.js",
     "README.md",
     "LICENSE"
   ],
@@ -35,10 +34,10 @@
     "*.css"
   ],
   "dependencies": {
-    "tailwindcss-animate": "^1.0.7"
+    "tw-animate-css": "^1.4.0"
   },
   "peerDependencies": {
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "^4.0.0"
   },
   "publishConfig": {
     "access": "public"

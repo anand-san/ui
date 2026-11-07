@@ -41,22 +41,21 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@sandilya/ui": "workspace:*",
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@fontsource-variable/figtree": "^5.3.0",
+    "@sandilya/ui": "workspace:*",
     "@storybook/addon-docs": "10.6.2",
     "@storybook/addon-themes": "10.6.2",
     "@storybook/react-vite": "10.6.2",
+    "@tailwindcss/vite": "^4.3.5",
     "@types/bun": "latest",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^4.2.3",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
     "prettier": "3.8.3",
     "shadcn": "4.23.0",
     "storybook": "10.6.2",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3",
     "vite": "^7.0.6"
   }

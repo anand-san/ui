@@ -51,7 +51,7 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
   theme in as the default brand, the Brand decorator only swaps themes at runtime, and
   `withThemeByClassName` uses no class for light, so previews render light Eloovor without them.
 - [GENERAL] `_ds_bundle.css` is Storybook's compiled Tailwind (CSS_FROM_STORYBOOK), so it
-  holds only the utility classes used somewhere in `src` (the Tailwind content glob), plus
+  holds only the utility classes used somewhere in `src` (the `@source` paths in `.storybook/preview.css`), plus
   tokens, the Eloovor theme and the two fonts (Figtree, Bricolage Grotesque).
 
 ## Previews

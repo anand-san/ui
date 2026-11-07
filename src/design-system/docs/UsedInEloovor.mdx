@@ -45,27 +45,14 @@ An opportunity moves through seven statuses, more than the seven Badge tones can
 }
 ```
 
-and names them in its own Tailwind config, next to the preset:
+and names them for Tailwind in the same file, after the san-ui imports:
 
-```js
-// tailwind.config.js
-import preset from '@sandilya/ui';
-
-export default {
-  presets: [preset],
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
-  theme: {
-    extend: {
-      colors: {
-        status: {
-          'to-apply': 'hsl(var(--status-to-apply))',
-          applied: 'hsl(var(--status-applied))',
-          /* … */
-        },
-      },
-    },
-  },
-};
+```css
+@theme inline {
+  --color-status-to-apply: hsl(var(--status-to-apply));
+  --color-status-applied: hsl(var(--status-applied));
+  /* … */
+}
 ```
 
 The class maps are written out in full so Tailwind generates every class:
