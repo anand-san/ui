@@ -19,13 +19,13 @@ The app needs React, Tailwind CSS 4 and an `@/` alias that points at `src/` (in 
 bun add @sandilya/ui
 ```
 
-**2. A theme.** Copy [`themes/template.css`](packages/tokens/themes/template.css) into the app as `src/theme.css` and set your brand (see [Themes](#themes)). Or use the Eloovor theme as is.
+**2. A theme.** Copy [`themes/template.css`](packages/tokens/themes/template.css) into the app as `src/brand.css` and set your brand (see [Themes](#themes)). Or use the Eloovor theme as is.
 
 ```css
 /* src/index.css */
 @import 'tailwindcss';
 @import '@sandilya/ui/tokens.css';
-@import './theme.css'; /* or '@sandilya/ui/themes/eloovor.css' */
+@import './brand.css'; /* or '@sandilya/ui/themes/eloovor.css' */
 @import '@sandilya/ui/theme.css';
 @import '@sandilya/ui/base.css';
 ```
