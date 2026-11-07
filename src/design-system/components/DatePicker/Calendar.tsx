@@ -30,24 +30,22 @@ export function Calendar({
       fromYear={fromYear}
       toYear={toYear}
       classNames={{
-        months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-        month: 'space-y-4',
+        months: 'flex flex-col gap-4 sm:flex-row',
+        month: 'flex flex-col gap-4',
         caption: 'flex justify-center gap-1 py-1 relative items-center',
         caption_label: 'hidden',
         dropdown: 'p-0',
         dropdown_month: 'relative inline-flex',
         dropdown_year: 'relative inline-flex',
         dropdown_icon: 'hidden',
-        nav: 'space-x-1 flex items-center px-2',
+        nav: 'flex items-center gap-1 px-2',
         nav_button:
           'inline-flex size-7 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground',
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
-        table: 'w-full border-collapse mt-4',
-        tbody: 'mt-1',
+        table: 'w-full border-collapse',
         head_row: 'flex',
-        head_cell:
-          'w-8 rounded-md py-px text-xs font-normal text-muted-foreground',
+        head_cell: 'w-8 rounded-md text-xs font-normal text-muted-foreground',
         row: 'flex w-full mt-2',
         cell: cn(
           'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-primary/5 [&:has([aria-selected].day-outside)]:bg-primary/5 [&:has([aria-selected].day-range-end)]:rounded-r-md',
