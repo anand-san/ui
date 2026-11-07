@@ -1,6 +1,9 @@
 @import '@fontsource-variable/figtree';
 @import '@fontsource-variable/bricolage-grotesque/opsz.css';
 @import '@sandilya/ui/tokens.css';
+/* The default brand, compiled in so the CSS works without the Brand decorator
+   (the design-sync bundle uses this CSS); the toolbar swaps it at runtime */
+@import '@sandilya/ui/themes/eloovor.css';
 @import '@sandilya/ui/base.css';
 
 @tailwind base;

@@ -1,0 +1,59 @@
+# Publishes @sandilya/ui to npm when packages/tokens/package.json has a
+# version that isn't on npm yet. Bump the version in a commit to main to
+# release; other pushes skip the publish step.
+#
+# Uses npm trusted publishing (OIDC): no npm token is stored. The package's
+# trusted publisher on npmjs.com must name this repo and `release.yml`.
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/tokens/**'
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
+
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run test
+      - run: bun run build
+
+      - name: Check whether this version is on npm
+        id: version
+        working-directory: packages/tokens
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        if: steps.version.outputs.publish == 'true'
+        working-directory: packages/tokens
+        run: npm publish --provenance --access public

@@ -1,0 +1,40 @@
+{
+  "projectId": "cd220307-f608-4c39-aef1-24d8822365c0",
+  "pkg": "@eloovor/design-system",
+  "globalName": "EloovorDesignSystem",
+  "shape": "storybook",
+  "storybookConfigDir": ".storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "entry": ".design-sync/.cache/ds-pkg/index.ts",
+  "buildCmd": "node .design-sync/build-ds.mjs",
+  "tsconfig": "../../../tsconfig.json",
+  "titleMap": {
+    "Colors": null,
+    "Spacing": null,
+    "Typography": null
+  },
+  "libOverrides": {
+    "source-storybook.mjs": "splits the grouped story files (Forms, Overlays, Feedback, Navigation, Layout) into one card per component"
+  },
+  "overrides": {
+    "Badge": {
+      "cardMode": "column"
+    },
+    "Card": {
+      "cardMode": "column",
+      "viewport": "900x900"
+    },
+    "EmptyState": {
+      "cardMode": "column"
+    }
+  },
+  "extraEntries": [
+    "lucide-react"
+  ],
+  "storyImports": {
+    "bundle": [
+      "lucide-react"
+    ]
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}
