@@ -383,7 +383,7 @@ export const InsideSheet: Story = {
     },
   },
   render: () => (
-    <div className="flex max-w-sm flex-col gap-4 rounded-xl border bg-background p-4 shadow-sm">
+    <div className="flex max-w-sm flex-col gap-4 rounded-xl border bg-background p-4 shadow-xs">
       <Text variant="heading">Report defaults</Text>
       <Card size="md">
         <CardHeader>

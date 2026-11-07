@@ -24,12 +24,12 @@ export type ButtonVariant =
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon';
 
 const buttonVariants = cva(
-  'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         primary:
-          'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:bg-primary/85',
+          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:bg-primary/85',
         secondary: 'bg-primary/5 text-foreground hover:bg-primary/10',
         outline:
           'border border-input bg-card text-foreground hover:border-ring/40 hover:bg-primary/5',

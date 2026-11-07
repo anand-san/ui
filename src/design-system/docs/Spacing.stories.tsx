@@ -41,7 +41,7 @@ export const Scale: Story = {
               <Code>{row.step}</Code>
               <Text variant="caption">{row.px}px</Text>
               <div
-                className="hidden h-3 rounded-sm bg-brand md:block"
+                className="hidden h-3 rounded-xs bg-brand md:block"
                 style={{ width: row.px * 2 }}
               />
               <Text variant="caption" tone="default">

@@ -6,7 +6,7 @@ import { controlVariants } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 const dayButtonClass =
-  'inline-flex size-8 items-center justify-center rounded-md p-0 text-sm font-normal transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-selected:opacity-100';
+  'inline-flex size-8 items-center justify-center rounded-md p-0 text-sm font-normal transition-colors hover:bg-primary/5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring aria-selected:opacity-100';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -43,9 +43,11 @@ export function Calendar({
           'inline-flex size-7 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground',
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
-        table: 'w-full border-collapse space-y-1 mt-4',
+        table: 'w-full border-collapse mt-4',
+        tbody: 'mt-1',
         head_row: 'flex',
-        head_cell: 'w-8 rounded-md text-xs font-normal text-muted-foreground',
+        head_cell:
+          'w-8 rounded-md py-px text-xs font-normal text-muted-foreground',
         row: 'flex w-full mt-2',
         cell: cn(
           'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-primary/5 [&:has([aria-selected].day-outside)]:bg-primary/5 [&:has([aria-selected].day-range-end)]:rounded-r-md',

@@ -97,7 +97,7 @@ export function StatusMenu<T extends string>({
           size={size}
           tone={color.tone}
           className={cn(
-            'cursor-pointer hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
+            'cursor-pointer hover:brightness-95 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
             color.className,
             className,
           )}

@@ -20,9 +20,9 @@ export function Toaster(props: ToasterProps) {
       toastOptions={{
         classNames: {
           toast: 'shadow-lg',
-          description: '!text-muted-foreground',
-          actionButton: '!bg-primary !text-primary-foreground',
-          cancelButton: '!bg-primary/5 !text-foreground',
+          description: 'text-muted-foreground!',
+          actionButton: 'bg-primary! text-primary-foreground!',
+          cancelButton: 'bg-primary/5! text-foreground!',
           success: '[&_[data-icon]]:text-success',
           error: '[&_[data-icon]]:text-destructive',
           warning: '[&_[data-icon]]:text-warning',
