@@ -41,4 +41,11 @@ describe('StatusMenu', () => {
     expect(html).toContain('text-late');
     expect(html).toContain('>late<');
   });
+
+  test('passes props to the plain badge', () => {
+    const html = renderToStaticMarkup(
+      <StatusMenu value="done" options={options} data-testid="status" />,
+    );
+    expect(html).toContain('data-testid="status"');
+  });
 });

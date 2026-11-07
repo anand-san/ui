@@ -83,6 +83,7 @@ export function StatusMenu<T extends string>({
         tone={color.tone}
         className={cn(color.className, className)}
         dot
+        {...(props as React.HTMLAttributes<HTMLSpanElement>)}
       >
         {currentLabel}
       </Badge>
@@ -131,7 +132,7 @@ export function StatusMenu<T extends string>({
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={value}
-          onValueChange={next => onValueChange(next as T)}
+          onValueChange={next => next !== value && onValueChange(next as T)}
         >
           {options.map(option => {
             const { tone, className: colorClass } = optionColor(option);
