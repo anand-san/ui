@@ -28,7 +28,7 @@ export type CardSize = 'lg' | 'md' | 'sm';
 
 const CardSizeContext = React.createContext<CardSize>('lg');
 
-const cardVariants = cva('flex flex-col rounded-xl text-card-foreground', {
+const cardVariants = cva('flex flex-col text-card-foreground', {
   variants: {
     variant: {
       soft: 'bg-surface',
@@ -37,9 +37,9 @@ const cardVariants = cva('flex flex-col rounded-xl text-card-foreground', {
       brand: 'bg-brand-600 text-white dark:bg-brand-800',
     },
     size: {
-      lg: cn(spacing.card.lg.inset, spacing.card.lg.gap),
-      md: cn(spacing.card.md.inset, spacing.card.md.gap),
-      sm: cn(spacing.card.sm.inset, spacing.card.sm.gap),
+      lg: cn('rounded-xl', spacing.card.lg.inset, spacing.card.lg.gap),
+      md: cn('rounded-xl', spacing.card.md.inset, spacing.card.md.gap),
+      sm: cn('rounded-lg', spacing.card.sm.inset, spacing.card.sm.gap),
     },
     interactive: {
       true: 'cursor-pointer transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',

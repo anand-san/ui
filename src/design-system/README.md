@@ -61,7 +61,7 @@ The base sets the structure; a theme fills in the colors and faces.
 - **Ink**: `primary` is the brand color. Neutrals (`background`, `surface`, `muted`, `border`) lean slightly toward `--tint-hue` instead of pure grey. Dark mode is deep ink, not charcoal.
 - **Highlighter**: the `highlight-*` ramp and the `highlight` token. It is a fill behind dark text, never text on white. Use it through `Mark`, `Badge tone="highlight"` and text selection.
 - **Type**: `font-display` for `display`, `title` and `heading`; `font-sans` for the rest.
-- **Shape**: buttons default to pills. Radius goes up with size: `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards, `rounded-2xl` dialogs.
+- **Shape**: buttons default to pills. Radius goes up with size and down as things nest: `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards and floating panels, `rounded-2xl` dialogs and sheets, `rounded-inset` for rows inside a menu.
 - **Shadows** are tinted with `--shadow-color` and kept for floating things: menus, dialogs, toasts, the primary button.
 - **Paper stays paper**: `.force-light-mode` (printed pages, document previews) resets to plain greys and Helvetica, a PDF's font.
 
@@ -71,7 +71,7 @@ The base sets the structure; a theme fills in the colors and faces.
 2. **Tints, not new colors.** For a soft fill behind text, use a token at `/5`, `/10` or `/20` (`bg-primary/5`, `bg-success/10 text-success`). These follow the surface they sit on in both themes.
 3. **Type roles, not sizes.** Use `<Text variant>` or `textVariants()`. No `text-[10px]`, `text-[13px]` or other arbitrary sizes. Labels are sentence case, never `uppercase tracking-wider`.
 4. **Spacing steps.** Only `0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16`. Use the `spacing` roles for page gutters, card padding and gaps between cards.
-5. **Radius.** `rounded-md` for fields, `rounded-xl` for cards, `rounded-2xl` for dialogs, `rounded-full` for buttons, badges and avatars.
+5. **Radius.** `rounded-md` for fields, `rounded-lg` for small cards, `rounded-xl` for section cards and floating panels, `rounded-2xl` for dialogs and sheets, `rounded-inset` for rows inside a menu, `rounded-full` for buttons, badges and avatars.
 6. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
 7. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
 

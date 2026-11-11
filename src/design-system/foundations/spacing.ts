@@ -45,7 +45,13 @@ export const spacing = {
 } as const;
 
 export const radiusScale = [
-  { name: 'rounded-md', usage: 'Controls: buttons, inputs, menu items' },
-  { name: 'rounded-xl', usage: 'Every card, section or item' },
-  { name: 'rounded-full', usage: 'Pills, counts, avatars, status dots' },
+  { name: 'rounded-md', usage: 'Fields: inputs, selects, squared-off buttons' },
+  {
+    name: 'rounded-inset',
+    usage: 'Rows inside a menu or select list, concentric with the panel',
+  },
+  { name: 'rounded-lg', usage: 'Small cards: items inside a section card' },
+  { name: 'rounded-xl', usage: 'Section cards, popovers, menus, alerts' },
+  { name: 'rounded-2xl', usage: 'Dialogs and sheets' },
+  { name: 'rounded-full', usage: 'Buttons, badges, tabs, avatars' },
 ] as const;

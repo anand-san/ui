@@ -175,7 +175,7 @@ export const Radius: Story = {
   render: () => (
     <DocPage
       title="Radius"
-      intro="Three radii. Cards are always rounded-xl, so nested cards share the same curve."
+      intro="Radius goes up with size and down as things nest: a small card inside a section card is one step smaller, and a menu row follows the curve of its panel."
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {radiusScale.map(row => (

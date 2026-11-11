@@ -27,7 +27,7 @@ export const floatingPanelClass =
 
 /** A row inside a menu or select list */
 export const menuItemClass =
-  'relative flex cursor-default select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-hidden transition-colors focus:bg-primary/[0.07] data-[highlighted]:bg-primary/[0.07] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0';
+  'relative flex cursor-default select-none items-center gap-2 rounded-inset px-2 py-1.5 text-sm outline-hidden transition-colors focus:bg-primary/[0.07] data-[highlighted]:bg-primary/[0.07] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0';
 
 /** Dimmed backdrop behind dialogs and sheets */
 export const overlayClass =
