@@ -1,7 +1,7 @@
 {
   "projectId": "cd220307-f608-4c39-aef1-24d8822365c0",
-  "pkg": "@eloovor/design-system",
-  "globalName": "EloovorDesignSystem",
+  "pkg": "san-ui",
+  "globalName": "SanUI",
   "shape": "storybook",
   "storybookConfigDir": ".storybook",
   "storybookStatic": ".design-sync/sb-reference",

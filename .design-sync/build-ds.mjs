@@ -56,7 +56,7 @@ symlinkSync(relative(PKG_DIR, resolve('node_modules')), join(PKG_DIR, 'node_modu
 writeFileSync(join(PKG_DIR, 'index.ts'),
   `export * from ${JSON.stringify(relative(PKG_DIR, join(SRC, 'design-system', 'index.ts')))};\n`);
 writeFileSync(join(PKG_DIR, 'package.json'), JSON.stringify({
-  name: '@eloovor/design-system',
+  name: JSON.parse(readFileSync('.design-sync/config.json', 'utf8')).pkg,
   version: JSON.parse(readFileSync('packages/tokens/package.json', 'utf8')).version,
   private: true,
   type: 'module',

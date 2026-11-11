@@ -4,8 +4,8 @@ san-ui is a shared design system for every kind of app: tools and dashboards, co
 
 ## Setup
 
-- No provider is needed. Load `styles.css` and `_ds_bundle.js`, then take everything from `window.EloovorDesignSystem` (the global keeps an older name). Components and the lucide icon set share that global.
-- Icons: `const { Plus, Search, Trash2 } = window.EloovorDesignSystem`. `Badge`, `Calendar`, `Gauge`, `List`, `Sheet` and `Text` are components, so use `BadgeIcon`, `CalendarIcon`, `GaugeIcon`, `ListIcon`, `SheetIcon` and `TextIcon` for those icons.
+- No provider is needed. Load `styles.css` and `_ds_bundle.js`, then take everything from `window.SanUI`. Components and the lucide icon set share that global.
+- Icons: `const { Plus, Search, Trash2 } = window.SanUI`. `Badge`, `Calendar`, `Gauge`, `List`, `Sheet` and `Text` are components, so use `BadgeIcon`, `CalendarIcon`, `GaugeIcon`, `ListIcon`, `SheetIcon` and `TextIcon` for those icons.
 - Wrap any `Tooltip` in a `TooltipProvider`; Radix tooltips throw without it.
 - Dark mode: `className="dark"` on an ancestor (usually `<html>`). `.light` inside it keeps a subtree light.
 - Density: `data-density="compact"`, `"regular"` or `"comfortable"` on an ancestor sizes the type, controls and rows. Use `comfortable` for a phone design.
@@ -38,7 +38,7 @@ Settings and detail screens are `ListSection` > `List` > `ListItem` rows on `bg-
 
 ```jsx
 const { PageHeader, ListSection, List, ListItem, Switch, Badge, Button, Card, CardHeader,
-  CardTitle, CardDescription, CardAction, CardContent, Bell, CreditCard } = window.EloovorDesignSystem;
+  CardTitle, CardDescription, CardAction, CardContent, Bell, CreditCard } = window.SanUI;
 
 <div className="min-h-screen bg-canvas">
   <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6 md:px-8 md:py-10">

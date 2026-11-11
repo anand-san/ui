@@ -1,11 +1,11 @@
 # design-sync notes (san-ui)
 
-Synced to claude.ai/design project "Eloovor Design System v2" (projectId in config.json).
-The pipeline moved here from the Eloovor repo on 2026-11-07, when the design system became
-san-ui; it has not been re-run since the move. `pkg` and `globalName` keep their Eloovor names
-(`@eloovor/design-system`, `window.EloovorDesignSystem`) so existing designs in the project
-keep working; renaming them means updating those designs. The older "Eloovor Design System"
-project (2026-10-11, the shadcn `components/ui` era) is not synced from here; leave it alone.
+Synced to the claude.ai/design project in config.json, "Eloovor Design System v2" when it was
+last synced. The pipeline moved here from the Eloovor repo on 2026-11-07, when the design system
+became san-ui. On 2026-11-11 `pkg` and `globalName` became `san-ui` and `window.SanUI`; designs
+in the project made before then read `window.EloovorDesignSystem` and need the new name.
+The older "Eloovor Design System" project (2026-10-11, the shadcn `components/ui` era) is not
+synced from here; leave it alone.
 
 ## Re-sync recipe (from the repo root)
 
@@ -69,7 +69,7 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
 ## Bundle contents
 
 - [GENERAL] `extraEntries: ["lucide-react"]` puts the app's whole icon set on
-  `window.EloovorDesignSystem` (+~650 KB), since every screen and story uses lucide icons.
+  `window.SanUI` (+~650 KB), since every screen and story uses lucide icons.
   Badge, Calendar, Gauge, List, Sheet and Text are both components and icons: the components
   win, and the icons are reachable as `BadgeIcon`, `CalendarIcon`, `GaugeIcon`, `ListIcon`,
   `SheetIcon`, `TextIcon`.
