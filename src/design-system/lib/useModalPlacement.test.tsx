@@ -1,10 +1,14 @@
 import { afterEach, describe, expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { useModalContentClass } from './useModalContentClass';
+import { modalSurfaceVariants } from '@/design-system/foundations/controls';
+
+import { useModalPlacement } from './useModalPlacement';
 
 function Modal() {
-  return <div className={useModalContentClass()} />;
+  return (
+    <div className={modalSurfaceVariants({ placement: useModalPlacement() })} />
+  );
 }
 
 function renderWithViewport(isMobile: boolean) {
@@ -19,7 +23,7 @@ afterEach(() => {
   Reflect.deleteProperty(globalThis, 'window');
 });
 
-describe('useModalContentClass', () => {
+describe('useModalPlacement', () => {
   test('centers the desktop dialog and only fades and zooms it in', () => {
     const html = renderWithViewport(false);
 

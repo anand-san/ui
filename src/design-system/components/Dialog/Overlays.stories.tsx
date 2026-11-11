@@ -240,7 +240,7 @@ export const SheetStory: Story = {
       <SheetTrigger asChild>
         <Button variant="outline">Report defaults</Button>
       </SheetTrigger>
-      <SheetContent showClose>
+      <SheetContent close>
         <SheetHeader>
           <SheetTitle>Report defaults</SheetTitle>
           <SheetDescription>Used when creating a new report.</SheetDescription>

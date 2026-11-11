@@ -42,6 +42,8 @@ export const spacing = {
   items: 'gap-3',
   /** Between an icon and its text, or a title and its count */
   inline: 'gap-2',
+  /** Between a title and its description */
+  stack: 'gap-1',
 } as const;
 
 export const radiusScale = [

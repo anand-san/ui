@@ -110,7 +110,8 @@ export const CardHeader = React.forwardRef<
     ref={ref}
     data-slot="card-header"
     className={cn(
-      'grid auto-rows-min items-start gap-1 has-[[data-slot=card-action]]:grid-cols-[1fr_auto] has-[[data-slot=card-action]]:gap-x-3',
+      'grid auto-rows-min items-start has-[[data-slot=card-action]]:grid-cols-[1fr_auto] has-[[data-slot=card-action]]:gap-x-3',
+      spacing.stack,
       className,
     )}
     {...props}
