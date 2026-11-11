@@ -21,6 +21,9 @@ export const controlVariants = cva(
 
 export type ControlSize = 'sm' | 'md' | 'lg';
 
+export const focusRing =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+
 /** Panel look shared by popovers, menus, select lists and tooltips */
 export const floatingPanelClass =
   'z-50 rounded-xl border bg-popover text-popover-foreground shadow-lg outline-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2';

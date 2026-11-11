@@ -3,6 +3,7 @@ import { cva } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 import * as React from 'react';
 
+import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -24,7 +25,10 @@ export type ButtonVariant =
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon';
 
 const buttonVariants = cva(
-  'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  [
+    'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    focusRing,
+  ],
   {
     variants: {
       variant: {
@@ -38,9 +42,9 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         link: 'text-primary underline decoration-primary/30 underline-offset-4 hover:decoration-primary',
         inverse:
-          'bg-white text-neutral-900 hover:bg-white/90 focus-visible:ring-white focus-visible:ring-offset-0',
+          'bg-white text-neutral-900 hover:bg-white/90 focus-visible:outline-white',
         'inverse-soft':
-          'bg-white/15 text-white hover:bg-white/25 focus-visible:ring-white focus-visible:ring-offset-0',
+          'bg-white/15 text-white hover:bg-white/25 focus-visible:outline-white',
       },
       size: {
         sm: 'h-8 px-3 text-xs',

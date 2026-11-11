@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/design-system/components/DropdownMenu/DropdownMenu';
+import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -97,7 +98,8 @@ export function StatusMenu<T extends string>({
           size={size}
           tone={color.tone}
           className={cn(
-            'cursor-pointer hover:brightness-95 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
+            'cursor-pointer hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
+            focusRing,
             color.className,
             className,
           )}

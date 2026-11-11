@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 import { X } from 'lucide-react';
 import * as React from 'react';
 
-import { overlayClass } from '@/design-system/foundations/controls';
+import { focusRing, overlayClass } from '@/design-system/foundations/controls';
 import { textVariants } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
 
@@ -69,7 +69,12 @@ export const SheetContent = React.forwardRef<
       >
         {children}
         {showClose && (
-          <SheetPrimitive.Close className="absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
+          <SheetPrimitive.Close
+            className={cn(
+              'absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground',
+              focusRing,
+            )}
+          >
             <X className="size-4" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>

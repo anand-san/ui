@@ -2,11 +2,16 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 
-import { controlVariants } from '@/design-system/foundations/controls';
+import {
+  controlVariants,
+  focusRing,
+} from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
-const dayButtonClass =
-  'inline-flex size-8 items-center justify-center rounded-md p-0 text-sm font-normal transition-colors hover:bg-primary/5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring aria-selected:opacity-100';
+const dayButtonClass = cn(
+  'inline-flex size-8 items-center justify-center rounded-md p-0 text-sm font-normal transition-colors hover:bg-primary/5 aria-selected:opacity-100',
+  focusRing,
+);
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 

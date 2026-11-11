@@ -108,7 +108,7 @@ export const AsAMenuTrigger: Story = {
     <Badge tone="info" asChild>
       <button
         type="button"
-        className="focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+        className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <BadgeDot />
         In review

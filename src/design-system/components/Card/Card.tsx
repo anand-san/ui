@@ -8,6 +8,7 @@ import {
   type TextVariant,
   textVariants,
 } from '@/design-system/foundations/typography';
+import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -42,7 +43,7 @@ const cardVariants = cva('flex flex-col text-card-foreground', {
       sm: cn('rounded-lg', spacing.card.sm.inset, spacing.card.sm.gap),
     },
     interactive: {
-      true: 'cursor-pointer transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
+      true: cn('cursor-pointer transition-colors', focusRing),
       false: '',
     },
   },
