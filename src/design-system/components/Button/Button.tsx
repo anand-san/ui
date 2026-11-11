@@ -76,9 +76,12 @@ const buttonVariants = cva(
   },
 );
 
-/** A link sizes to its text and underlines on hover, like text */
+/**
+ * A link sizes to its text. A faint underline marks it without relying on
+ * color, which a grey theme doesn't have; hover makes it solid.
+ */
 const linkClass =
-  'inline-flex items-center gap-1 rounded-xs font-medium underline-offset-[0.2em] hover:underline disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-[1em]';
+  'inline-flex items-center gap-1 rounded-xs font-medium underline decoration-current/35 underline-offset-[0.2em] transition-[text-decoration-color] duration-(--duration-fast) hover:decoration-current disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-[1em]';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   /** Defaults to `filled` */
