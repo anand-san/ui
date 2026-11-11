@@ -1,86 +1,82 @@
-import { cva } from 'class-variance-authority';
-import * as React from 'react';
+import type { ComponentProps } from 'react';
 
 import { textVariants } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
 
 /**
- * An inline message in a tinted box. Put an icon first and it lines up with
- * the title; the text sits in a column next to it.
+ * An inline message on a soft fill. Put an icon first and it lines up with
+ * the title; everything else stacks next to it, actions included.
+ *
+ * Screen readers hear a `status` politely when it appears. A `danger` alert
+ * is an `alert` and interrupts, so keep those for errors.
  */
 
 export type AlertTone =
   | 'neutral'
-  | 'brand'
+  | 'accent'
   | 'success'
   | 'warning'
-  | 'info'
-  | 'destructive';
+  | 'danger'
+  | 'info';
 
-const alertVariants = cva(
-  'relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-xl px-4 py-3 text-sm has-[>svg]:grid-cols-[1rem_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5',
-  {
-    variants: {
-      tone: {
-        neutral: 'bg-primary/5 text-foreground [&>svg]:text-muted-foreground',
-        brand: 'bg-brand/10 text-foreground [&>svg]:text-brand',
-        success: 'bg-success/10 text-foreground [&>svg]:text-success',
-        warning: 'bg-warning/10 text-foreground [&>svg]:text-warning',
-        info: 'bg-info/10 text-foreground [&>svg]:text-info',
-        destructive:
-          'bg-destructive/10 text-destructive [&>svg]:text-destructive',
-      },
-    },
-  },
-);
+const tones: Record<AlertTone, string> = {
+  neutral: 'bg-fill [&>svg]:text-ink-secondary',
+  accent: 'bg-accent-soft [&>svg]:text-accent',
+  success: 'bg-success-soft [&>svg]:text-success',
+  warning: 'bg-warning-soft [&>svg]:text-warning',
+  danger: 'bg-danger-soft [&>svg]:text-danger',
+  info: 'bg-info-soft [&>svg]:text-info',
+};
 
-export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AlertProps extends ComponentProps<'div'> {
   /** Defaults to `neutral` */
   tone?: AlertTone;
 }
 
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ tone = 'neutral', className, ...props }, ref) => (
+export function Alert({
+  tone = 'neutral',
+  role,
+  className,
+  ...props
+}: AlertProps) {
+  return (
     <div
-      ref={ref}
-      role="alert"
+      role={role ?? (tone === 'danger' ? 'alert' : 'status')}
       data-slot="alert"
-      className={cn(alertVariants({ tone }), className)}
+      data-tone={tone}
+      className={cn(
+        'grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-card px-4 py-3 text-subhead text-ink has-[>svg]:grid-cols-[1.125rem_1fr] has-[>svg]:gap-x-3 [&>*:not(svg)]:col-start-2 [&>svg]:size-[1.125rem] [&>svg]:translate-y-px',
+        tones[tone],
+        className,
+      )}
       {...props}
     />
-  ),
-);
-Alert.displayName = 'Alert';
+  );
+}
 
-export const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="alert-title"
-    className={cn(
-      textVariants({ variant: 'body-strong' }),
-      'col-start-2',
-      className,
-    )}
-    {...props}
-  />
-));
-AlertTitle.displayName = 'AlertTitle';
+export function AlertTitle({ className, ...props }: ComponentProps<'p'>) {
+  return (
+    <p
+      data-slot="alert-title"
+      className={cn(
+        textVariants({ variant: 'subhead' }),
+        'font-semibold',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
-export const AlertDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="alert-description"
-    className={cn(
-      'col-start-2 text-sm opacity-90 [&_p]:leading-relaxed',
-      className,
-    )}
-    {...props}
-  />
-));
-AlertDescription.displayName = 'AlertDescription';
+export function AlertDescription({
+  className,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn('[&_p+p]:mt-1', className)}
+      {...props}
+    />
+  );
+}

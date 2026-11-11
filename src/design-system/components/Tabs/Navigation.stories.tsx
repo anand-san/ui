@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  Briefcase,
-  FileUser,
-  Home,
-  LineChart,
-  Sparkles,
-  User,
-} from 'lucide-react';
+import { Calendar, LayoutGrid, List as ListIcon } from 'lucide-react';
 
 import {
   Accordion,
@@ -23,7 +16,7 @@ import {
   NavigationMenuTrigger,
 } from '@/design-system/components/NavigationMenu/NavigationMenu';
 import {
-  navigationMenuItemVariants,
+  navigationMenuItemClass,
   navigationMenuLinkClass,
 } from '@/design-system/components/NavigationMenu/navigationMenuStyles';
 import { Text } from '@/design-system/components/Text/Text';
@@ -36,7 +29,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Tabs are a pill segmented control on the child card tint; when they overflow, the list scrolls and shows arrow buttons. Accordions are for optional detail, like the advanced fields of a form. NavigationMenu is the desktop header: pill items, with a panel of links for Tools.',
+          'Tabs are a segmented control: a few views of the same content, with a thumb that springs to the chosen one. Accordions hold optional detail. NavigationMenu is the bar of a desktop app or site; hover is grey and the current page is the accent, so they never look alike.',
       },
     },
   },
@@ -48,43 +41,43 @@ type Story = StoryObj<typeof meta>;
 export const TabsStory: Story = {
   name: 'Tabs',
   render: () => (
-    <Tabs defaultValue="summary" className="max-w-2xl">
+    <Tabs defaultValue="list" className="max-w-md">
       <TabsList>
-        <TabsTrigger value="summary">
-          <Sparkles />
-          Summary
+        <TabsTrigger value="list">
+          <ListIcon />
+          List
         </TabsTrigger>
-        <TabsTrigger value="basic">
-          <FileUser />
-          Basic
+        <TabsTrigger value="board">
+          <LayoutGrid />
+          Board
         </TabsTrigger>
-        <TabsTrigger value="experience">
-          <Briefcase />
-          Work
+        <TabsTrigger value="calendar">
+          <Calendar />
+          Calendar
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="summary">
-        <Text tone="muted">Profile summary.</Text>
+      <TabsContent value="list">
+        <Text tone="secondary">Tasks in a list, newest first.</Text>
       </TabsContent>
-      <TabsContent value="basic">
-        <Text tone="muted">Name, email and links.</Text>
+      <TabsContent value="board">
+        <Text tone="secondary">Tasks in columns by status.</Text>
       </TabsContent>
-      <TabsContent value="experience">
-        <Text tone="muted">Teams and projects.</Text>
+      <TabsContent value="calendar">
+        <Text tone="secondary">Tasks on the days they are due.</Text>
       </TabsContent>
     </Tabs>
   ),
 };
 
-export const OverflowingTabs: Story = {
+export const FullWidthTabs: Story = {
+  name: 'Full width',
   render: () => (
-    <Tabs defaultValue="t0" className="max-w-sm">
-      <TabsList className="flex w-full">
-        {Array.from({ length: 8 }, (_, i) => (
-          <TabsTrigger key={i} value={`t${i}`}>
-            Section {i + 1}
-          </TabsTrigger>
-        ))}
+    <Tabs defaultValue="week" className="max-w-sm">
+      <TabsList className="w-full">
+        <TabsTrigger value="day">Day</TabsTrigger>
+        <TabsTrigger value="week">Week</TabsTrigger>
+        <TabsTrigger value="month">Month</TabsTrigger>
+        <TabsTrigger value="year">Year</TabsTrigger>
       </TabsList>
     </Tabs>
   ),
@@ -97,7 +90,7 @@ export const AccordionStory: Story = {
       <AccordionItem value="accuracy">
         <AccordionTrigger>Advanced settings</AccordionTrigger>
         <AccordionContent>
-          <Text tone="muted">
+          <Text tone="secondary">
             Set a custom domain and the time zone used for due dates.
           </Text>
         </AccordionContent>
@@ -105,7 +98,7 @@ export const AccordionStory: Story = {
       <AccordionItem value="more">
         <AccordionTrigger>More options</AccordionTrigger>
         <AccordionContent>
-          <Text tone="muted">Anything else that is rarely needed.</Text>
+          <Text tone="secondary">Anything else that is rarely needed.</Text>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
@@ -137,7 +130,7 @@ export const HeaderNavigation: Story = {
     docs: {
       description: {
         story:
-          'Style links with `navigationMenuItemVariants({ active })` and set `aria-current="page"` on the active one. Links in a panel use `navigationMenuLinkClass`.',
+          'Style links in the bar with `navigationMenuItemClass` and pass `active` to the current one; Radix sets `aria-current="page"`. Links in a panel use `navigationMenuLinkClass`.',
       },
     },
   },
@@ -148,28 +141,28 @@ export const HeaderNavigation: Story = {
           <NavigationMenuItem>
             <NavigationMenuLink
               href="#"
-              aria-current="page"
-              className={navigationMenuItemVariants({ active: true })}
+              active
+              className={navigationMenuItemClass}
             >
-              <Home />
-              Home
+              Overview
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className={navigationMenuItemVariants()}>
-              <LineChart />
-              Tools
-            </NavigationMenuTrigger>
+            <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[520px] gap-2 p-3 md:grid-cols-2">
+              <ul className="grid w-[520px] gap-1 md:grid-cols-2">
                 {TOOLS.map(tool => (
                   <li key={tool.title}>
                     <NavigationMenuLink
                       href="#"
                       className={navigationMenuLinkClass}
                     >
-                      <Text variant="body-strong">{tool.title}</Text>
-                      <Text tone="muted" className="mt-1 line-clamp-2">
+                      <Text variant="headline">{tool.title}</Text>
+                      <Text
+                        variant="subhead"
+                        tone="secondary"
+                        className="mt-0.5 line-clamp-2"
+                      >
                         {tool.description}
                       </Text>
                     </NavigationMenuLink>
@@ -179,12 +172,8 @@ export const HeaderNavigation: Story = {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink
-              href="#"
-              className={navigationMenuItemVariants()}
-            >
-              <User />
-              Profile
+            <NavigationMenuLink href="#" className={navigationMenuItemClass}>
+              Pricing
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>

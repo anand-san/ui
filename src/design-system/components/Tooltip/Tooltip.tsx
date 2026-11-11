@@ -1,29 +1,43 @@
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import * as React from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '@/design-system/lib/cn';
 
-const TooltipProvider = TooltipPrimitive.Provider;
+/**
+ * A short label for a control that has no visible one, like an icon button.
+ * It fades in without moving. Put one TooltipProvider near the app root.
+ */
+
 const Tooltip = TooltipPrimitive.Root;
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
-export const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      data-slot="tooltip-content"
-      className={cn(
-        'z-50 max-w-xs rounded-md bg-foreground px-2.5 py-1.5 text-xs text-background shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-        className,
-      )}
-      {...props}
-    />
-  </TooltipPrimitive.Portal>
-));
-TooltipContent.displayName = 'TooltipContent';
+function TooltipProvider({
+  delayDuration = 500,
+  ...props
+}: ComponentProps<typeof TooltipPrimitive.Provider>) {
+  return <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />;
+}
+
+export function TooltipContent({
+  className,
+  sideOffset = 6,
+  collisionPadding = 8,
+  ...props
+}: ComponentProps<typeof TooltipPrimitive.Content>) {
+  return (
+    <TooltipPrimitive.Portal>
+      <TooltipPrimitive.Content
+        sideOffset={sideOffset}
+        collisionPadding={collisionPadding}
+        data-slot="tooltip-content"
+        className={cn(
+          'z-50 max-w-64 animate-fade-in rounded-control border border-separator material px-2 py-1 text-caption text-ink shadow-floating data-[state=closed]:animate-fade-out',
+          className,
+        )}
+        {...props}
+      />
+    </TooltipPrimitive.Portal>
+  );
+}
 
 export { Tooltip, TooltipProvider, TooltipTrigger };

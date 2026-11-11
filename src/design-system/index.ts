@@ -20,8 +20,6 @@ export {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogOverlay,
-  AlertDialogPortal,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from './components/AlertDialog/AlertDialog';
@@ -44,24 +42,23 @@ export {
   Button,
   type ButtonProps,
   type ButtonSize,
+  type ButtonTone,
   type ButtonVariant,
 } from './components/Button/Button';
 export {
   Card,
   CardAction,
   CardContent,
-  CardCount,
   CardDescription,
   CardFooter,
   CardHeader,
   type CardProps,
-  type CardSize,
   CardTitle,
   type CardTitleProps,
   type CardVariant,
 } from './components/Card/Card';
 export { Checkbox } from './components/Checkbox/Checkbox';
-export { Calendar } from './components/DatePicker/Calendar';
+export { Calendar, type CalendarProps } from './components/DatePicker/Calendar';
 export {
   DatePicker,
   type DatePickerProps,
@@ -74,8 +71,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogOverlay,
-  DialogPortal,
+  type DialogProps,
   DialogTitle,
   DialogTrigger,
 } from './components/Dialog/Dialog';
@@ -103,6 +99,12 @@ export {
 } from './components/EmptyState/EmptyState';
 export { Field, type FieldProps } from './components/Field/Field';
 export { useFieldControl } from './components/Field/fieldContext';
+export {
+  Gauge,
+  type GaugeProps,
+  type GaugeSize,
+  type GaugeTone,
+} from './components/Gauge/Gauge';
 export { Input, type InputProps } from './components/Input/Input';
 export { Textarea, type TextareaProps } from './components/Input/Textarea';
 export {
@@ -112,9 +114,15 @@ export {
   type LabelProps,
 } from './components/Label/Label';
 export {
+  List,
+  ListItem,
+  type ListItemProps,
+  ListSection,
+  type ListSectionProps,
+} from './components/List/List';
+export {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
@@ -122,7 +130,7 @@ export {
   NavigationMenuViewport,
 } from './components/NavigationMenu/NavigationMenu';
 export {
-  navigationMenuItemVariants,
+  navigationMenuItemClass,
   navigationMenuLinkClass,
 } from './components/NavigationMenu/navigationMenuStyles';
 export {
@@ -141,11 +149,6 @@ export {
   type ProgressProps,
   type ProgressTone,
 } from './components/Progress/Progress';
-export {
-  ScoreRing,
-  type ScoreRingProps,
-} from './components/ScoreRing/ScoreRing';
-export { scoreTone } from './components/ScoreRing/scoreTone';
 export { ScrollArea, ScrollBar } from './components/ScrollArea/ScrollArea';
 export {
   Select,
@@ -170,8 +173,6 @@ export {
   SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetOverlay,
-  SheetPortal,
   SheetTitle,
   SheetTrigger,
 } from './components/Sheet/Sheet';
@@ -181,6 +182,11 @@ export {
   type StatusMenuProps,
   type StatusOption,
 } from './components/StatusMenu/StatusMenu';
+export {
+  Surface,
+  type SurfaceProps,
+  type SurfaceTone,
+} from './components/Surface/Surface';
 export { Switch } from './components/Switch/Switch';
 export {
   Tabs,
@@ -198,19 +204,26 @@ export {
   TooltipTrigger,
 } from './components/Tooltip/Tooltip';
 export {
+  colorGroups,
   type ColorGroup,
   type ColorToken,
-  semanticColors,
-  supportedRamps,
-  tintScale,
+  themeInputs,
 } from './foundations/colors';
 export {
   type ControlSize,
   controlVariants,
   focusRing,
+  pressable,
   touchTarget,
 } from './foundations/controls';
-export { radiusScale, spacing, spacingScale } from './foundations/spacing';
+export { projectMomentum, springs } from './foundations/motion';
+export {
+  type Density,
+  densityScale,
+  radiusScale,
+  spacing,
+  spacingScale,
+} from './foundations/spacing';
 export {
   type TextTone,
   type TextVariant,
@@ -218,4 +231,5 @@ export {
   typeScale,
 } from './foundations/typography';
 export { cn } from './lib/cn';
+export { useControllableState } from './lib/useControllableState';
 export { useMediaQuery } from './lib/useMediaQuery';

@@ -1,115 +1,142 @@
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
-import { Loader2 } from 'lucide-react';
-import * as React from 'react';
+import { LoaderCircle } from 'lucide-react';
+import type { ComponentProps } from 'react';
 
-import { focusRing, touchTarget } from '@/design-system/foundations/controls';
+import {
+  focusRing,
+  pressable,
+  touchTarget,
+} from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
- * Button. `primary` is the one main action in a view; `secondary` uses the
- * same tint as child cards; `ghost` is for quiet actions inside cards, like
- * a view switcher in a card header. `inverse` and `inverse-soft` sit on a
- * brand colored banner, where the theme colors would vanish.
+ * Button. Prominence comes from the variant: `filled` for the one main
+ * action in a view, `tinted` for the actions beside it, `plain` for quiet
+ * ones like a toolbar icon, `link` for a button inside a sentence. The tone
+ * says what it does: `accent` by default, `neutral` for secondary actions,
+ * `danger` for destructive ones.
  */
 
-export type ButtonVariant =
-  | 'primary'
-  | 'secondary'
-  | 'outline'
-  | 'ghost'
-  | 'destructive'
-  | 'link'
-  | 'inverse'
-  | 'inverse-soft';
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon';
+export type ButtonVariant = 'filled' | 'tinted' | 'plain' | 'link';
+export type ButtonTone = 'accent' | 'neutral' | 'danger';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+const tones: Record<ButtonVariant, Record<ButtonTone, string>> = {
+  filled: {
+    accent:
+      'bg-accent text-accent-foreground hover:bg-accent-pressed active:bg-accent-pressed',
+    neutral: 'bg-ink text-surface hover:bg-ink/85 active:bg-ink/80',
+    danger:
+      'bg-danger text-danger-foreground hover:bg-[color-mix(in_oklch,var(--danger),black_8%)] active:bg-[color-mix(in_oklch,var(--danger),black_12%)]',
+  },
+  tinted: {
+    accent:
+      'bg-accent-soft text-accent hover:bg-accent-soft-hover active:bg-accent-soft-hover',
+    neutral: 'bg-fill text-ink hover:bg-fill-hover active:bg-fill-strong',
+    danger:
+      'bg-danger-soft text-danger hover:bg-[color-mix(in_oklch,var(--danger-soft),var(--danger)_6%)] active:bg-[color-mix(in_oklch,var(--danger-soft),var(--danger)_10%)]',
+  },
+  plain: {
+    accent: 'text-accent hover:bg-fill active:bg-fill-hover',
+    neutral:
+      'text-ink-secondary hover:bg-fill hover:text-ink active:bg-fill-hover',
+    danger: 'text-danger hover:bg-fill active:bg-fill-hover',
+  },
+  link: {
+    accent: 'text-accent',
+    neutral: 'text-ink',
+    danger: 'text-danger',
+  },
+};
 
 const buttonVariants = cva(
   [
-    'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'inline-flex shrink-0 select-none items-center justify-center gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
     focusRing,
-    touchTarget,
   ],
   {
     variants: {
-      variant: {
-        primary:
-          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:bg-primary/85',
-        secondary: 'bg-primary/5 text-foreground hover:bg-primary/10',
-        outline:
-          'border border-input bg-card text-foreground hover:border-ring/40 hover:bg-primary/5',
-        ghost: 'text-muted-foreground hover:bg-primary/5 hover:text-foreground',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        link: 'text-primary underline decoration-primary/30 underline-offset-4 hover:decoration-primary',
-        inverse:
-          'bg-white text-neutral-900 hover:bg-white/90 focus-visible:outline-white',
-        'inverse-soft':
-          'bg-white/15 text-white hover:bg-white/25 focus-visible:outline-white',
-      },
       size: {
-        sm: 'h-8 px-3 text-xs',
-        md: 'h-9 px-4 text-sm',
-        lg: 'h-10 px-6 text-sm',
-        'icon-sm': 'size-8',
-        icon: 'size-9',
+        sm: 'h-control-sm px-3 text-subhead [&_svg]:size-3.5',
+        md: 'h-control-md px-4 text-body [&_svg]:size-4',
+        lg: 'h-control-lg px-5 text-body [&_svg]:size-[1.125rem]',
       },
+      icon: { true: 'px-0', false: '' },
       shape: {
-        rounded: 'rounded-md',
-        pill: 'rounded-full',
+        capsule: 'rounded-full',
+        rounded: 'rounded-control',
       },
     },
     compoundVariants: [
-      // Links size to their text, not to a button box
-      { variant: 'link', className: 'h-auto px-0' },
+      { icon: true, size: 'sm', className: 'w-control-sm' },
+      { icon: true, size: 'md', className: 'w-control-md' },
+      { icon: true, size: 'lg', className: 'w-control-lg' },
     ],
   },
 );
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Defaults to `primary` */
+/**
+ * A link sizes to its text. A faint underline marks it without relying on
+ * color, which a grey theme doesn't have; hover makes it solid.
+ */
+const linkClass =
+  'inline-flex items-center gap-1 rounded-xs font-medium underline decoration-current/35 underline-offset-[0.2em] transition-[text-decoration-color] duration-(--duration-fast) hover:decoration-current disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-[1em]';
+
+export interface ButtonProps extends ComponentProps<'button'> {
+  /** Defaults to `filled` */
   variant?: ButtonVariant;
-  /** Defaults to `md`. Icon sizes are square, for a lone icon with an aria-label. */
+  /** Defaults to `accent` */
+  tone?: ButtonTone;
+  /** sm, md and lg follow the density. Defaults to `md`. */
   size?: ButtonSize;
-  /** Buttons are pills. `rounded` squares them off to sit flush in a toolbar or segmented group. Defaults to `pill`. */
-  shape?: 'rounded' | 'pill';
-  /** Shows a spinner in place of the leading icon and disables the button */
+  /** A square button for a lone icon. Give it an `aria-label`. */
+  icon?: boolean;
+  /** `capsule` by default; `rounded` sits flush in a toolbar or a group */
+  shape?: 'capsule' | 'rounded';
+  /** Shows a spinner before the label and disables the button */
   loading?: boolean;
-  /** Merge the button styles onto its only child, e.g. a router `<Link>` */
+  /** Merge the button styles onto its only child, like a router `<Link>` */
   asChild?: boolean;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      shape = 'pill',
-      loading = false,
-      asChild = false,
-      type,
-      disabled,
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const Component = asChild ? Slot : 'button';
-    return (
-      <Component
-        ref={ref}
-        // A plain <button> defaults to submit inside forms; make that explicit
-        type={asChild ? type : (type ?? 'button')}
-        disabled={disabled || loading}
-        aria-busy={loading || undefined}
-        className={cn(buttonVariants({ variant, size, shape }), className)}
-        {...props}
-      >
-        {loading && <Loader2 aria-hidden className="animate-spin" />}
-        <Slottable>{children}</Slottable>
-      </Component>
-    );
-  },
-);
-Button.displayName = 'Button';
+export function Button({
+  variant = 'filled',
+  tone = 'accent',
+  size = 'md',
+  icon = false,
+  shape = 'capsule',
+  loading = false,
+  asChild = false,
+  type,
+  disabled,
+  className,
+  children,
+  ...props
+}: ButtonProps) {
+  const Component = asChild ? Slot : 'button';
+  return (
+    <Component
+      data-slot="button"
+      // A plain <button> defaults to submit inside forms; make that explicit
+      type={asChild ? type : (type ?? 'button')}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={cn(
+        variant === 'link'
+          ? [linkClass, focusRing]
+          : [
+              buttonVariants({ size, icon, shape }),
+              pressable,
+              size === 'sm' || icon ? touchTarget : '',
+            ],
+        tones[variant][tone],
+        className,
+      )}
+      {...props}
+    >
+      {loading && <LoaderCircle aria-hidden className="animate-spin" />}
+      <Slottable>{children}</Slottable>
+    </Component>
+  );
+}

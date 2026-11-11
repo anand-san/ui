@@ -1,82 +1,81 @@
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
-import * as React from 'react';
+import { AnimatePresence } from 'motion/react';
+import type { ComponentProps } from 'react';
 
 import {
   Button,
-  type ButtonVariant,
+  type ButtonProps,
 } from '@/design-system/components/Button/Button';
-import {
-  modalFooterClass,
-  modalHeaderClass,
-  modalSurfaceVariants,
-  overlayClass,
-} from '@/design-system/foundations/controls';
+import { modalFooterClass } from '@/design-system/foundations/controls';
 import { textVariants } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
-import { useModalPlacement } from '@/design-system/lib/useModalPlacement';
+import {
+  ModalHeader,
+  type ModalRootProps,
+  ModalScrim,
+  ModalStateContext,
+  ModalSurface,
+  useModalRoot,
+  useModalState,
+} from '@/design-system/lib/modal';
 
 /**
- * A dialog that asks the person to confirm something, usually a deletion.
- * It has no close button and does not close on outside click: the person
- * picks Cancel or the action.
+ * A dialog that asks the person to confirm something, like a deletion. It
+ * is centred at every width, has no close button and ignores outside
+ * clicks: the person picks Cancel or the action.
  */
 
-const AlertDialog = AlertDialogPrimitive.Root;
+export function AlertDialog({ children, ...props }: ModalRootProps) {
+  const state = useModalRoot(props);
+  return (
+    <AlertDialogPrimitive.Root open={state.open} onOpenChange={state.setOpen}>
+      <ModalStateContext value={state}>{children}</ModalStateContext>
+    </AlertDialogPrimitive.Root>
+  );
+}
+
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
-const AlertDialogPortal = AlertDialogPrimitive.Portal;
 
-export const AlertDialogOverlay = React.forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
-    ref={ref}
-    className={cn(overlayClass, className)}
-    {...props}
-  />
-));
-AlertDialogOverlay.displayName = 'AlertDialogOverlay';
-
-export const AlertDialogContent = React.forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
->(({ className, ...props }, ref) => {
-  const placement = useModalPlacement();
-  return (
-    <AlertDialogPortal>
-      <AlertDialogOverlay />
-      <AlertDialogPrimitive.Content
-        ref={ref}
-        data-slot="alert-dialog-content"
-        className={cn(
-          modalSurfaceVariants({ placement }),
-          '[&>*]:shrink-0',
-          className,
-        )}
-        {...props}
-      />
-    </AlertDialogPortal>
-  );
-});
-AlertDialogContent.displayName = 'AlertDialogContent';
-
-export function AlertDialogHeader({
+export function AlertDialogContent({
   className,
+  children,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: Omit<
+  ComponentProps<typeof AlertDialogPrimitive.Content>,
+  'forceMount' | 'asChild'
+>) {
+  const { open, setOpen } = useModalState();
   return (
-    <div
-      data-slot="alert-dialog-header"
-      className={cn(modalHeaderClass, className)}
-      {...props}
-    />
+    <AnimatePresence>
+      {open && (
+        <AlertDialogPrimitive.Portal forceMount>
+          <AlertDialogPrimitive.Overlay forceMount asChild>
+            <ModalScrim />
+          </AlertDialogPrimitive.Overlay>
+          <AlertDialogPrimitive.Content forceMount asChild {...props}>
+            <ModalSurface
+              data-slot="alert-dialog-content"
+              placement="center"
+              onDismiss={() => setOpen(false)}
+              className={cn('max-w-md', className)}
+            >
+              {children}
+            </ModalSurface>
+          </AlertDialogPrimitive.Content>
+        </AlertDialogPrimitive.Portal>
+      )}
+    </AnimatePresence>
   );
+}
+
+export function AlertDialogHeader(props: ComponentProps<'div'>) {
+  return <ModalHeader data-slot="alert-dialog-header" {...props} />;
 }
 
 export function AlertDialogFooter({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: ComponentProps<'div'>) {
   return (
     <div
       data-slot="alert-dialog-footer"
@@ -86,60 +85,57 @@ export function AlertDialogFooter({
   );
 }
 
-export const AlertDialogTitle = React.forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Title
-    ref={ref}
-    className={cn(textVariants({ variant: 'heading' }), className)}
-    {...props}
-  />
-));
-AlertDialogTitle.displayName = 'AlertDialogTitle';
+export function AlertDialogTitle({
+  className,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Title>) {
+  return (
+    <AlertDialogPrimitive.Title
+      className={cn(textVariants({ variant: 'title-3' }), className)}
+      {...props}
+    />
+  );
+}
 
-export const AlertDialogDescription = React.forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Description
-    ref={ref}
-    className={cn(textVariants({ variant: 'body', tone: 'muted' }), className)}
-    {...props}
-  />
-));
-AlertDialogDescription.displayName = 'AlertDialogDescription';
+export function AlertDialogDescription({
+  className,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Description>) {
+  return (
+    <AlertDialogPrimitive.Description
+      className={cn(
+        textVariants({ variant: 'body', tone: 'secondary' }),
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
-type AlertDialogButtonProps = React.ComponentPropsWithoutRef<
-  typeof AlertDialogPrimitive.Action
-> & {
-  variant?: ButtonVariant;
-  loading?: boolean;
-};
+type AlertDialogButtonProps = Omit<ButtonProps, 'asChild'>;
 
-/** The confirming button. Use `variant="destructive"` for deletions. */
-export const AlertDialogAction = React.forwardRef<
-  HTMLButtonElement,
-  AlertDialogButtonProps
->(({ variant = 'primary', loading, className, children, ...props }, ref) => (
-  <AlertDialogPrimitive.Action asChild {...props}>
-    <Button ref={ref} variant={variant} loading={loading} className={className}>
-      {children}
-    </Button>
-  </AlertDialogPrimitive.Action>
-));
-AlertDialogAction.displayName = 'AlertDialogAction';
+/** The confirming button. Use `tone="danger"` for deletions. */
+export function AlertDialogAction({
+  variant = 'filled',
+  ...props
+}: AlertDialogButtonProps) {
+  return (
+    <AlertDialogPrimitive.Action asChild>
+      <Button variant={variant} {...props} />
+    </AlertDialogPrimitive.Action>
+  );
+}
 
-export const AlertDialogCancel = React.forwardRef<
-  HTMLButtonElement,
-  AlertDialogButtonProps
->(({ variant = 'outline', className, children, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel asChild {...props}>
-    <Button ref={ref} variant={variant} className={className}>
-      {children}
-    </Button>
-  </AlertDialogPrimitive.Cancel>
-));
-AlertDialogCancel.displayName = 'AlertDialogCancel';
+export function AlertDialogCancel({
+  variant = 'tinted',
+  tone = 'neutral',
+  ...props
+}: AlertDialogButtonProps) {
+  return (
+    <AlertDialogPrimitive.Cancel asChild>
+      <Button variant={variant} tone={tone} {...props} />
+    </AlertDialogPrimitive.Cancel>
+  );
+}
 
-export { AlertDialog, AlertDialogPortal, AlertDialogTrigger };
+export { AlertDialogTrigger };

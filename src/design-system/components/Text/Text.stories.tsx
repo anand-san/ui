@@ -11,29 +11,27 @@ const meta = {
     docs: {
       description: {
         component:
-          'Renders text in one of the type scale roles. The role picks the size, weight and default element (title is h1, heading h2, subheading h3). Use `as` to change the element without changing the look.',
+          'Renders a type role with its default element: `title-1` is an h1, `body` a p. Pick the role, and override the element with `as` when the outline needs it. `numeric` lines digits up.',
       },
     },
   },
   args: {
-    children: 'Website redesign, owned by the Design team',
+    children: 'Get a summary of what changed every Monday morning.',
     variant: 'body',
     tone: 'default',
-    truncate: false,
   },
   argTypes: {
     variant: {
       control: 'select',
       options: [
         'display',
-        'title',
-        'heading',
-        'subheading',
-        'body-lg',
+        'title-1',
+        'title-2',
+        'title-3',
+        'headline',
         'body',
-        'body-strong',
+        'subhead',
         'caption',
-        'label',
         'code',
       ],
     },
@@ -41,12 +39,12 @@ const meta = {
       control: 'select',
       options: [
         'default',
-        'muted',
-        'brand',
+        'secondary',
+        'accent',
         'success',
         'warning',
+        'danger',
         'info',
-        'destructive',
       ],
     },
     as: { control: false },
@@ -58,46 +56,23 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Truncated: Story = {
-  args: {
-    variant: 'body-strong',
-    truncate: true,
-    children:
-      'A very long project name that would otherwise wrap onto a second line inside a narrow card',
-  },
-  render: args => (
-    <div className="w-64">
-      <Text {...args} />
-    </div>
-  ),
-};
-
-export const DifferentElement: Story = {
-  name: 'Different element',
-  args: { variant: 'display', as: 'h2', children: '24' },
-};
-
 export const Highlighter: Story = {
-  name: 'Highlighter (Mark)',
   parameters: {
     docs: {
       description: {
         story:
-          '`Mark` is the highlighter. Use it for the few words that matter, like the terms a search matched. `underline` is the quieter version for long passages.',
+          '`Mark` is the highlighter: a fill behind a few words, or a quieter line under them. Both keep the text readable in light and dark.',
       },
     },
   },
   render: () => (
-    <div className="flex max-w-xl flex-col gap-6">
-      <Text variant="body-lg">
-        The new onboarding cut <Mark>setup time in half</Mark>, and teams that
-        finish it invite <Mark>twice as many people</Mark> in their first week.
-        Retention after a month is unchanged.
+    <div className="flex max-w-lg flex-col gap-3">
+      <Text>
+        Results for <Mark>quarterly report</Mark> in Documents.
       </Text>
       <Text>
-        The assistant suggests leading the update with{' '}
-        <Mark variant="underline">the drop in setup time</Mark>, since the
-        launch goal was about activation.
+        The comment is about{' '}
+        <Mark variant="underline">the second paragraph</Mark>.
       </Text>
     </div>
   ),

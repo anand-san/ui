@@ -1,11 +1,11 @@
 ---
 name: san-ui
-description: Build and review React UI with the san-ui design system (tokens from @sandilya/ui, components in src/design-system/ imported from '@/design-system'). Use when a project has src/design-system/, @sandilya/ui in package.json, or imports from '@/design-system'; when adding the design system to a new app or creating a brand theme; and when writing, restyling or reviewing screens, components, colors, typography, spacing or dark mode in such a project.
+description: Build and review React UI with the san-ui design system (tokens from @sandilya/ui, components in src/design-system/ imported from '@/design-system'). Use when a project has src/design-system/, @sandilya/ui in package.json, or imports from '@/design-system'; when adding the design system to a new app or creating a theme; and when writing, restyling or reviewing screens, components, colors, typography, spacing, density, motion or dark mode in such a project.
 ---
 
 # san-ui
 
-A shared base (neutral surfaces, feedback colors, type scale, spacing, radius, about 30 React components on Tailwind CSS 4 and Radix) with each app's brand on top as a theme. Docs: https://ui.sandilya.dev.
+One interface for every app, with a native feel after Apple's platforms: OKLCH color roles that stay WCAG AA for any theme, a density system, springs, translucent materials and about 30 React 19 components on Tailwind CSS 4, Radix and Motion. Docs: https://ui.sandilya.dev.
 
 - Tokens, themes, base styles and the Tailwind theme: the `@sandilya/ui` npm package.
 - Components: copied into the app at `src/design-system/` from the shadcn registry at `https://ui.sandilya.dev/r/<item>.json`. The app owns these files; read them for props instead of guessing.
@@ -14,52 +14,54 @@ A shared base (neutral surfaces, feedback colors, type scale, spacing, radius, a
 
 1. `src/design-system/index.ts` exists: the system is installed. Import from `@/design-system` and follow the rules below.
 2. Only `@sandilya/ui` is installed, or neither: set it up, per [references/setup.md](references/setup.md).
-3. You are in the san-ui repo itself (it has `packages/tokens/` and `scripts/build-registry.ts`): new components need stories first, in light and dark and in both brands (the Brand toolbar).
+3. You are in the san-ui repo itself (it has `packages/tokens/` and `scripts/build-registry.ts`): new components need stories first, in light and dark, in every theme and density (the Storybook toolbars).
 
 ## Rules
 
-1. **Semantic colors first.** `bg-background` (page), `bg-surface` (section), `bg-card`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `text-primary`, `text-success`, `text-warning`, `text-info`, `text-destructive`, `border-border`, `border-input`. Use a ramp (`brand-200`, `highlight-300`, `neutral-200`) only when no role fits. Never `slate`, `gray`, `zinc`, `stone`, `emerald`, `indigo`, `violet`, `sky` or `rose`, and never hex or `rgb()` in components.
-2. **Tints, not new colors.** A soft fill behind text is a token at `/5`, `/10` or `/20`: `bg-primary/5`, `bg-success/10 text-success`.
-3. **Highlight is a fill, never text.** Use it through `<Mark>`, `<Badge tone="highlight">` or `bg-highlight text-highlight-foreground`, on a few words, never a whole sentence.
-4. **Type roles, not sizes.** `<Text variant>` or `textVariants({ variant })` with `display`, `title`, `heading`, `subheading`, `body-lg`, `body`, `body-strong`, `caption`, `label` or `code`, and `tone` for color. No `text-[13px]` or other arbitrary sizes. Labels are sentence case, never `uppercase tracking-wider`.
-5. **Spacing steps.** Only `0.5 1 1.5 2 3 4 6 8 12 16`. Use the `spacing` roles from `@/design-system` for page gutters, card padding and gaps. Items inside a card sit `gap-3` apart, cards `gap-4`.
-6. **Radius by size.** `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards and floating panels, `rounded-2xl` dialogs and sheets, `rounded-inset` rows inside a menu, `rounded-full` buttons, badges and avatars.
-7. **Focus and touch.** Anything clickable takes `focusRing` from `@/design-system`, never `focus-visible:ring-2`; fields (`Input`, `Textarea`, `Select`, `DatePicker`) keep their halo. A control drawn smaller than 44px adds `touchTarget`, so its hit area reaches 44px on touch screens; keep other controls `(44 − size) ÷ 2` away from it. Buttons are `position: relative`, so sticky and fixed bars need a `z-index`.
-8. **One `primary` button per view.** Quiet actions inside cards are `ghost`; form submit buttons need `type="submit"` (Button defaults to `type="button"`).
-9. **Both themes.** Everything must work with `dark` on `<html>`. Tokens handle it; a `dark:` override usually means a raw color slipped in.
-10. **Use the component, not its look.** `<Card>` (not a styled div), `<Field label hint error required>` around every form control (put `id` on the Field), `<PageHeader>` for page titles, `<EmptyState>` for empty lists, `<Alert>` for inline feedback, `<Button loading>` instead of a spinner icon. Screens import `Dialog`, `Select` and the rest from `@/design-system`, never from `@radix-ui/*`.
-11. **Domain in the app, look in san-ui.** App components (an order status dropdown, a project card) wrap san-ui components and add the data, types and mutations. Don't edit `src/design-system/` for one app's needs; if something is missing for every app, it belongs in the san-ui repo.
+1. **Roles, not colors.** Surfaces: `bg-canvas` (page), `bg-surface` (cards, lists, fields), `bg-surface-inset`, `bg-overlay`. Text: `text-ink`, `text-ink-secondary` (supporting text, placeholders), `text-ink-tertiary` (disabled and decoration only). Fills: `bg-fill`, `bg-fill-hover`, `bg-fill-strong`. Lines: `border-separator`, `border-control`. Accent: `bg-accent` + `text-accent-foreground` for fills, `text-accent` for text and links, `bg-accent-soft`. Status: `bg-success`, `text-success`, `bg-success-soft`, and the same for `warning`, `danger`, `info`. Tailwind's palette (`bg-slate-500`) and sizes (`text-sm`) are not built. Never hex, `rgb()` or `hsl()` in components.
+2. **Highlight is a fill.** Use it through `<Mark>`, `<Badge tone="highlight">` or `bg-highlight text-highlight-foreground`, on a few words.
+3. **Type roles.** `<Text variant>` or `textVariants({ variant })`: `display`, `title-1` (page title), `title-2` (section, dialog), `title-3` (card), `headline` (a row's title), `body`, `subhead`, `caption`, `code`; `tone` for color; `numeric` for digits that line up. Emphasis comes from weight before size. Labels are sentence case, never `uppercase tracking-wider`.
+4. **Density tokens.** Sizes that scale with the density are tokens: `h-control-sm|md|lg`, `min-h-row`, `p-inset`, `rounded-control`, `rounded-card`. `data-density="compact|regular|comfortable"` on any element sets them; the default is `regular` with a mouse and `comfortable` on touch. Other spacing uses `0.5 1 1.5 2 3 4 6 8 12 16`, and the `spacing` roles for the page frame.
+5. **Corners by role.** `rounded-control` fields, `rounded-card` cards and lists, `rounded-panel` menus, `rounded-item` rows inside them, `rounded-sheet` dialogs, `rounded-full` buttons, badges and avatars.
+6. **Grouped surfaces, no nesting.** White cards and lists on the tinted canvas. Inside a card use `Card variant="inset"`, a `List` or a `Separator`, never another card.
+7. **One `filled` button per view.** `tinted` beside it, `plain` for quiet actions, `link` in a sentence; `tone="neutral"` for secondary, `tone="danger"` for destructive. Submit buttons need `type="submit"` (Button defaults to `type="button"`).
+8. **Focus, touch and press.** Anything clickable takes `focusRing`, never `focus-visible:ring-2`; fields keep their own ring. A control under 44px adds `touchTarget`; keep other controls `(44 − size) ÷ 2` away. Clickable surfaces take `pressable`.
+9. **Motion.** Springs from `springs` in `@/design-system` (Motion) or `ease-spring` in CSS. No bounce on things that just appear; bounce only after a gesture. Never animate without honouring reduced motion: Motion's `MotionConfig reducedMotion="user"` or `motion-reduce:`.
+10. **Every mode.** Everything must work with `dark` on `<html>`, in every theme and density. Tokens handle it; a `dark:` override usually means a raw color slipped in.
+11. **Use the component, not its look.** `<Card>`, `<List>`/`<ListItem>` for rows, `<Field label hint error required>` around every form control (put `id` on the Field), `<PageHeader>` for page titles, `<EmptyState>` for empty lists, `<Alert>` for inline feedback, `<Button loading>`. Screens import `Dialog`, `Select` and the rest from `@/design-system`, never from `@radix-ui/*`.
+12. **Domain in the app, look in san-ui.** App components wrap san-ui components and add the data and mutations. Don't edit `src/design-system/` for one app's needs.
 
 ## Picking a component
 
-| Need                               | Use                                                                                                           |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| A page section                     | `<Card>` (soft, size `lg`) with `CardHeader`, `CardTitle icon count`, `CardContent`                           |
-| An item inside a section           | `<Card variant="tinted">` (size `sm`), `interactive` + `asChild` for a link                                   |
-| A card straight on the page canvas | `<Card variant="outline">`                                                                                    |
-| A promo banner                     | `<Card variant="brand">` with `Button variant="inverse"`                                                      |
-| A status or label pill             | `<Badge tone variant dot>`                                                                                    |
-| A status the user can change       | `<StatusMenu value options onValueChange>`; options take a `tone`, or the app's color classes via `className` |
-| A form                             | `Field` + `Input` / `Textarea` / `Select` / `DatePicker`; `Checkbox`/`Switch` with `Label`                    |
-| A modal                            | `Dialog` (bottom sheet on phones); `AlertDialog variant="destructive"` for deletes                            |
-| A side panel                       | `Sheet`                                                                                                       |
-| Menus and hints                    | `DropdownMenu` (`variant="destructive"` items), `Popover`, `Tooltip` (inside `TooltipProvider`)               |
-| Switching views                    | `Tabs`                                                                                                        |
-| Progress or a score                | `Progress`, `ScoreRing`                                                                                       |
-| Loading                            | `Skeleton`, `Button loading`                                                                                  |
+| Need                              | Use                                                                                               |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- | ---- | ------- |
+| Settings, details, a list of rows | `ListSection title footer` > `List` > `ListItem title description leading trailing chevron`       |
+| A group of content                | `<Card>` with `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`           |
+| A card that is a link             | `<Card interactive asChild><a href>…</a></Card>`                                                  |
+| A promo or hero band              | `<Card variant="accent">` or `<Surface tone="accent">`; all buttons work inside                   |
+| A status or label                 | `<Badge tone variant dot>`                                                                        |
+| A status the user can change      | `<StatusMenu value options onValueChange>`                                                        |
+| A form                            | `Field` + `Input` / `Textarea` / `Select` / `DatePicker`; `Checkbox`/`Switch` with `Label`        |
+| A modal                           | `Dialog` (draggable bottom sheet on phones); `AlertDialog` with `AlertDialogAction tone="danger"` |
+| A panel from an edge              | `Sheet` with `SheetContent side="bottom                                                           | left | right"` |
+| Menus and hints                   | `DropdownMenu` (`tone="danger"` items), `Popover`, `Tooltip` (inside `TooltipProvider`)           |
+| A few views of one thing          | `Tabs` (segmented control)                                                                        |
+| App or site navigation            | `NavigationMenu`; `active` on the current link                                                    |
+| Progress, a meter                 | `Progress`, `Gauge value label tone`                                                              |
+| Loading                           | `Skeleton`, `Button loading`                                                                      |
 
-The full component guide, the Card size table and the migration table (old class or component → new) are in [references/design-system.md](references/design-system.md).
+The full component guide is in [references/design-system.md](references/design-system.md).
 
 ## Themes
 
-A new app gets its own brand by copying `themes/template.css` from the tokens package and setting `--brand-*` and `--highlight-*` ramps, `--tint-hue`, `--ink-hue` and optionally `--font-sans` / `--font-display`. Values are bare HSL channels. Check 4.5:1 contrast for `brand-600` on white and `highlight-950` on `highlight-300`. Domain colors (like a pipeline status) go in the app's own CSS and its `@theme inline` block, not in the theme. Details: [references/setup.md](references/setup.md#themes).
+A theme sets five inputs on `:root` and nothing else: `--accent-hue` (0 to 360), `--accent-chroma` (0 to 0.2), `--neutral-hue`, `--neutral-chroma` (0 to 0.03) and `--radius-scale`, plus optionally `--font-sans` and `--font-display`. Every role is derived from them at contrast that holds for any value, so there is nothing to check by hand. Start from `themes/template.css` or use `forest`, `ember` or `graphite`. Domain colors go in the app's own CSS and its `@theme inline` block. Details: [references/setup.md](references/setup.md#themes).
 
 ## Before you finish
 
 Search the files you changed for slips:
 
 ```bash
-grep -nE '(slate|gray|zinc|stone|emerald|indigo|violet|sky|rose)-[0-9]|text-\[[0-9]+px\]|uppercase tracking|#[0-9a-fA-F]{3,6}\b|from .@radix-ui' <files>
+grep -nE '(slate|gray|zinc|stone|neutral|blue|red|green)-[0-9]|text-(xs|sm|base|lg|xl)\b|text-\[[0-9]+px\]|uppercase tracking|#[0-9a-fA-F]{3,6}\b|from .@radix-ui' <files>
 ```
 
-Then run the app's typecheck, and look at the screen in light and dark mode if you can.
+Then run the app's typecheck, and look at the screen in light and dark mode, and on a phone if you can.

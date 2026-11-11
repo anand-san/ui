@@ -1,0 +1,8 @@
+/* Forest: a green accent over slightly green greys, with softer corners */
+:root {
+  --accent-hue: 155;
+  --accent-chroma: 0.15;
+  --neutral-hue: 150;
+  --neutral-chroma: 0.012;
+  --radius-scale: 1.25;
+}

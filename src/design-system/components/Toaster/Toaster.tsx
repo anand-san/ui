@@ -1,9 +1,9 @@
-import type * as React from 'react';
+import type { CSSProperties } from 'react';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 /**
- * Toast container, styled with the design system tokens so toasts follow
- * the theme. Call `toast.success()`, `toast.error()` and so on from `sonner`.
+ * The toast container, on the token roles so toasts follow the theme and
+ * the mode. Call `toast()`, `toast.success()` and so on from `sonner`.
  */
 export function Toaster(props: ToasterProps) {
   return (
@@ -11,20 +11,22 @@ export function Toaster(props: ToasterProps) {
       className="toaster group"
       style={
         {
-          '--normal-bg': 'hsl(var(--popover))',
-          '--normal-text': 'hsl(var(--popover-foreground))',
-          '--normal-border': 'hsl(var(--border))',
-          '--border-radius': 'var(--radius-xl)',
-        } as React.CSSProperties
+          '--normal-bg': 'var(--overlay)',
+          '--normal-text': 'var(--ink)',
+          '--normal-border': 'var(--separator)',
+          '--border-radius': 'var(--radius-panel)',
+        } as CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: 'shadow-lg',
-          description: 'text-muted-foreground!',
-          actionButton: 'bg-primary! text-primary-foreground!',
-          cancelButton: 'bg-primary/5! text-foreground!',
+          toast: 'font-sans! shadow-floating! text-subhead!',
+          title: 'font-semibold!',
+          description: 'text-ink-secondary!',
+          actionButton:
+            'rounded-full! bg-accent! font-medium! text-accent-foreground!',
+          cancelButton: 'rounded-full! bg-fill! font-medium! text-ink!',
           success: '[&_[data-icon]]:text-success',
-          error: '[&_[data-icon]]:text-destructive',
+          error: '[&_[data-icon]]:text-danger',
           warning: '[&_[data-icon]]:text-warning',
           info: '[&_[data-icon]]:text-info',
         },

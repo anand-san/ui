@@ -1,10 +1,11 @@
 /**
- * Color tokens come in two tiers.
+ * The color roles, for the docs and for agents. Every value lives in
+ * @sandilya/ui/tokens.css; a test keeps this list and theme.css in step with
+ * it.
  *
- * Primitives are the raw ramps (neutral-500, brand-600). Semantic tokens name
- * a job (surface, muted-foreground, success) and switch value between light
- * and dark mode. Components and screens use semantic tokens; primitives are
- * for the rare case no role fits, like an illustration.
+ * Use the role that names the job. There are no color ramps: a theme picks
+ * an accent hue and the base derives the rest, at contrast that holds for
+ * any hue.
  */
 
 export interface ColorToken {
@@ -13,8 +14,6 @@ export interface ColorToken {
   /** Tailwind utility that applies it */
   className: string;
   usage: string;
-  /** Variable to use for text placed on this color, if any */
-  onColor?: string;
 }
 
 export interface ColorGroup {
@@ -23,161 +22,211 @@ export interface ColorGroup {
   tokens: ColorToken[];
 }
 
-export const semanticColors: ColorGroup[] = [
+export const colorGroups: ColorGroup[] = [
   {
     title: 'Surfaces',
     description:
-      'Backgrounds, from the page canvas up. The canvas is a faint violet-white so white outline cards lift off it; soft section cards use surface; child cards add a tint of primary on top.',
+      'Grouped surfaces, as in Apple’s settings: a tinted canvas with white groups on it. In dark mode elevation is lightness, so groups and floating panels get lighter.',
     tokens: [
-      { name: 'background', className: 'bg-background', usage: 'Page canvas' },
+      { name: 'canvas', className: 'bg-canvas', usage: 'The page' },
       {
         name: 'surface',
         className: 'bg-surface',
-        usage: 'Soft section cards on a dashboard page',
+        usage: 'Cards, list groups and fields on the canvas',
       },
       {
-        name: 'card',
-        className: 'bg-card',
-        usage: 'Outlined cards and popovers on the canvas',
+        name: 'surface-inset',
+        className: 'bg-surface-inset',
+        usage: 'A well inside a surface: code, a nested group',
       },
       {
-        name: 'muted',
-        className: 'bg-muted',
-        usage: 'Wells, skeletons, empty-state icon circles',
+        name: 'overlay',
+        className: 'bg-overlay',
+        usage: 'Menus, popovers, dialogs and sheets',
       },
     ],
   },
   {
     title: 'Text',
-    description: 'Two text colors cover almost everything.',
+    description:
+      'Two inks cover almost everything. Placeholders use the secondary ink, which reads at 4.5:1 on every surface and fill.',
     tokens: [
       {
-        name: 'foreground',
-        className: 'text-foreground',
+        name: 'ink',
+        className: 'text-ink',
         usage: 'Primary text and icons',
       },
       {
-        name: 'muted-foreground',
-        className: 'text-muted-foreground',
-        usage: 'Secondary text, captions, labels, placeholder icons',
+        name: 'ink-secondary',
+        className: 'text-ink-secondary',
+        usage: 'Descriptions, metadata, placeholders, inactive icons',
+      },
+      {
+        name: 'ink-tertiary',
+        className: 'text-ink-tertiary',
+        usage: 'Disabled text and decoration only; it is not for reading',
       },
     ],
   },
   {
-    title: 'Actions and brand',
+    title: 'Fills and lines',
     description:
-      'Primary is the brand color, used like a pen: main buttons, selection, focus. Highlight is used like a highlighter: a fill behind the few things that should jump out. Never use highlight as text on white. Both come from the theme.',
+      'Neutral fills are translucent, so a grey button reads the same on the canvas, a card or a sheet. Separators divide; control borders outline fields at 3:1.',
     tokens: [
       {
-        name: 'primary',
-        className: 'bg-primary',
-        usage: 'Main buttons, selection, checked controls, child card tints',
-        onColor: 'primary-foreground',
+        name: 'fill',
+        className: 'bg-fill',
+        usage: 'Grey buttons, segmented tracks, chips',
       },
       {
-        name: 'brand',
-        className: 'bg-brand',
-        usage: 'Logo, assistant and promo banners',
-        onColor: 'brand-foreground',
+        name: 'fill-hover',
+        className: 'bg-fill-hover',
+        usage: 'Hover on a fill or a plain button',
       },
       {
-        name: 'highlight',
-        className: 'bg-highlight',
-        usage: 'Matched keywords, Elo suggestions, text selection, new items',
-        onColor: 'highlight-foreground',
+        name: 'fill-strong',
+        className: 'bg-fill-strong',
+        usage: 'Pressed fills, a switch that is off, progress tracks',
       },
       {
-        name: 'ring',
-        className: 'ring-ring',
-        usage: 'Focus rings',
+        name: 'separator',
+        className: 'border-separator',
+        usage: 'Dividers and card outlines; the default border',
+      },
+      {
+        name: 'border-control',
+        className: 'border-control',
+        usage: 'The outline of a field, checkbox or radio',
+      },
+      {
+        name: 'scrim',
+        className: 'bg-scrim',
+        usage: 'The dimmed layer behind a modal',
       },
     ],
   },
   {
-    title: 'Feedback',
+    title: 'Accent',
     description:
-      'Solid for icons and text, or use a 10% tint behind text (bg-success/10 text-success) for pills and banners.',
+      'The app’s color, from its theme: filled buttons, selection, links and focus. `bg-accent` is the fill under white text; `text-accent` is a shade that reads as text on any surface.',
     tokens: [
       {
-        name: 'success',
-        className: 'bg-success',
-        usage: 'Done, saved, goal met',
-        onColor: 'success-foreground',
+        name: 'accent',
+        className: 'bg-accent',
+        usage: 'Filled buttons, checked controls, the selected item',
       },
       {
-        name: 'warning',
-        className: 'bg-warning',
-        usage: 'Needs attention, quota close, outdated',
-        onColor: 'warning-foreground',
+        name: 'accent-pressed',
+        className: 'bg-accent-pressed',
+        usage: 'A filled button while it is pressed',
       },
       {
-        name: 'info',
-        className: 'bg-info',
-        usage: 'Neutral notices and tips',
-        onColor: 'info-foreground',
+        name: 'accent-foreground',
+        className: 'text-accent-foreground',
+        usage: 'Text and icons on the accent',
       },
       {
-        name: 'destructive',
-        className: 'bg-destructive',
-        usage: 'Errors and delete actions',
-        onColor: 'destructive-foreground',
+        name: 'accent-text',
+        className: 'text-accent',
+        usage: 'Links, tinted buttons, accent icons',
       },
+      {
+        name: 'accent-soft',
+        className: 'bg-accent-soft',
+        usage: 'Tinted buttons, a selected row, accent badges',
+      },
+      {
+        name: 'accent-soft-hover',
+        className: 'bg-accent-soft-hover',
+        usage: 'Hover on a soft accent fill',
+      },
+      { name: 'focus', className: 'outline-focus', usage: 'Focus rings' },
     ],
   },
   {
-    title: 'Lines',
+    title: 'Status',
     description:
-      'Borders and dividers. Prefer spacing and surfaces over lines.',
+      'Four feedback colors, each with a solid fill (`bg-success` under `text-success-foreground`), a text shade (`text-success`) and a soft fill (`bg-success-soft`) that the text shade reads on.',
+    tokens: (['success', 'warning', 'danger', 'info'] as const).flatMap(
+      name => [
+        {
+          name,
+          className: `bg-${name}`,
+          usage: {
+            success: 'Done, saved, goal met',
+            warning: 'Needs attention, close to a limit',
+            danger: 'Errors and destructive actions',
+            info: 'Neutral notices and tips',
+          }[name],
+        },
+        {
+          name: `${name}-foreground`,
+          className: `text-${name}-foreground`,
+          usage: `Text and icons on the solid ${name} fill`,
+        },
+        {
+          name: `${name}-text`,
+          className: `text-${name}`,
+          usage: `${name[0].toUpperCase()}${name.slice(1)} text and icons`,
+        },
+        {
+          name: `${name}-soft`,
+          className: `bg-${name}-soft`,
+          usage: 'Soft badges and callouts',
+        },
+      ],
+    ),
+  },
+  {
+    title: 'Highlight',
+    description:
+      'A highlighter: a fill behind a few words, like the terms a search matched, and text selection.',
     tokens: [
+      { name: 'highlight', className: 'bg-highlight', usage: 'Mark' },
       {
-        name: 'border',
-        className: 'border-border',
-        usage: 'Dividers, outlined cards',
-      },
-      {
-        name: 'input',
-        className: 'border-input',
-        usage: 'Form control borders',
+        name: 'highlight-foreground',
+        className: 'text-highlight-foreground',
+        usage: 'Text on the highlight',
       },
     ],
   },
 ];
 
-/**
- * Tint steps: a semantic color at low opacity over the surface below it.
- * Only these three steps are used.
- */
-export const tintScale = [
-  { opacity: 5, usage: 'Child cards inside a section card (bg-primary/5)' },
-  { opacity: 10, usage: 'Counts, pills, hover on child cards (bg-primary/10)' },
-  { opacity: 20, usage: 'Selected or pressed states' },
+/** The inputs a theme sets; everything else is derived from them */
+export const themeInputs = [
+  {
+    name: 'accent-hue',
+    example: '250',
+    usage: 'The accent hue in degrees, 0 to 360',
+  },
+  {
+    name: 'accent-chroma',
+    example: '0.2',
+    usage: 'How vivid the accent is, 0 (grey) to 0.2',
+  },
+  {
+    name: 'neutral-hue',
+    example: '250',
+    usage: 'The hue the greys lean toward',
+  },
+  {
+    name: 'neutral-chroma',
+    example: '0.008',
+    usage: 'How far the greys lean, 0 to 0.03',
+  },
+  {
+    name: 'radius-scale',
+    example: '1',
+    usage: 'Multiplies every corner radius',
+  },
+  {
+    name: 'font-sans',
+    example: 'system-ui, …',
+    usage: 'The text face; the system font by default',
+  },
+  {
+    name: 'font-display',
+    example: 'var(--font-sans)',
+    usage: 'The face for display and titles',
+  },
 ] as const;
-
-/** The Tailwind ramps the app supports. Others (slate, zinc, emerald...) map onto these. */
-export const supportedRamps = [
-  'neutral',
-  'brand',
-  'highlight',
-  'red',
-  'orange',
-  'amber',
-  'yellow',
-  'green',
-  'blue',
-  'purple',
-  'fuchsia',
-] as const;
-
-export const rampSteps = [
-  50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
-] as const;
-
-export const rampMigrations: { from: string; to: string }[] = [
-  { from: 'slate, gray, zinc, stone', to: 'neutral, or a semantic token' },
-  { from: 'yellow-200 marker fills', to: 'highlight, or Mark' },
-  { from: 'text-gray-500, text-slate-500', to: 'text-muted-foreground' },
-  { from: 'emerald, teal', to: 'success, or green' },
-  { from: 'violet, indigo', to: 'brand, or purple' },
-  { from: 'rose, pink', to: 'destructive, or red' },
-  { from: 'sky, cyan', to: 'info, or blue' },
-];

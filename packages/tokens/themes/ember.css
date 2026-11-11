@@ -1,0 +1,8 @@
+/* Ember: a red-orange accent over warm greys, with tighter corners */
+:root {
+  --accent-hue: 38;
+  --accent-chroma: 0.19;
+  --neutral-hue: 60;
+  --neutral-chroma: 0.01;
+  --radius-scale: 0.7;
+}

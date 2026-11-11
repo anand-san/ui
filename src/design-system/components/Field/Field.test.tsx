@@ -89,7 +89,7 @@ describe('Field', () => {
         <Input />
       </Field>,
     );
-    expect(parse(html).attr('input', 'class')).toContain('h-8');
+    expect(parse(html).attr('input', 'class')).toContain('h-control-sm');
   });
 
   test('props on the control win over the field', () => {
@@ -101,7 +101,7 @@ describe('Field', () => {
       ),
     );
     expect(attr('input', 'id')).toBe('own-id');
-    expect(attr('input', 'class')).toContain('h-10');
+    expect(attr('input', 'class')).toContain('h-control-lg');
   });
 
   test('a control outside a Field is unchanged', () => {

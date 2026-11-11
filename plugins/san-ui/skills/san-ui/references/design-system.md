@@ -2,12 +2,12 @@
 
 # san-ui
 
-Shared foundations and components, extracted from Eloovor and meant for any app: a shared base (neutrals, feedback colors, type scale, spacing, radius, components) with each app's brand on top as a theme. Components are built and reviewed in Storybook first; screens are then moved onto them one at a time.
+Shared foundations and components for every app: tools and dashboards, consumer apps and content sites. The goal is a native feel, after Apple's platforms: content first, quiet chrome, springs that can be interrupted, and contrast that holds for any theme.
 
-Apps get this folder through the shadcn registry at ui.sandilya.dev (it lands at the same path, `src/design-system/`), and the tokens, themes and Tailwind theme from the `@sandilya/ui` npm package. Setup is in the repository README. Nothing here imports app code: domain UI built on it lives in the app. The Storybook guide **Guides / Used in Eloovor** shows one app doing that.
+Apps get this folder through the shadcn registry at ui.sandilya.dev (it lands at the same path, `src/design-system/`), and the tokens, themes and Tailwind theme from the `@sandilya/ui` npm package. Setup is in the repository README. Nothing here imports app code: domain UI built on it lives in the app.
 
 ```bash
-bun run dev    # Storybook at http://localhost:6006; the Brand toolbar switches themes
+bun run dev    # Storybook at http://localhost:6006, with Theme and Density toolbars
 bun run build  # Storybook and the registry in dist/
 ```
 
@@ -17,11 +17,12 @@ bun run build  # Storybook and the registry in dist/
 design-system/
 ├── index.ts              # public exports: import from '@/design-system'
 ├── foundations/
-│   ├── colors.ts         # token metadata, tint steps, supported ramps, migration map
-│   ├── controls.ts       # shared control, floating panel, menu item and overlay classes
-│   ├── typography.ts     # textVariants (the type scale) and its docs
-│   └── spacing.ts        # spacing scale, spacing roles, radius
-├── lib/                  # cn, useMediaQuery, the dialog layout hook
+│   ├── colors.ts         # the color roles and theme inputs, for docs and agents
+│   ├── controls.ts       # focus ring, touch target, press, fields, panels, menus, modals
+│   ├── motion.ts         # spring presets and momentum projection
+│   ├── typography.ts     # textVariants (the type roles) and their docs
+│   └── spacing.ts        # spacing scale and roles, density, radius
+├── lib/                  # cn, hooks, and the modal frame Dialog, AlertDialog and Sheet share
 ├── components/           # one folder per component, with its stories
 └── docs/                 # foundation stories and their helpers (not exported)
 ```
@@ -30,131 +31,83 @@ The tokens live in `packages/tokens/` (published as `@sandilya/ui`):
 
 ```
 packages/tokens/
-├── tokens.css            # base color roles, light and dark, built on the theme's hues
-├── base.css              # border, page and selection defaults the components assume
-├── themes/
-│   ├── eloovor.css       # the Eloovor brand: ramps, hues, fonts
-│   └── template.css      # a working starting point for a new app's theme
-└── theme.css            # Tailwind names for the tokens
+├── tokens.css            # every role, derived in OKLCH from the theme inputs; density
+├── theme.css             # Tailwind names for the roles, keyframes, materials
+├── base.css              # page, border, selection and placeholder defaults
+└── themes/               # template, forest, ember, graphite
 ```
 
-An app's CSS imports Tailwind, its fonts, `tokens.css`, one theme, `theme.css` and `base.css`, then adds only its own domain colors and motion in an `@theme inline` block. App code never defines colors of its own; it uses the token classes.
+## Direction
 
-## Themes
-
-`tokens.css` is the base every app shares. A theme, imported after it, gives an app its brand:
-
-| Variable                             | What it sets                                                                |
-| ------------------------------------ | --------------------------------------------------------------------------- |
-| `--brand-50` … `--brand-950`         | The brand ramp. `brand-600` is `primary` in light mode, `brand-300` in dark |
-| `--highlight-50` … `--highlight-950` | The highlighter ramp. `highlight-300` is the `highlight` fill               |
-| `--tint-hue`                         | The hue the neutrals (canvas, surfaces, borders) lean toward                |
-| `--ink-hue`                          | The hue of text, and of shadows in light mode                               |
-| `--font-sans`, `--font-display`      | Optional. System fonts otherwise. The app loads the font files              |
-
-Set the hues and ramps for light mode on `:root, .force-light-mode, .dark .force-light-mode`, and the dark-mode hues on `.dark`. A theme may also override any role, usually `primary`, `brand`, `highlight` and `ring` in dark mode. Start a new app from `themes/template.css`, and check every story in both themes.
-
-Domain colors, like the statuses of an app's own workflow, belong to the app: define the variables in the app's CSS and their Tailwind names in its `@theme inline` block, then pass the classes to components like `StatusMenu`.
-
-## Direction: pen and highlighter
-
-The base sets the structure; a theme fills in the colors and faces.
-
-- **Ink**: `primary` is the brand color. Neutrals (`background`, `surface`, `muted`, `border`) lean slightly toward `--tint-hue` instead of pure grey. Dark mode is deep ink, not charcoal.
-- **Highlighter**: the `highlight-*` ramp and the `highlight` token. It is a fill behind dark text, never text on white. Use it through `Mark`, `Badge tone="highlight"` and text selection.
-- **Type**: `font-display` for `display`, `title` and `heading`; `font-sans` for the rest.
-- **Shape**: buttons default to pills. Radius goes up with size and down as things nest: `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards and floating panels, `rounded-2xl` dialogs and sheets, `rounded-inset` for rows inside a menu.
-- **Shadows** are tinted with `--shadow-color` and kept for floating things: menus, dialogs, toasts, the primary button.
-- **Paper stays paper**: `.force-light-mode` (printed pages, document previews) resets to plain greys and Helvetica, a PDF's font.
+- **Roles, not ramps.** Colors name a job: `canvas`, `surface`, `ink`, `ink-secondary`, `fill`, `separator`, `accent`, `danger`. There are no color ramps. A theme sets an accent hue and chroma; the base derives the rest at a lightness that keeps WCAG AA for any hue, and a test sweeps all 360 to prove it.
+- **Grouped surfaces.** A tinted canvas with white groups on it, as in a settings screen. In dark mode elevation is lightness, so groups and floating panels get lighter. Cards don't nest.
+- **Accent.** `bg-accent` is the fill under white text; `text-accent` is a shade that reads as text on any surface. Inside `Surface tone="accent"` or `Card variant="accent"` every role turns white, so nothing needs a special variant.
+- **Type.** The system font, with tracking that tightens as text grows. Hierarchy comes from weight before size. Sizes follow the density.
+- **Density.** `data-density` sizes type, controls and rows: `regular` on a desk, `comfortable` on touch (the default with a coarse pointer, so every target is 44px), `compact` for dense tools.
+- **Motion.** Springs that start from wherever an element is and keep its speed. Things that appear use the critically damped default; bounce is only for motion a gesture started. Reduced motion keeps the state change and drops the movement.
+- **Materials.** Menus, popovers, tooltips and the navigation panel are translucent and grow from their trigger. With reduced transparency or more contrast they turn solid.
+- **Shadows** are kept for things that float: menus, dialogs, toasts.
 
 ## Rules
 
-1. **Semantic colors first.** Use `bg-surface`, `text-muted-foreground`, `text-success` and so on. Use a ramp like `neutral-200` only when no role fits. Never use `slate`, `gray`, `zinc`, `stone`, `emerald`, `indigo`, `violet`, `sky`, `rose`: see the migration map below.
-2. **Tints, not new colors.** For a soft fill behind text, use a token at `/5`, `/10` or `/20` (`bg-primary/5`, `bg-success/10 text-success`). These follow the surface they sit on in both themes.
-3. **Type roles, not sizes.** Use `<Text variant>` or `textVariants()`. No `text-[10px]`, `text-[13px]` or other arbitrary sizes. Labels are sentence case, never `uppercase tracking-wider`.
-4. **Spacing steps.** Only `0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16`. Use the `spacing` roles for page gutters, card padding and gaps between cards.
-5. **Radius.** `rounded-md` for fields, `rounded-lg` for small cards, `rounded-xl` for section cards and floating panels, `rounded-2xl` for dialogs and sheets, `rounded-inset` for rows inside a menu, `rounded-full` for buttons, badges and avatars.
-6. **Focus and touch.** Anything clickable takes `focusRing`, a 2px outline 2px off its edge, except fields: `Input`, `Textarea` and the `Select` and `DatePicker` triggers keep the border and halo from `controlVariants`. A control drawn smaller than 44px adds `touchTarget`, which grows its hit area to 44px on touch screens without changing its size. The extra area reaches `(44 − size) ÷ 2` past each edge, 6px for a 32px button, and takes the taps there, so keep other controls that far away. Checkbox and Switch skip it: the Label beside them is the target. `touchTarget` makes the control `position: relative`, so a sticky or fixed bar that buttons scroll under needs a `z-index`.
-7. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
-8. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
-
-## Mark
-
-`<Mark>` puts a highlighter stroke over a few words, like the terms a search matched. `variant="underline"` is a quieter marker line for longer passages. Mark a few words, never whole sentences.
-
-## Card
-
-| Variant   | Use                                                | Default size |
-| --------- | -------------------------------------------------- | ------------ |
-| `soft`    | A section of a page (Recent, Your projects)        | `lg`         |
-| `tinted`  | An item inside a section (one project)             | `sm`         |
-| `outline` | Straight on the page canvas, where a fill vanishes | `lg`         |
-
-| Size | Use                    | Padding     | Gap | Title role    |
-| ---- | ---------------------- | ----------- | --- | ------------- |
-| `lg` | Page sections          | 16px → 24px | 16  | `heading`     |
-| `md` | Sheets, dialogs, rails | 16px        | 16  | `subheading`  |
-| `sm` | Items inside a card    | 16px        | 12  | `body-strong` |
-
-Child cards sit 12px apart (`spacing.items`). Padding is on the card and its parts are spaced by a gap, so you never add `pt-0` or per-part insets. Use `interactive` for hover and focus states and `asChild` to render the card as a `<Link>`.
+1. **Roles first.** Use `bg-surface`, `text-ink-secondary`, `bg-success-soft text-success` and so on. Tailwind's default palette is not built. An app's own domain colors go in its own `@theme inline` block.
+2. **Type roles, not sizes.** Use `<Text variant>` or `textVariants()`: `display`, `title-1`, `title-2`, `title-3`, `headline`, `body`, `subhead`, `caption`, `code`. There is no `text-sm`. Labels are sentence case, never `uppercase tracking-wider`.
+3. **Two inks.** `text-ink` for what people read, `text-ink-secondary` for supporting text and placeholders. `text-ink-tertiary` is for disabled text and decoration only; it is not for reading.
+4. **One filled button per view.** `filled` for the main action, `tinted` beside it, `plain` for quiet ones. The tone says what it does: `accent`, `neutral` or `danger`.
+5. **Density tokens for sizes that scale.** `h-control-sm|md|lg`, `min-h-row`, `p-inset`, `rounded-control`, `rounded-card`. Everything else is the 4px grid: `0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16`.
+6. **Corners by role.** `rounded-control` fields, `rounded-card` cards and lists, `rounded-panel` menus and popovers, `rounded-item` rows inside them (concentric with the panel), `rounded-sheet` dialogs and sheets, `rounded-full` buttons, badges and avatars. The theme's `--radius-scale` scales them all.
+7. **Focus and touch.** Anything clickable takes `focusRing`. Fields keep their own ring from `controlVariants`, drawn on the border. A control drawn smaller than 44px adds `touchTarget`, which grows its hit area on touch screens without changing its size; the extra area reaches `(44 − size) ÷ 2` past each edge, so keep other controls that far away.
+8. **Press.** Buttons and interactive cards take `pressable`: they sink a little at once and spring back on release.
+9. **Every mode.** Every story must look right in light and dark, in every theme and density. Check with the Storybook toolbar.
+10. **Stories first.** A new component gets stories before an app uses it.
 
 ## Components
 
-- **Button**: `primary` (one per view), `secondary` (the child card tint), `outline`, `ghost` (quiet actions inside cards), `destructive`, `link`, and `inverse` / `inverse-soft` for brand banners. Sizes `sm`, `md`, `lg`, `icon-sm`, `icon`. Pills by default; `shape="rounded"` squares them off for toolbars and segmented groups. `loading` shows a spinner and disables it. It defaults to `type="button"`, so form submit buttons need `type="submit"`.
-- **Card**: also has a `brand` variant for promo banners, with white text in both themes.
-- **Badge**: seven tones (`neutral`, `brand`, `highlight`, `success`, `warning`, `info`, `destructive`) in `soft` (default), `solid` or `outline`, with an optional `dot`. `CardCount` is a neutral Badge.
-- **StatusMenu**: a status badge that opens a menu to change the status. Options take a Badge `tone`, or the app's own colors through `className` when there are more statuses than tones. Without `onValueChange` it is a read-only badge. It is safe inside a linked card: its clicks don't reach the card.
-- **Avatar**: image with an initials fallback from `name`, in the same six tones and three sizes (24, 32, 40px).
-- **Field**: wraps one control with its label and its hint or error, and links them: the label's `htmlFor`, `aria-describedby` to the message, `aria-invalid` when there is an `error`, and `aria-required` with `required` (which also adds the asterisk). Set `id` on the Field, not the control. `size="sm"` is the dense style for forms inside a list of entries: a small muted label and 32px controls. `size="lg"` gives 40px controls. `labelAction` puts something at the right of the label row.
-- **Forms**: `Input`, `Textarea` and `SelectTrigger` share one control style and the Button heights, and read their id, size and states from a surrounding `Field`. Use `Label` on its own only beside a `Checkbox` or `Switch`. `DatePicker` wraps react-day-picker and takes `label`, `required` and `error` itself. Custom controls can join a Field with `useFieldControl`.
-- **PageHeader**: the title block of a page: the `title` role, a muted description, an optional icon tile and actions. `as="h2"` for a step inside a flow.
-- **Overlays**: `Dialog` (a bottom sheet on phones), `AlertDialog` (Cancel plus an action; use `variant="destructive"` for deletions), `Sheet`, `Popover`, `DropdownMenu` (items take `variant="destructive"`), `Tooltip`. `close` puts the close button in the corner: on by default in `DialogContent`, off in `SheetContent`.
-- **Navigation**: `Tabs` (pill segmented control, scrolls with arrows when it overflows), `Accordion`, `NavigationMenu` (the desktop header).
-- **Feedback**: `Alert` in six tones, `Progress` and `ScoreRing` with tone colors, `Skeleton`, and `Toaster` for `sonner` toasts.
-- **EmptyState**: `sm` (the default) for an empty list inside a card, with an icon. `lg` for a whole page or panel; with an `image` it sits beside the text from md. Use it for empty lists, pages waiting on the user (work in progress, a limit reached, setup to finish), the error boundary and maintenance screens.
+- **Button**: `filled`, `tinted`, `plain` and `link`, in `accent`, `neutral` and `danger`. Sizes `sm`, `md`, `lg` follow the density; `icon` makes it square for a lone icon (give it an `aria-label`). Capsules by default; `shape="rounded"` sits flush in a toolbar. `loading` shows a spinner and disables it. It defaults to `type="button"`.
+- **Surface**: a region on the `canvas`, `surface`, `inset` or `accent` background.
+- **Card**: `surface` (default), `inset` (a well inside a card), `outline`, `accent`. Parts: `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`. `interactive` plus `asChild` makes the whole card a link.
+- **List**: `ListSection` (title and footer), `List` (the rounded group) and `ListItem` (`title`, `description`, `leading`, `trailing`, `chevron`). With `asChild` the row is its child, like `<a href>`, with a pressed state. Separators start where the text starts.
+- **Badge**: `neutral`, `accent`, `success`, `warning`, `danger`, `info`, `highlight`, in `soft` (default) or `solid`, with an optional `dot`.
+- **StatusMenu**: a status badge that opens a menu to change it. Options take a Badge `tone`, or the app's own colors through `className`. Without `onValueChange` it is a read-only badge. It is safe inside a linked card.
+- **Avatar**: an image with an initials fallback in rounded type, `neutral` or `accent`, 24 to 64px.
+- **Text** and **Mark**: `Text` renders a type role; `Mark` is the highlighter, a `fill` or an `underline`.
+- **Field**: wraps one control with its label and its hint or error, and links them (`htmlFor`, `aria-describedby`, `aria-invalid`, `aria-required`). Set `id` on the Field. `size="sm"` is the dense style.
+- **Forms**: `Input`, `Textarea` (grows with its content) and `SelectTrigger` share one style and the Button heights, and read their state from a surrounding `Field`. `Checkbox` and `Switch` size from the body text. `Select` opens over its trigger like a desktop pop-up button; pass `position="popper"` to drop below. `DatePicker` closes once a day is picked; `captionLayout="dropdown"` adds month and year menus. Custom controls join a Field with `useFieldControl`.
+- **PageHeader**: the large title of a page, with a description, an `eyebrow` (a back link) and actions.
+- **Overlays**: `Dialog` (centred from 768px, a draggable bottom sheet on phones), `AlertDialog` (centred, Cancel plus an action; `tone="danger"` for deletions), `Sheet` (`bottom`, `left` or `right`), `Popover`, `DropdownMenu` (items take `tone="danger"`), `Tooltip`. Dialogs and sheets are controlled or uncontrolled through `open`, `defaultOpen` and `onOpenChange`.
+- **Navigation**: `Tabs` (a segmented control with a springing thumb), `Accordion`, `NavigationMenu` (the bar of a desktop app or site; pass `active` to the current link).
+- **Feedback**: `Alert` (a `status`, or an `alert` when `danger`), `Progress`, `Gauge` (a ring meter with a label), `Skeleton`, and `Toaster` for `sonner` toasts.
+- **EmptyState**: `sm` (default) for an empty section in a card, `lg` for a whole page. A large quiet glyph, never a tile.
 - **Layout**: `Separator` and `ScrollArea`.
 
-## Radix and shadcn
+## Radix, Motion and shadcn
 
-**Decision: Radix for behavior, our own code for everything visual.**
+**Radix for behavior, Motion for movement, our own code for everything visual.**
 
-Radix provides behavior that is hard to get right and easy to get subtly wrong: focus trapping and restoring in dialogs, keyboard navigation in menus and selects, typeahead, dismissing on outside click and Escape, scroll locking, portals, and collision-aware positioning for popovers and tooltips. It is unstyled, so it puts no limit on the look.
+Radix provides behavior that is hard to get right: focus trapping and restoring, keyboard navigation in menus and selects, typeahead, dismissing on outside click and Escape, scroll locking, portals and collision-aware positioning. It is unstyled, so it puts no limit on the look. Motion provides springs, interruptible exit animations and gestures with velocity, which CSS can't do: the bottom sheet's drag to dismiss and the segmented thumb use it. Simple enter and exit animations stay in CSS, on the same spring curve.
 
 | Kind of component                | Examples                                                                            | Built on                                                                |
 | -------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Visual only                      | Text, Card, Button, Badge, Avatar, Skeleton, Input, Textarea, Label, Progress       | Our own code. No Radix, apart from `@radix-ui/react-slot` for `asChild` |
-| Behavior heavy                   | Dialog, AlertDialog, Sheet, Popover, DropdownMenu, Select, Tooltip, Tabs, Accordion | A Radix primitive, styled with our tokens                               |
+| Visual only                      | Text, Card, List, Button, Badge, Avatar, Skeleton, Input, Textarea, Label, Gauge    | Our own code. No Radix, apart from `@radix-ui/react-slot` for `asChild` |
+| Behavior heavy                   | Dialog, AlertDialog, Sheet, Popover, DropdownMenu, Select, Tooltip, Tabs, Accordion | A Radix primitive, styled with our tokens, moved with Motion            |
 | Small inputs with state and ARIA | Checkbox, Switch                                                                    | Radix for now. Cheap to replace later                                   |
 
-Base UI and React Aria Components are capable alternatives, but they solve the same problems Radix already solves here. Revisit only if Radix stops being maintained.
-
-The Radix primitive is an internal detail. Screens import `Dialog` from `@/design-system`, never from `@radix-ui/*` directly, so the engine can be swapped without touching screens.
+The primitives are an internal detail. Screens import `Dialog` from `@/design-system`, never from `@radix-ui/*` directly, so the engine can be swapped without touching screens.
 
 san-ui is distributed the way shadcn/ui is, as source copied into the app by the shadcn CLI, but it is not shadcn/ui: don't add shadcn components next to it. Build the missing component here, with stories, so every app gets it.
 
-## Migrating a screen
+## From 0.3 to 0.4
 
-When you move an existing screen onto san-ui (from shadcn/ui, or from hand-written Tailwind), use these replacements:
+0.4 is a rebuild; nothing used 0.3 yet, so there is no migration path, only a map:
 
-| Old                                                        | New                                                   |
-| ---------------------------------------------------------- | ----------------------------------------------------- |
-| `@/components/ui/*`                                        | The same component from `@/design-system`             |
-| Title with icon and a count span                           | `<CardTitle icon={…} count={n}>`                      |
-| Cards in sheets and dialogs                                | `<Card size="md">`                                    |
-| `text-gray-500`, `text-slate-500`                          | `text-muted-foreground` or `<Text variant="caption">` |
-| `Avatar` + `AvatarFallback` + `getInitials`                | `<Avatar name={…} tone="info">`                       |
-| `Label` + control + `{errors.x && <FieldMessage>}`         | `<Field label error={errors.x?.message}>`             |
-| `<p className="text-sm text-red-500">` under a field       | `<Field error>`, or `<FieldMessage error>`            |
-| `border-red-500` on an invalid field                       | `<Field error>`, or `aria-invalid`                    |
-| `"Name *"` in a label                                      | `<Field label="Name" required>`                       |
-| Page `<h1>`/`<h2 className="text-2xl…">` + muted paragraph | `<PageHeader title description>`                      |
-| `<Loader2 className="animate-spin" />` inside a Button     | `<Button loading>`                                    |
-| Red `DropdownMenuItem` classes                             | `<DropdownMenuItem variant="destructive">`            |
-| `<DialogContent hideClose>`                                | `<DialogContent close={false}>`                       |
-| `<SheetContent showClose>`                                 | `<SheetContent close>`                                |
-| `focus-visible:ring-2 focus-visible:ring-ring`             | `focusRing`                                           |
-| `slate`, `gray`, `zinc`, `stone`                           | `neutral`, or a semantic token                        |
-| `emerald`, `teal`                                          | `success`, or `green`                                 |
-| `violet`, `indigo`                                         | `brand`, or `purple`                                  |
-| `rose`, `pink`                                             | `destructive`, or `red`                               |
-| `sky`, `cyan`                                              | `info`, or `blue`                                     |
+| 0.3                                                | 0.4                                                        |
+| -------------------------------------------------- | ---------------------------------------------------------- |
+| `--brand-*` ramps, `--tint-hue`, `--ink-hue`       | `--accent-hue`, `--accent-chroma`, `--neutral-*`           |
+| `bg-primary`, `text-muted-foreground`, `bg-card`   | `bg-accent`, `text-ink-secondary`, `bg-surface`            |
+| `text-destructive`, `tone="destructive"`           | `text-danger`, `tone="danger"`                             |
+| Type roles `title`, `heading`, `body-strong`       | `title-1`, `title-2` / `title-3`, `headline`               |
+| Button `primary`, `secondary`, `ghost`, `inverse`  | `filled`, `tinted` + `neutral`, `plain`, an accent Surface |
+| Button sizes `icon`, `icon-sm`                     | `icon` with `size`                                         |
+| Card `soft`, `tinted`, `brand`; `size`; title icon | `surface`, `inset`, `accent`; the density sets the size    |
+| `ScoreRing` and `scoreTone`                        | `Gauge` with a `tone` the app picks                        |
+| `tw-animate-css`, Figtree and Bricolage            | The san-ui keyframes and the system font                   |

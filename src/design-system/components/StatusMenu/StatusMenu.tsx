@@ -1,5 +1,10 @@
 import { ChevronDown } from 'lucide-react';
-import * as React from 'react';
+import type {
+  ComponentProps,
+  HTMLAttributes,
+  ReactNode,
+  SyntheticEvent,
+} from 'react';
 
 import {
   Badge,
@@ -24,8 +29,8 @@ import { cn } from '@/design-system/lib/cn';
  * the status of a task, an order or an application.
  *
  * Each option is a Badge `tone`, or the app's own colors through
- * `className` (a soft fill and a text color, e.g.
- * `bg-status-done/10 text-status-done`), for apps with more statuses than
+ * `className` (a soft fill and a text color, like
+ * `bg-status-done/15 text-status-done`), for apps with more statuses than
  * tones. Without `onValueChange` it renders a plain badge.
  *
  * It is safe inside a clickable card or link: clicks on the badge and the
@@ -35,7 +40,7 @@ import { cn } from '@/design-system/lib/cn';
 export interface StatusOption<T extends string = string> {
   value: T;
   /** Defaults to `value` */
-  label?: React.ReactNode;
+  label?: ReactNode;
   /** Defaults to `neutral` */
   tone?: BadgeTone;
   /** The app's own colors, instead of a tone: a soft fill and a text color */
@@ -43,7 +48,7 @@ export interface StatusOption<T extends string = string> {
 }
 
 export interface StatusMenuProps<T extends string> extends Omit<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  ComponentProps<'button'>,
   'value' | 'defaultValue' | 'onChange'
 > {
   value: T;
@@ -60,7 +65,18 @@ export interface StatusMenuProps<T extends string> extends Omit<
 const optionColor = (option?: StatusOption) =>
   option?.className ? { className: option.className } : { tone: option?.tone };
 
-const stop = (event: React.SyntheticEvent) => event.stopPropagation();
+/** The text color of each tone, for the dots in the menu */
+const toneDot: Record<BadgeTone, string> = {
+  neutral: 'text-ink-secondary',
+  accent: 'text-accent',
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
+  info: 'text-info',
+  highlight: 'text-highlight',
+};
+
+const stop = (event: SyntheticEvent) => event.stopPropagation();
 
 export function StatusMenu<T extends string>({
   value,
@@ -84,7 +100,7 @@ export function StatusMenu<T extends string>({
         tone={color.tone}
         className={cn(color.className, className)}
         dot
-        {...(props as React.HTMLAttributes<HTMLSpanElement>)}
+        {...(props as HTMLAttributes<HTMLSpanElement>)}
       >
         {currentLabel}
       </Badge>
@@ -98,7 +114,7 @@ export function StatusMenu<T extends string>({
           size={size}
           tone={color.tone}
           className={cn(
-            'cursor-pointer hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
+            'cursor-pointer hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:brightness-110',
             focusRing,
             touchTarget,
             color.className,
@@ -120,7 +136,7 @@ export function StatusMenu<T extends string>({
           >
             <BadgeDot />
             {currentLabel}
-            <ChevronDown className="opacity-60" />
+            <ChevronDown aria-hidden className="opacity-70" />
           </button>
         </Badge>
       </DropdownMenuTrigger>
@@ -141,19 +157,16 @@ export function StatusMenu<T extends string>({
             const { tone, className: colorClass } = optionColor(option);
             return (
               <DropdownMenuRadioItem key={option.value} value={option.value}>
-                <Badge
-                  tone={tone}
-                  // Only the text color is kept, for the dot
+                <span
+                  aria-hidden
                   className={cn(
+                    toneDot[tone ?? 'neutral'],
                     colorClass,
-                    'bg-transparent p-0 dark:bg-transparent',
+                    'flex bg-transparent',
                   )}
-                  asChild
                 >
-                  <span aria-hidden>
-                    <BadgeDot className="size-2" />
-                  </span>
-                </Badge>
+                  <BadgeDot className="size-2" />
+                </span>
                 {option.label ?? option.value}
               </DropdownMenuRadioItem>
             );

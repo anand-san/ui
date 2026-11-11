@@ -1,21 +1,40 @@
 import { cva } from 'class-variance-authority';
 
-import { spacing } from '@/design-system/foundations/spacing';
-import { cn } from '@/design-system/lib/cn';
+/**
+ * Shared looks for controls, so a field and a button on one row have the
+ * same height, the same corners and the same focus ring.
+ */
+
+/** The focus ring for anything that is not a text field */
+export const focusRing =
+  'outline-offset-2 outline-focus focus-visible:outline-2';
 
 /**
- * Shared look for text controls (Input, Textarea, Select trigger), so a field
- * and a button on the same row have the same height and the same focus ring.
- * Heights follow Button: sm 32px, md 36px, lg 40px.
+ * Grows the hit area of a small control to 44px on touch screens without
+ * changing its size, so a 28px icon button is still easy to tap.
+ */
+export const touchTarget =
+  'relative pointer-coarse:after:absolute pointer-coarse:after:left-1/2 pointer-coarse:after:top-1/2 pointer-coarse:after:size-full pointer-coarse:after:min-h-touch pointer-coarse:after:min-w-touch pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2';
+
+/**
+ * The press response: a pressed control sinks a little at once and springs
+ * back when it is released. Reduced motion keeps the color change only.
+ */
+export const pressable =
+  'transition-[scale] duration-(--duration-spring) ease-spring active:scale-[0.97] active:duration-(--duration-press) active:ease-out motion-reduce:active:scale-100';
+
+/**
+ * Text fields: Input, Textarea and the Select trigger. Text is never below
+ * 16px on a touch screen, so iOS doesn't zoom into the field.
  */
 export const controlVariants = cva(
-  'flex w-full min-w-0 rounded-md border border-input bg-card text-foreground transition-[color,border-color,box-shadow] placeholder:text-muted-foreground/70 hover:border-ring/50 focus-visible:border-ring focus-visible:outline-hidden focus-visible:ring-[3px] focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-destructive/60 aria-[invalid=true]:focus-visible:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/15',
+  'flex w-full min-w-0 rounded-control border border-control bg-surface text-ink outline-focus transition-[border-color,outline-color] duration-(--duration-fast) ease-out focus-visible:border-focus focus-visible:outline-2 focus-visible:-outline-offset-1 disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-danger aria-[invalid=true]:outline-danger',
   {
     variants: {
       size: {
-        sm: 'h-8 px-2.5 text-xs',
-        md: 'h-9 px-3 text-sm',
-        lg: 'h-10 px-3 text-sm',
+        sm: 'h-control-sm px-2.5 text-subhead pointer-coarse:text-body',
+        md: 'h-control-md px-3 text-body',
+        lg: 'h-control-lg px-3.5 text-body',
       },
     },
     defaultVariants: { size: 'md' },
@@ -24,70 +43,74 @@ export const controlVariants = cva(
 
 export type ControlSize = 'sm' | 'md' | 'lg';
 
-export const focusRing =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
-
-export const touchTarget =
-  'relative pointer-coarse:after:absolute pointer-coarse:after:left-1/2 pointer-coarse:after:top-1/2 pointer-coarse:after:size-full pointer-coarse:after:min-h-touch pointer-coarse:after:min-w-touch pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2';
-
-/** Panel look shared by popovers, menus, select lists and tooltips */
+/**
+ * Menus, popovers and select lists: a translucent panel that grows from the
+ * control that opened it. The origin comes from Radix.
+ */
 export const floatingPanelClass =
-  'z-50 rounded-xl border bg-popover text-popover-foreground shadow-lg outline-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2';
+  'z-50 origin-(--radix-popper-transform-origin) overflow-hidden rounded-panel border border-separator material p-panel text-ink shadow-floating outline-hidden data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in';
 
-/** A row inside a menu or select list */
+/**
+ * A row in a menu or select list. The highlighted row fills with the accent,
+ * as in a native menu; rows are 44px tall on a touch screen.
+ */
 export const menuItemClass =
-  'relative flex cursor-default select-none items-center gap-2 rounded-inset px-2 py-1.5 text-sm outline-hidden transition-colors focus:bg-primary/[0.07] data-[highlighted]:bg-primary/[0.07] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0';
+  'relative flex min-h-control-sm cursor-default select-none items-center gap-2.5 rounded-item px-2.5 py-1 text-body outline-hidden pointer-coarse:min-h-touch data-disabled:pointer-events-none data-disabled:text-ink-tertiary data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-ink-secondary data-highlighted:[&_svg]:text-current';
 
-/** Dimmed backdrop behind dialogs and sheets */
-export const overlayClass =
-  'fixed inset-0 z-50 bg-brand-950/50 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0';
+/** A destructive row: red text, a red fill when highlighted */
+export const menuItemDangerClass =
+  'text-danger [&_svg]:text-current data-highlighted:bg-danger data-highlighted:text-danger-foreground';
 
-export type ModalPlacement = 'center' | 'bottom' | 'top' | 'left' | 'right';
+export const menuLabelClass =
+  'px-2.5 pb-1 pt-2 text-caption font-semibold text-ink-secondary';
+
+export const menuSeparatorClass = '-mx-panel my-1 h-px bg-separator';
+
+/** The dimmed layer behind a dialog or sheet */
+export const scrimClass = 'fixed inset-0 z-50 bg-scrim';
+
+export type ModalPlacement = 'center' | 'bottom' | 'left' | 'right';
 
 export const modalSurfaceVariants = cva(
-  'fixed z-50 flex flex-col gap-4 overflow-y-auto bg-popover text-popover-foreground outline-hidden data-[state=open]:animate-in data-[state=closed]:animate-out',
+  'fixed z-50 flex flex-col bg-overlay text-ink shadow-modal outline-hidden dark:border dark:border-separator',
   {
     variants: {
       placement: {
         center:
-          'left-1/2 top-1/2 max-h-[calc(100dvh-2rem)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border p-6 shadow-xl duration-200 data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+          'left-1/2 top-1/2 max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-sheet',
         bottom:
-          'inset-x-0 bottom-0 max-h-[90dvh] rounded-t-2xl border-t px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 shadow-lg duration-300 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom md:px-6 md:pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pt-6',
-        top: 'inset-x-0 top-0 max-h-[90dvh] rounded-b-2xl border-b px-6 pb-6 pt-[max(1.5rem,env(safe-area-inset-top))] shadow-lg duration-300 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
-        left: 'inset-y-0 left-0 h-full w-3/4 border-r pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[max(1.5rem,env(safe-area-inset-left))] pr-6 pt-[max(1.5rem,env(safe-area-inset-top))] shadow-lg duration-300 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+          'inset-x-0 bottom-0 max-h-[calc(100dvh-max(1rem,env(safe-area-inset-top)))] rounded-t-sheet after:absolute after:inset-x-0 after:top-full after:h-24 after:bg-overlay',
+        left: 'bottom-2 left-2 top-2 w-[min(24rem,calc(100vw-3rem))] rounded-sheet',
         right:
-          'inset-y-0 right-0 h-full w-3/4 border-l pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-6 pr-[max(1.5rem,env(safe-area-inset-right))] pt-[max(1.5rem,env(safe-area-inset-top))] shadow-lg duration-300 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+          'bottom-2 right-2 top-2 w-[min(24rem,calc(100vw-3rem))] rounded-sheet',
       },
     },
     defaultVariants: { placement: 'center' },
   },
 );
 
-export const modalCloseVariants = cva(
-  [
-    touchTarget,
-    'absolute inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground disabled:pointer-events-none',
-    focusRing,
-  ],
+/** The scrolling body of a dialog or sheet */
+export const modalBodyVariants = cva(
+  'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain',
   {
     variants: {
       placement: {
-        center: 'right-4 top-5.5',
-        bottom: 'right-2 top-3.5 md:right-4 md:top-5.5',
-        top: 'right-4 top-[calc(max(1.5rem,env(safe-area-inset-top))-2px)]',
-        left: 'right-4 top-[calc(max(1.5rem,env(safe-area-inset-top))-2px)]',
-        right:
-          'right-[calc(max(1.5rem,env(safe-area-inset-right))-0.5rem)] top-[calc(max(1.5rem,env(safe-area-inset-top))-2px)]',
+        center: 'p-6',
+        bottom:
+          'px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-1 sm:px-6 sm:pb-[max(1.5rem,env(safe-area-inset-bottom))]',
+        left: 'p-5',
+        right: 'p-5',
       },
     },
     defaultVariants: { placement: 'center' },
   },
 );
 
-export const modalHeaderClass = cn(
-  'flex flex-col text-left in-data-close:pr-8',
-  spacing.stack,
-);
+export const modalCloseClass =
+  'absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full bg-fill text-ink-secondary hover:bg-fill-hover hover:text-ink [&_svg]:size-4';
+
+export const modalHeaderClass =
+  'flex flex-col gap-1 text-left in-data-close:pr-10';
 
 export const modalFooterClass =
-  'mt-auto flex flex-col-reverse gap-2 sm:flex-row sm:justify-end';
+  'mt-auto flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end';
