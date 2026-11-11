@@ -74,8 +74,9 @@ The base sets the structure; a theme fills in the colors and faces.
 3. **Type roles, not sizes.** Use `<Text variant>` or `textVariants()`. No `text-[10px]`, `text-[13px]` or other arbitrary sizes. Labels are sentence case, never `uppercase tracking-wider`.
 4. **Spacing steps.** Only `0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16`. Use the `spacing` roles for page gutters, card padding and gaps between cards.
 5. **Radius.** `rounded-md` for fields, `rounded-lg` for small cards, `rounded-xl` for section cards and floating panels, `rounded-2xl` for dialogs and sheets, `rounded-inset` for rows inside a menu, `rounded-full` for buttons, badges and avatars.
-6. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
-7. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
+6. **Focus and touch.** Anything clickable that isn't a text field takes `focusRing`, a 2px outline 2px off its edge; text fields keep the border and halo from `controlVariants`. A control drawn smaller than 44px adds `touchTarget`, which grows its hit area to 44px on touch screens without changing its size. The larger area sits over anything right beside it, so leave a little room.
+7. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
+8. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
 
 ## Mark
 
