@@ -28,7 +28,7 @@ export const focusRing =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
 export const touchTarget =
-  'relative pointer-coarse:after:absolute pointer-coarse:after:left-1/2 pointer-coarse:after:top-1/2 pointer-coarse:after:size-touch pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2';
+  'relative pointer-coarse:after:absolute pointer-coarse:after:left-1/2 pointer-coarse:after:top-1/2 pointer-coarse:after:size-full pointer-coarse:after:min-h-touch pointer-coarse:after:min-w-touch pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2';
 
 /** Panel look shared by popovers, menus, select lists and tooltips */
 export const floatingPanelClass =
