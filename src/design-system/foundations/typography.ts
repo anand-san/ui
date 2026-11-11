@@ -2,40 +2,39 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import type { ElementType } from 'react';
 
 /**
- * The type scale. Each variant is a role, not a size: pick the one that
- * describes what the text is, and the size, weight and tracking follow.
- * Labels are sentence case; the design system has no tiny uppercase labels
- * and no arbitrary sizes like text-[10px] or text-[13px].
+ * The type scale. Each variant is a role, not a size: pick what the text is,
+ * and size, leading, tracking and weight follow as one set. Sizes come from
+ * the density, so the same role is larger on a touch screen, and they are in
+ * rem, so they follow the user's text size.
  *
- * Two faces, set by the theme: font-display for display, title and
- * heading, where its character shows; font-sans for everything people
- * read and operate. In the Eloovor theme they are Bricolage Grotesque and
- * Figtree.
+ * Emphasis comes from weight before size: `headline` is body text in
+ * semibold, for list titles and labels that lead a row.
  */
 export const textVariants = cva('', {
   variants: {
     variant: {
-      display:
-        'font-display text-2xl font-bold tabular-nums tracking-tight md:text-3xl',
-      title: 'text-balance font-display text-2xl font-semibold tracking-tight',
-      heading:
-        'text-balance font-display text-lg font-semibold tracking-tight md:text-xl',
-      subheading: 'text-base font-semibold',
-      'body-lg': 'text-base',
-      body: 'text-sm',
-      'body-strong': 'text-sm font-medium',
-      caption: 'text-xs',
-      label: 'text-xs font-medium',
-      code: 'font-mono text-xs',
+      display: 'text-balance font-display text-display',
+      'title-1': 'text-balance font-display text-title-1',
+      'title-2': 'text-balance font-display text-title-2',
+      'title-3': 'text-title-3',
+      headline: 'text-headline',
+      body: 'text-body',
+      subhead: 'text-subhead',
+      caption: 'text-caption',
+      code: 'font-mono text-subhead',
     },
     tone: {
       default: '',
-      muted: 'text-muted-foreground',
-      brand: 'text-brand',
+      secondary: 'text-ink-secondary',
+      accent: 'text-accent',
       success: 'text-success',
       warning: 'text-warning',
+      danger: 'text-danger',
       info: 'text-info',
-      destructive: 'text-destructive',
+    },
+    numeric: {
+      true: 'tabular-nums',
+      false: '',
     },
     truncate: {
       true: 'truncate',
@@ -43,16 +42,13 @@ export const textVariants = cva('', {
     },
   },
   compoundVariants: [
-    // Captions and labels read as supporting text unless a tone says otherwise
-    {
-      variant: ['caption', 'label'],
-      tone: 'default',
-      className: 'text-muted-foreground',
-    },
+    // Captions read as supporting text unless a tone says otherwise
+    { variant: 'caption', tone: 'default', className: 'text-ink-secondary' },
   ],
   defaultVariants: {
     variant: 'body',
     tone: 'default',
+    numeric: false,
     truncate: false,
   },
 });
@@ -64,83 +60,66 @@ export type TextTone = NonNullable<VariantProps<typeof textVariants>['tone']>;
 
 /** The element each variant renders by default; override with `as`. */
 export const defaultTextElement: Record<TextVariant, ElementType> = {
-  display: 'p',
-  title: 'h1',
-  heading: 'h2',
-  subheading: 'h3',
-  'body-lg': 'p',
+  display: 'h1',
+  'title-1': 'h1',
+  'title-2': 'h2',
+  'title-3': 'h3',
+  headline: 'p',
   body: 'p',
-  'body-strong': 'p',
+  subhead: 'p',
   caption: 'p',
-  label: 'span',
   code: 'code',
 };
 
 /** Documentation for the type scale story and future agents. */
 export const typeScale: {
   variant: TextVariant;
-  size: string;
+  sizes: string;
   usage: string;
-  replaces: string;
 }[] = [
   {
     variant: 'display',
-    size: '24px → 30px, display face, bold, tabular figures',
-    usage: 'Key numbers and metrics, like the counts on a dashboard.',
-    replaces: 'text-2xl/3xl/4xl font-bold',
+    sizes: '40 → 72px, fluid with the viewport, bold',
+    usage: 'The one headline of a landing or marketing page.',
   },
   {
-    variant: 'title',
-    size: '24px, display face, semibold',
-    usage: 'The one page title at the top of a screen.',
-    replaces: 'text-2xl/3xl font-semibold|bold',
+    variant: 'title-1',
+    sizes: '24 / 28 / 34px, bold',
+    usage: 'The page title at the top of a screen.',
   },
   {
-    variant: 'heading',
-    size: '18px → 20px, display face, semibold',
-    usage: 'Section and card titles on a page, like Recent or Today’s Focus.',
-    replaces: 'SECTION_TITLE_CLASS, text-lg/xl font-semibold',
+    variant: 'title-2',
+    sizes: '18 / 20 / 22px, semibold',
+    usage: 'Section titles on a page and the title of a dialog.',
   },
   {
-    variant: 'subheading',
-    size: '16px, semibold',
-    usage: 'Card titles inside sheets, dialogs and side panels.',
-    replaces: 'CONFIG_CARD_TITLE_CLASS, text-base font-semibold',
+    variant: 'title-3',
+    sizes: '15 / 17 / 20px, semibold',
+    usage: 'Card and group titles.',
   },
   {
-    variant: 'body-lg',
-    size: '16px',
-    usage: 'Long reading text: analyses, notes, generated documents.',
-    replaces: 'text-base, text-[15px]',
+    variant: 'headline',
+    sizes: 'body size, semibold',
+    usage: 'The title of a list row, a field label, anything that leads.',
   },
   {
     variant: 'body',
-    size: '14px',
-    usage: 'The default for UI text, descriptions and list rows.',
-    replaces: 'text-sm, text-[13px], text-[13.5px], text-[14px]',
+    sizes: '14 / 15 / 17px',
+    usage: 'Everything people read and operate: the default.',
   },
   {
-    variant: 'body-strong',
-    size: '14px, medium',
-    usage: 'Titles of child cards and list items, like a project name.',
-    replaces: 'CONFIG_ITEM_TITLE_CLASS, text-sm font-medium',
+    variant: 'subhead',
+    sizes: '13 / 14 / 15px',
+    usage: 'Descriptions under titles and secondary lines in rows.',
   },
   {
     variant: 'caption',
-    size: '12px, muted',
-    usage: 'Metadata and secondary lines: owner, dates, counts.',
-    replaces: 'text-xs text-gray-500, text-[11px], text-[10px]',
-  },
-  {
-    variant: 'label',
-    size: '12px, medium, muted',
-    usage: 'Field and group labels. Sentence case, never uppercase.',
-    replaces: 'text-[10px]/[11px] uppercase tracking-wider labels',
+    sizes: '12 / 12 / 13px, secondary',
+    usage: 'Metadata: dates, counts, footnotes under a group.',
   },
   {
     variant: 'code',
-    size: '12px, mono',
-    usage: 'Hex values, IDs and other literal values.',
-    replaces: 'font-mono text-[10px]/xs',
+    sizes: 'subhead size, monospace',
+    usage: 'IDs, keys and other literal values.',
   },
 ];
