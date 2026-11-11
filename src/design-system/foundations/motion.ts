@@ -24,15 +24,3 @@ export const springs = {
 export function projectMomentum(velocity: number, decelerationRate = 0.998) {
   return ((velocity / 1000) * decelerationRate) / (1 - decelerationRate);
 }
-
-/** Resistance past an edge: the further the drag, the less it follows */
-export function rubberband(
-  overshoot: number,
-  dimension: number,
-  constant = 0.55,
-) {
-  return (
-    (overshoot * dimension * constant) /
-    (dimension + constant * Math.abs(overshoot))
-  );
-}
