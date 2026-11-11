@@ -176,9 +176,6 @@
   --accent-soft: oklch(0 0 0 / 0.12);
   --accent-soft-hover: oklch(0 0 0 / 0.18);
   --focus: oklch(1 0 0);
-
-  background-color: var(--surface);
-  color: var(--ink);
 }
 
 /* More contrast on request: solid lines, darker secondary text */

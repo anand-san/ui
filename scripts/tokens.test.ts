@@ -28,6 +28,8 @@ interface Pair {
 
 const surfaces = ['--canvas', '--surface', '--surface-inset', '--overlay'];
 const fills = ['--fill', '--fill-hover', '--fill-strong'];
+/** Colored text sits on these: a plain button's hover and pressed fills */
+const hoverFills = ['--fill', '--fill-hover'];
 
 const neutralPairs: Pair[] = [
   ...['--ink', '--ink-secondary'].flatMap(text => [
@@ -53,6 +55,19 @@ const accentPairs: Pair[] = [
     on,
     min: NON_TEXT,
   })),
+  ...hoverFills.flatMap(layer =>
+    ['--surface', '--overlay'].map(on => ({
+      text: '--accent-text',
+      on,
+      layer,
+      min: AA,
+    })),
+  ),
+  ...['--ink', '--ink-secondary'].map(text => ({
+    text,
+    on: '--accent-soft',
+    min: AA,
+  })),
 ];
 
 const statusPairs: Pair[] = ['success', 'warning', 'danger', 'info'].flatMap(
@@ -61,6 +76,17 @@ const statusPairs: Pair[] = ['success', 'warning', 'danger', 'info'].flatMap(
     ...[...surfaces, `--${s}-soft`].map(on => ({
       text: `--${s}-text`,
       on,
+      min: AA,
+    })),
+    ...hoverFills.map(layer => ({
+      text: `--${s}-text`,
+      on: '--surface',
+      layer,
+      min: AA,
+    })),
+    ...['--ink', '--ink-secondary'].map(text => ({
+      text,
+      on: `--${s}-soft`,
       min: AA,
     })),
   ],
