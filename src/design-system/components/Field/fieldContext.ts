@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type AriaAttributes, createContext, use } from 'react';
 
 import type { ControlSize } from '@/design-system/foundations/controls';
 
@@ -12,13 +12,13 @@ export interface FieldContextValue {
   size: ControlSize;
 }
 
-export const FieldContext = React.createContext<FieldContextValue | null>(null);
+export const FieldContext = createContext<FieldContextValue | null>(null);
 
 interface ControlProps {
   id?: string;
   size?: ControlSize;
   'aria-describedby'?: string;
-  'aria-invalid'?: React.AriaAttributes['aria-invalid'];
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
 }
 
 /**
@@ -27,7 +27,7 @@ interface ControlProps {
  * passed to the control win. Outside a Field it returns the props unchanged.
  */
 export function useFieldControl(props: ControlProps) {
-  const field = React.useContext(FieldContext);
+  const field = use(FieldContext);
   const describedBy =
     [props['aria-describedby'], field?.messageId].filter(Boolean).join(' ') ||
     undefined;

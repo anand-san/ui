@@ -1,6 +1,5 @@
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import * as React from 'react';
+import { CalendarDays } from 'lucide-react';
+import { type ComponentProps, useState } from 'react';
 
 import { Field } from '@/design-system/components/Field/Field';
 import { useFieldControl } from '@/design-system/components/Field/fieldContext';
@@ -15,98 +14,103 @@ import { cn } from '@/design-system/lib/cn';
 import { Calendar } from './Calendar';
 
 export interface DatePickerProps {
+  /** An ISO string at midnight UTC, like `2026-11-11T00:00:00.000Z` */
   value?: string;
   onChange?: (date: string | undefined) => void;
   label?: string;
+  hint?: string;
   /** Adds an asterisk to the label and marks the field required */
   required?: boolean;
   placeholder?: string;
   error?: string;
   disabled?: boolean;
-  maxDate?: Date;
   minDate?: Date;
-  fromYear?: number;
-  toYear?: number;
+  maxDate?: Date;
+  /**
+   * `dropdown` adds month and year menus, for dates far from today like a
+   * birthday. Defaults to `label`.
+   */
+  captionLayout?: 'label' | 'dropdown';
   className?: string;
 }
 
-/** A date field that opens a calendar. Values are ISO strings at midnight UTC. */
+const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
+
+function fromIso(value: string) {
+  const date = new Date(value);
+  return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+}
+
+function toIso(date: Date) {
+  return new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+  ).toISOString();
+}
+
+/**
+ * A date field that opens a calendar and closes when a day is picked.
+ * Values are ISO strings at midnight UTC, so a date doesn't shift between
+ * time zones.
+ */
 export function DatePicker({
   value,
   onChange,
   label,
+  hint,
   required,
   placeholder = 'Pick a date',
   error,
   disabled,
-  maxDate,
   minDate,
-  fromYear,
-  toYear,
+  maxDate,
+  captionLayout = 'label',
   className,
 }: DatePickerProps) {
-  const handleSelect = (date: Date | undefined) => {
-    if (!date) {
-      onChange?.(undefined);
-      return;
-    }
-    // Set the time to midnight UTC to avoid timezone issues
-    const utcDate = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-    );
-    onChange?.(utcDate.toISOString());
-  };
-
-  const displayDate = value
-    ? (() => {
-        const utcDate = new Date(value);
-        return new Date(
-          utcDate.getUTCFullYear(),
-          utcDate.getUTCMonth(),
-          utcDate.getUTCDate(),
-        );
-      })()
-    : undefined;
-  const defaultMonth = displayDate || new Date();
+  const [open, setOpen] = useState(false);
+  const selected = value ? fromIso(value) : undefined;
 
   const picker = (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <DatePickerTrigger
           disabled={disabled}
           className={cn(
-            !displayDate && 'text-muted-foreground',
-            !label && !error && className,
+            !selected && 'text-ink-secondary',
+            !label && !error && !hint && className,
           )}
         >
-          {displayDate ? format(displayDate, 'PPP') : placeholder}
+          {selected ? dateFormat.format(selected) : placeholder}
         </DatePickerTrigger>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={displayDate}
-          defaultMonth={defaultMonth}
-          onSelect={handleSelect}
-          disabled={date => {
-            if (maxDate && date > maxDate) return true;
-            if (minDate && date < minDate) return true;
-            return false;
+          autoFocus
+          selected={selected}
+          defaultMonth={selected}
+          captionLayout={captionLayout}
+          startMonth={minDate}
+          endMonth={maxDate}
+          disabled={[
+            ...(minDate ? [{ before: minDate }] : []),
+            ...(maxDate ? [{ after: maxDate }] : []),
+          ]}
+          onSelect={date => {
+            onChange?.(date ? toIso(date) : undefined);
+            setOpen(false);
           }}
-          fromYear={fromYear}
-          toYear={toYear}
-          initialFocus
         />
       </PopoverContent>
     </Popover>
   );
 
-  // With a label or an error the picker is its own Field; without, it can sit
-  // inside one
-  if (!label && !error) return picker;
+  // With a label, hint or error the picker is its own Field; without, it can
+  // sit inside one
+  if (!label && !error && !hint) return picker;
   return (
     <Field
       label={label}
+      hint={hint}
       required={required}
       error={error}
       className={className}
@@ -116,14 +120,14 @@ export function DatePicker({
   );
 }
 
-const DatePickerTrigger = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => {
+function DatePickerTrigger({
+  className,
+  children,
+  ...props
+}: ComponentProps<'button'>) {
   const field = useFieldControl({});
   return (
     <button
-      ref={ref}
       type="button"
       id={field.id}
       aria-describedby={field['aria-describedby']}
@@ -131,14 +135,13 @@ const DatePickerTrigger = React.forwardRef<
       aria-required={field['aria-required']}
       className={cn(
         controlVariants({ size: field.size }),
-        'items-center gap-2 text-left [&_svg]:size-4 [&_svg]:shrink-0',
+        'cursor-pointer items-center gap-2 text-left [&_svg]:size-4 [&_svg]:shrink-0',
         className,
       )}
       {...props}
     >
-      <CalendarIcon className="text-muted-foreground" />
+      <CalendarDays aria-hidden className="text-ink-secondary" />
       <span className="truncate">{children}</span>
     </button>
   );
-});
-DatePickerTrigger.displayName = 'DatePickerTrigger';
+}

@@ -1,100 +1,85 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import * as React from 'react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+} from 'lucide-react';
+import type { ComponentProps } from 'react';
 import { DayPicker } from 'react-day-picker';
 
-import {
-  controlVariants,
-  focusRing,
-} from '@/design-system/foundations/controls';
+import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
-const dayButtonClass = cn(
-  'inline-flex size-8 items-center justify-center rounded-md p-0 text-sm font-normal transition-colors hover:bg-primary/5 aria-selected:opacity-100',
+export type CalendarProps = ComponentProps<typeof DayPicker>;
+
+const chevrons = {
+  up: ChevronUp,
+  down: ChevronDown,
+  left: ChevronLeft,
+  right: ChevronRight,
+};
+
+const navButtonClass = cn(
+  'inline-flex size-control-md cursor-pointer items-center justify-center rounded-full text-accent hover:bg-fill aria-disabled:pointer-events-none aria-disabled:opacity-40 [&_svg]:size-4',
   focusRing,
 );
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
-
-/** A month grid with month and year dropdowns, built on react-day-picker */
+/**
+ * A month grid on react-day-picker. Days are round, today is in the accent
+ * and the chosen day fills with it; a range fills softly between its ends.
+ * Day cells follow the density.
+ */
 export function Calendar({
   className,
   classNames,
-  showOutsideDays = true,
-  fromYear = 1900,
-  toYear = new Date().getFullYear() + 10,
+  showOutsideDays = false,
+  components,
   ...props
-}: CalendarProps & {
-  fromYear?: number;
-  toYear?: number;
-}) {
+}: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
-      captionLayout="dropdown"
-      fromYear={fromYear}
-      toYear={toYear}
+      className={cn('relative w-fit p-3 text-ink', className)}
       classNames={{
         months: 'flex flex-col gap-4 sm:flex-row',
-        month: 'flex flex-col gap-4',
-        caption: 'flex justify-center gap-1 py-1 relative items-center',
-        caption_label: 'hidden',
-        dropdown: 'p-0',
-        dropdown_month: 'relative inline-flex',
-        dropdown_year: 'relative inline-flex',
-        dropdown_icon: 'hidden',
-        nav: 'flex items-center gap-1 px-2',
-        nav_button:
-          'inline-flex size-7 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground',
-        nav_button_previous: 'absolute left-1',
-        nav_button_next: 'absolute right-1',
-        table: 'w-full border-collapse',
-        head_row: 'flex',
-        head_cell: 'w-8 rounded-md text-xs font-normal text-muted-foreground',
-        row: 'flex w-full mt-2',
-        cell: cn(
-          'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-primary/5 [&:has([aria-selected].day-outside)]:bg-primary/5 [&:has([aria-selected].day-range-end)]:rounded-r-md',
-          props.mode === 'range'
-            ? '[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md'
-            : '[&:has([aria-selected])]:rounded-md',
+        month: 'flex flex-col gap-2',
+        month_caption: 'flex h-control-md items-center pe-24 ps-2',
+        caption_label:
+          'inline-flex items-center gap-1 text-headline [&_svg]:size-3.5 [&_svg]:text-ink-secondary',
+        dropdowns: 'flex items-center gap-1',
+        dropdown_root:
+          'relative inline-flex h-control-sm items-center rounded-control px-1.5 hover:bg-fill has-focus-visible:outline-2 has-focus-visible:outline-focus',
+        dropdown:
+          'absolute inset-0 z-10 cursor-pointer appearance-none opacity-0',
+        nav: 'absolute end-3 top-3 flex items-center gap-1',
+        button_previous: navButtonClass,
+        button_next: navButtonClass,
+        month_grid: 'border-collapse',
+        weekdays: 'flex',
+        weekday:
+          'flex h-6 w-control-md items-center justify-center text-caption font-medium text-ink-secondary',
+        weeks: '',
+        week: 'mt-0.5 flex',
+        day: 'group/day relative p-0 text-center data-disabled:text-ink-tertiary data-outside:text-ink-tertiary data-today:font-semibold data-today:text-accent',
+        day_button: cn(
+          'inline-flex size-control-md cursor-pointer items-center justify-center rounded-full text-body tabular-nums transition-colors duration-(--duration-fast) hover:bg-fill disabled:pointer-events-none group-data-selected/day:bg-accent group-data-selected/day:font-semibold group-data-selected/day:text-accent-foreground',
+          focusRing,
+          'outline-offset-1',
         ),
-        day: dayButtonClass,
-        day_range_start: 'day-range-start',
-        day_range_end: 'day-range-end',
-        day_selected:
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
-        day_today: 'bg-primary/10 font-medium',
-        day_outside:
-          'day-outside text-muted-foreground aria-selected:bg-primary/5 aria-selected:text-muted-foreground',
-        day_disabled: 'text-muted-foreground opacity-50',
-        day_range_middle:
-          'aria-selected:bg-primary/5 aria-selected:text-foreground',
-        day_hidden: 'invisible',
+        range_start: 'rounded-s-full bg-accent-soft',
+        range_middle:
+          'bg-accent-soft [&>button]:bg-transparent! [&>button]:font-normal! [&>button]:text-accent!',
+        range_end: 'rounded-e-full bg-accent-soft',
+        hidden: 'invisible',
+        footer: 'pt-2 text-caption text-ink-secondary',
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn('size-4', className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn('size-4', className)} {...props} />
-        ),
-        CaptionLabel: () => null,
-        Dropdown: ({ value, onChange, children, ...props }) => {
-          return (
-            <select
-              value={value}
-              onChange={onChange}
-              className={cn(
-                controlVariants({ size: 'md' }),
-                'w-[120px] cursor-pointer px-2',
-                props.name === 'months' && 'mr-2',
-              )}
-            >
-              {children}
-            </select>
-          );
+        Chevron: ({ orientation = 'down', className }) => {
+          const Icon = chevrons[orientation];
+          return <Icon aria-hidden className={className} />;
         },
+        ...components,
       }}
       {...props}
     />
