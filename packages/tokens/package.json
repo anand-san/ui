@@ -1,6 +1,6 @@
 {
   "name": "@sandilya/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Design tokens, themes and the Tailwind CSS 4 theme for san-ui",
   "license": "MIT",
   "type": "module",
