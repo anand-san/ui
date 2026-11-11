@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/design-system/components/DropdownMenu/DropdownMenu';
-import { focusRing } from '@/design-system/foundations/controls';
+import { focusRing, touchTarget } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -100,6 +100,7 @@ export function StatusMenu<T extends string>({
           className={cn(
             'cursor-pointer hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:brightness-110',
             focusRing,
+            touchTarget,
             color.className,
             className,
           )}
