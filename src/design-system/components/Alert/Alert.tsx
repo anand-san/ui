@@ -59,8 +59,8 @@ export function AlertTitle({ className, ...props }: ComponentProps<'p'>) {
     <p
       data-slot="alert-title"
       className={cn(
-        textVariants({ variant: 'headline' }),
-        'text-subhead',
+        textVariants({ variant: 'subhead' }),
+        'font-semibold',
         className,
       )}
       {...props}
@@ -75,7 +75,7 @@ export function AlertDescription({
   return (
     <div
       data-slot="alert-description"
-      className={cn('text-ink-secondary [&_p+p]:mt-1', className)}
+      className={cn('[&_p+p]:mt-1', className)}
       {...props}
     />
   );
