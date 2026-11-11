@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 import * as React from 'react';
 
-import { focusRing } from '@/design-system/foundations/controls';
+import { focusRing, touchTarget } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -28,6 +28,7 @@ const buttonVariants = cva(
   [
     'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     focusRing,
+    touchTarget,
   ],
   {
     variants: {
