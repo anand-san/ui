@@ -14,7 +14,7 @@ export function Toaster(props: ToasterProps) {
           '--normal-bg': 'hsl(var(--popover))',
           '--normal-text': 'hsl(var(--popover-foreground))',
           '--normal-border': 'hsl(var(--border))',
-          '--border-radius': '0.75rem',
+          '--border-radius': 'var(--radius-xl)',
         } as React.CSSProperties
       }
       toastOptions={{

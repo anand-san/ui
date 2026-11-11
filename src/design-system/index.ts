@@ -204,7 +204,12 @@ export {
   supportedRamps,
   tintScale,
 } from './foundations/colors';
-export { type ControlSize, controlVariants } from './foundations/controls';
+export {
+  type ControlSize,
+  controlVariants,
+  focusRing,
+  touchTarget,
+} from './foundations/controls';
 export { radiusScale, spacing, spacingScale } from './foundations/spacing';
 export {
   type TextTone,

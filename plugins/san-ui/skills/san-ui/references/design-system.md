@@ -63,7 +63,7 @@ The base sets the structure; a theme fills in the colors and faces.
 - **Ink**: `primary` is the brand color. Neutrals (`background`, `surface`, `muted`, `border`) lean slightly toward `--tint-hue` instead of pure grey. Dark mode is deep ink, not charcoal.
 - **Highlighter**: the `highlight-*` ramp and the `highlight` token. It is a fill behind dark text, never text on white. Use it through `Mark`, `Badge tone="highlight"` and text selection.
 - **Type**: `font-display` for `display`, `title` and `heading`; `font-sans` for the rest.
-- **Shape**: buttons default to pills. Radius goes up with size: `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards, `rounded-2xl` dialogs.
+- **Shape**: buttons default to pills. Radius goes up with size and down as things nest: `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards and floating panels, `rounded-2xl` dialogs and sheets, `rounded-inset` for rows inside a menu.
 - **Shadows** are tinted with `--shadow-color` and kept for floating things: menus, dialogs, toasts, the primary button.
 - **Paper stays paper**: `.force-light-mode` (printed pages, document previews) resets to plain greys and Helvetica, a PDF's font.
 
@@ -73,9 +73,10 @@ The base sets the structure; a theme fills in the colors and faces.
 2. **Tints, not new colors.** For a soft fill behind text, use a token at `/5`, `/10` or `/20` (`bg-primary/5`, `bg-success/10 text-success`). These follow the surface they sit on in both themes.
 3. **Type roles, not sizes.** Use `<Text variant>` or `textVariants()`. No `text-[10px]`, `text-[13px]` or other arbitrary sizes. Labels are sentence case, never `uppercase tracking-wider`.
 4. **Spacing steps.** Only `0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16`. Use the `spacing` roles for page gutters, card padding and gaps between cards.
-5. **Radius.** `rounded-md` for fields, `rounded-xl` for cards, `rounded-2xl` for dialogs, `rounded-full` for buttons, badges and avatars.
-6. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
-7. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
+5. **Radius.** `rounded-md` for fields, `rounded-lg` for small cards, `rounded-xl` for section cards and floating panels, `rounded-2xl` for dialogs and sheets, `rounded-inset` for rows inside a menu, `rounded-full` for buttons, badges and avatars.
+6. **Focus and touch.** Anything clickable takes `focusRing`, a 2px outline 2px off its edge, except fields: `Input`, `Textarea` and the `Select` and `DatePicker` triggers keep the border and halo from `controlVariants`. A control drawn smaller than 44px adds `touchTarget`, which grows its hit area to 44px on touch screens without changing its size. The extra area reaches `(44 − size) ÷ 2` past each edge, 6px for a 32px button, and takes the taps there, so keep other controls that far away. Checkbox and Switch skip it: the Label beside them is the target. `touchTarget` makes the control `position: relative`, so a sticky or fixed bar that buttons scroll under needs a `z-index`.
+7. **Both themes.** Every story must look right in light and dark. Check with the theme switch in the Storybook toolbar.
+8. **Stories first.** A new component gets stories, including one that rebuilds the real screen it comes from, before it is used in the app.
 
 ## Mark
 
@@ -104,10 +105,10 @@ Child cards sit 12px apart (`spacing.items`). Padding is on the card and its par
 - **Badge**: seven tones (`neutral`, `brand`, `highlight`, `success`, `warning`, `info`, `destructive`) in `soft` (default), `solid` or `outline`, with an optional `dot`. `CardCount` is a neutral Badge.
 - **StatusMenu**: a status badge that opens a menu to change the status. Options take a Badge `tone`, or the app's own colors through `className` when there are more statuses than tones. Without `onValueChange` it is a read-only badge. It is safe inside a linked card: its clicks don't reach the card.
 - **Avatar**: image with an initials fallback from `name`, in the same six tones and three sizes (24, 32, 40px).
-- **Field**: wraps one control with its label and its hint or error, and links them: the label's `htmlFor`, `aria-describedby` to the message, `aria-invalid` when there is an `error`, and `aria-required` with `required` (which also adds the asterisk). Set `id` on the Field, not the control. `size="sm"` is the dense style for forms inside a list of entries: a small muted label and 32px controls. `labelAction` puts something at the right of the label row.
+- **Field**: wraps one control with its label and its hint or error, and links them: the label's `htmlFor`, `aria-describedby` to the message, `aria-invalid` when there is an `error`, and `aria-required` with `required` (which also adds the asterisk). Set `id` on the Field, not the control. `size="sm"` is the dense style for forms inside a list of entries: a small muted label and 32px controls. `size="lg"` gives 40px controls. `labelAction` puts something at the right of the label row.
 - **Forms**: `Input`, `Textarea` and `SelectTrigger` share one control style and the Button heights, and read their id, size and states from a surrounding `Field`. Use `Label` on its own only beside a `Checkbox` or `Switch`. `DatePicker` wraps react-day-picker and takes `label`, `required` and `error` itself. Custom controls can join a Field with `useFieldControl`.
 - **PageHeader**: the title block of a page: the `title` role, a muted description, an optional icon tile and actions. `as="h2"` for a step inside a flow.
-- **Overlays**: `Dialog` (a bottom sheet on phones), `AlertDialog` (Cancel plus an action; use `variant="destructive"` for deletions), `Sheet`, `Popover`, `DropdownMenu` (items take `variant="destructive"`), `Tooltip`.
+- **Overlays**: `Dialog` (a bottom sheet on phones), `AlertDialog` (Cancel plus an action; use `variant="destructive"` for deletions), `Sheet`, `Popover`, `DropdownMenu` (items take `variant="destructive"`), `Tooltip`. `close` puts the close button in the corner: on by default in `DialogContent`, off in `SheetContent`.
 - **Navigation**: `Tabs` (pill segmented control, scrolls with arrows when it overflows), `Accordion`, `NavigationMenu` (the desktop header).
 - **Feedback**: `Alert` in six tones, `Progress` and `ScoreRing` with tone colors, `Skeleton`, and `Toaster` for `sonner` toasts.
 - **EmptyState**: `sm` (the default) for an empty list inside a card, with an icon. `lg` for a whole page or panel; with an `image` it sits beside the text from md. Use it for empty lists, pages waiting on the user (work in progress, a limit reached, setup to finish), the error boundary and maintenance screens.
@@ -149,6 +150,9 @@ When you move an existing screen onto san-ui (from shadcn/ui, or from hand-writt
 | Page `<h1>`/`<h2 className="text-2xl…">` + muted paragraph | `<PageHeader title description>`                      |
 | `<Loader2 className="animate-spin" />` inside a Button     | `<Button loading>`                                    |
 | Red `DropdownMenuItem` classes                             | `<DropdownMenuItem variant="destructive">`            |
+| `<DialogContent hideClose>`                                | `<DialogContent close={false}>`                       |
+| `<SheetContent showClose>`                                 | `<SheetContent close>`                                |
+| `focus-visible:ring-2 focus-visible:ring-ring`             | `focusRing`                                           |
 | `slate`, `gray`, `zinc`, `stone`                           | `neutral`, or a semantic token                        |
 | `emerald`, `teal`                                          | `success`, or `green`                                 |
 | `violet`, `indigo`                                         | `brand`, or `purple`                                  |

@@ -4,3 +4,4 @@ registry.json
 bun.lock
 plugins/san-ui/skills/san-ui/references
 .design-sync
+.claude/skills

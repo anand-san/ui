@@ -2,7 +2,6 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { Button } from '@/design-system/components/Button/Button';
 import { Field } from '@/design-system/components/Field/Field';
 import { useFieldControl } from '@/design-system/components/Field/fieldContext';
 import {
@@ -10,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/design-system/components/Popover/Popover';
+import { controlVariants } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 import { Calendar } from './Calendar';
@@ -122,25 +122,23 @@ const DatePickerTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const field = useFieldControl({});
   return (
-    <Button
+    <button
       ref={ref}
-      variant="outline"
-      // Squared off like the text inputs it sits beside in forms
-      shape="rounded"
+      type="button"
       id={field.id}
       aria-describedby={field['aria-describedby']}
       aria-invalid={field['aria-invalid']}
       aria-required={field['aria-required']}
       className={cn(
-        'w-full justify-start px-3 text-left font-normal aria-[invalid=true]:border-destructive/60',
-        field.size === 'sm' && 'h-8 px-2.5 text-xs',
+        controlVariants({ size: field.size }),
+        'items-center gap-2 text-left [&_svg]:size-4 [&_svg]:shrink-0',
         className,
       )}
       {...props}
     >
       <CalendarIcon className="text-muted-foreground" />
-      {children}
-    </Button>
+      <span className="truncate">{children}</span>
+    </button>
   );
 });
 DatePickerTrigger.displayName = 'DatePickerTrigger';

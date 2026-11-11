@@ -1,11 +1,12 @@
 import * as React from 'react';
 
+import type { ControlSize } from '@/design-system/foundations/controls';
 import { textVariants } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
 
 export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /** `sm` is a small muted label for dense editors. Defaults to `md`. */
-  size?: 'sm' | 'md';
+  size?: ControlSize;
 }
 
 /**

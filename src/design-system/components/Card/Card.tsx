@@ -8,6 +8,7 @@ import {
   type TextVariant,
   textVariants,
 } from '@/design-system/foundations/typography';
+import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 /**
@@ -28,7 +29,7 @@ export type CardSize = 'lg' | 'md' | 'sm';
 
 const CardSizeContext = React.createContext<CardSize>('lg');
 
-const cardVariants = cva('flex flex-col rounded-xl text-card-foreground', {
+const cardVariants = cva('flex flex-col text-card-foreground', {
   variants: {
     variant: {
       soft: 'bg-surface',
@@ -37,12 +38,12 @@ const cardVariants = cva('flex flex-col rounded-xl text-card-foreground', {
       brand: 'bg-brand-600 text-white dark:bg-brand-800',
     },
     size: {
-      lg: cn(spacing.card.lg.inset, spacing.card.lg.gap),
-      md: cn(spacing.card.md.inset, spacing.card.md.gap),
-      sm: cn(spacing.card.sm.inset, spacing.card.sm.gap),
+      lg: cn('rounded-xl', spacing.card.lg.inset, spacing.card.lg.gap),
+      md: cn('rounded-xl', spacing.card.md.inset, spacing.card.md.gap),
+      sm: cn('rounded-lg', spacing.card.sm.inset, spacing.card.sm.gap),
     },
     interactive: {
-      true: 'cursor-pointer transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
+      true: cn('cursor-pointer transition-colors', focusRing),
       false: '',
     },
   },
@@ -109,7 +110,8 @@ export const CardHeader = React.forwardRef<
     ref={ref}
     data-slot="card-header"
     className={cn(
-      'grid auto-rows-min items-start gap-1 has-[[data-slot=card-action]]:grid-cols-[1fr_auto] has-[[data-slot=card-action]]:gap-x-3',
+      'grid auto-rows-min items-start has-[[data-slot=card-action]]:grid-cols-[1fr_auto] has-[[data-slot=card-action]]:gap-x-3',
+      spacing.stack,
       className,
     )}
     {...props}

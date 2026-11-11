@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { FieldMessage, Label } from '@/design-system/components/Label/Label';
+import type { ControlSize } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
 import { FieldContext } from './fieldContext';
@@ -21,9 +22,9 @@ export interface FieldProps extends Omit<
   error?: React.ReactNode;
   /**
    * `sm` for dense editors, like a form inside a list of entries: a small muted label
-   * and 32px controls. Defaults to `md`.
+   * and 32px controls. `lg` gives 40px controls. Defaults to `md`.
    */
-  size?: 'sm' | 'md';
+  size?: ControlSize;
   /** id for the control; set it here, not on the control. Generated when left out. */
   id?: string;
 }

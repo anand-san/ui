@@ -5,10 +5,15 @@ import {
   Button,
   type ButtonVariant,
 } from '@/design-system/components/Button/Button';
-import { overlayClass } from '@/design-system/foundations/controls';
+import {
+  modalFooterClass,
+  modalHeaderClass,
+  modalSurfaceVariants,
+  overlayClass,
+} from '@/design-system/foundations/controls';
 import { textVariants } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
-import { useModalContentClass } from '@/design-system/lib/useModalContentClass';
+import { useModalPlacement } from '@/design-system/lib/useModalPlacement';
 
 /**
  * A dialog that asks the person to confirm something, usually a deletion.
@@ -36,14 +41,18 @@ export const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
 >(({ className, ...props }, ref) => {
-  const layoutClass = useModalContentClass();
+  const placement = useModalPlacement();
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         ref={ref}
         data-slot="alert-dialog-content"
-        className={cn(layoutClass, className)}
+        className={cn(
+          modalSurfaceVariants({ placement }),
+          '[&>*]:shrink-0',
+          className,
+        )}
         {...props}
       />
     </AlertDialogPortal>
@@ -58,7 +67,7 @@ export function AlertDialogHeader({
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn('flex flex-col gap-1.5 text-left', className)}
+      className={cn(modalHeaderClass, className)}
       {...props}
     />
   );
@@ -71,10 +80,7 @@ export function AlertDialogFooter({
   return (
     <div
       data-slot="alert-dialog-footer"
-      className={cn(
-        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
-        className,
-      )}
+      className={cn(modalFooterClass, className)}
       {...props}
     />
   );

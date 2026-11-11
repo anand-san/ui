@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Check } from 'lucide-react';
 
+import { focusRing } from '@/design-system/foundations/controls';
+
 import { Badge, BadgeDot } from './Badge';
 
 const tones = [
@@ -106,10 +108,7 @@ export const AsAMenuTrigger: Story = {
   },
   render: () => (
     <Badge tone="info" asChild>
-      <button
-        type="button"
-        className="focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
-      >
+      <button type="button" className={focusRing}>
         <BadgeDot />
         In review
       </button>
