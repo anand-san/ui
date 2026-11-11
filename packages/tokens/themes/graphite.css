@@ -1,0 +1,8 @@
+/* Graphite: a grey accent and pure greys, for tools that stay quiet */
+:root {
+  --accent-hue: 260;
+  --accent-chroma: 0.02;
+  --neutral-hue: 260;
+  --neutral-chroma: 0;
+  --radius-scale: 0.85;
+}

@@ -1,23 +1,41 @@
 /*
- * san-ui base element styles. Import it with the other @imports at
- * the top of the app's CSS; `@layer base` puts it after Tailwind's preflight.
- * Components assume borders default to the border token and the page sits
- * on the background token.
+ * san-ui base element styles. Import it after theme.css; `@layer base`
+ * puts it after Tailwind's preflight.
  */
 @layer base {
   *,
   ::before,
   ::after {
-    border-color: hsl(var(--border));
+    border-color: var(--separator);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html,
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--canvas);
+    color: var(--ink);
     font-family: var(--font-sans);
+    font-size: var(--type-body);
+    line-height: 1.45;
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    caret-color: var(--accent);
+    accent-color: var(--accent);
+  }
+
+  /* Smooth the jump when the theme switches, like the system does */
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+      transition:
+        background-color var(--duration-base) var(--ease-out),
+        color var(--duration-base) var(--ease-out);
+    }
   }
 
   button:not(:disabled),
@@ -26,7 +44,38 @@
   }
 
   ::selection {
-    background-color: hsl(var(--highlight) / 0.55);
-    color: hsl(var(--highlight-foreground));
+    background-color: color-mix(in oklch, var(--highlight) 70%, transparent);
+    color: var(--highlight-foreground);
+  }
+
+  ::placeholder {
+    color: var(--ink-secondary);
+    opacity: 1;
+  }
+
+  * {
+    scrollbar-color: var(--fill-strong) transparent;
+    scrollbar-width: thin;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: from-font;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      scroll-behavior: auto !important;
+    }
   }
 }

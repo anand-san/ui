@@ -1,129 +1,319 @@
 /*
- * san-ui base tokens: every color role, light and dark.
+ * san-ui tokens: every color, type, size, radius, shadow and motion value.
  *
- * Values are bare HSL channels so Tailwind opacity modifiers keep working
- * (bg-success/10, text-brand/80). Tailwind names for them live in
- * theme.css.
+ * Colors are OKLCH. A theme sets only the inputs below; the base fixes each
+ * role's lightness, so every role pair meets WCAG AA for any hue a theme
+ * picks (scripts/tokens.test.ts sweeps all 360). Tailwind names for these
+ * live in theme.css.
  *
- * This file holds what every app shares: the neutral surfaces, feedback
- * colors, lines, radius and the paper reset. The brand comes from a theme
- * (themes/*.css), imported after this file. A theme supplies:
- *
- *   --brand-50 … --brand-950       the primary color ramp
- *   --highlight-50 … --highlight-950 the highlighter ramp
- *   --tint-hue                     the hue neutrals lean toward
- *   --ink-hue                      the hue of text and light-mode shadows
- *   --font-sans, --font-display    optional, system fonts otherwise
- *
- * and may override any role below, usually primary, brand, highlight and
- * ring in dark mode.
+ * Light is the default. `.dark` on an ancestor (usually <html>) switches a
+ * subtree to dark, `.light` switches one back.
  */
 
-/*
- * Light values. `.dark .force-light-mode` is listed here so printed pages
- * stay light inside dark mode; its specificity beats `.dark`.
- */
+:root {
+  /* Theme inputs. Hues are unitless degrees. */
+  --accent-hue: 250;
+  --accent-chroma: 0.2; /* capped at 0.2 */
+  --neutral-hue: 250;
+  --neutral-chroma: 0.008; /* how far greys lean toward the hue, capped at 0.03 */
+  --radius-scale: 1;
+
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-rounded: ui-rounded, var(--font-sans);
+  --font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* The capped inputs every role reads */
+  --a-c: min(var(--accent-chroma), 0.2);
+  --n-c: min(var(--neutral-chroma), 0.03);
+  /*
+   * The lightest accent white text still reads on, at 4.6:1, for this hue:
+   * cyans need a darker accent than blues or reds at the same lightness.
+   * A fit of the per-hue limit, kept under it at every hue.
+   */
+  --accent-l: calc(
+    0.5398 + 0.0239 * cos(var(--accent-hue) * 1deg) + 0.002 *
+      sin(var(--accent-hue) * 1deg) - 0.0136 * cos(var(--accent-hue) * 2deg) -
+      0.0036 * sin(var(--accent-hue) * 2deg)
+  );
+  --accent-base: oklch(var(--accent-l) var(--a-c) var(--accent-hue));
+}
+
+/* Light */
 :root,
-.force-light-mode,
-.dark .force-light-mode {
+.light,
+.dark .light {
   color-scheme: light;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: var(--font-sans);
+  /* Grouped surfaces: a tinted canvas, white groups on it */
+  --canvas: oklch(0.967 var(--n-c) var(--neutral-hue));
+  --surface: oklch(1 0 0);
+  --surface-inset: oklch(0.975 calc(var(--n-c) * 0.6) var(--neutral-hue));
+  --overlay: oklch(0.995 calc(var(--n-c) * 0.3) var(--neutral-hue));
 
-  /* Surfaces: a tinted canvas, white cards that sit on it */
-  --background: var(--tint-hue) 33% 99%;
-  --foreground: var(--ink-hue) 30% 13%; /* ink */
-  --surface: var(--tint-hue) 26% 96.5%; /* soft section cards */
-  --card: 0 0% 100%; /* outline cards */
-  --card-foreground: var(--ink-hue) 30% 13%;
-  --popover: 0 0% 100%; /* menus, popovers, dialogs */
-  --popover-foreground: var(--ink-hue) 30% 13%;
-  --muted: var(--tint-hue) 20% 93.5%;
-  --muted-foreground: var(--tint-hue) 10% 42%; /* secondary text, 5.6:1 on the canvas */
+  /* Text, like Apple's label colors */
+  --ink: oklch(0.2 calc(var(--n-c) * 1.5) var(--neutral-hue));
+  --ink-secondary: oklch(0.46 calc(var(--n-c) * 1.5) var(--neutral-hue));
+  --ink-tertiary: oklch(0.68 var(--n-c) var(--neutral-hue));
 
-  /* Actions and brand */
-  --primary: var(--brand-600); /* main buttons, selection, child card tints */
-  --primary-foreground: 0 0% 100%;
-  --brand: var(--brand-600);
-  --brand-foreground: 0 0% 100%;
-  --highlight: var(--highlight-300); /* highlighter fill */
-  --highlight-foreground: var(--highlight-950);
-  --destructive: 2 58% 47%; /* brick red, 5.6:1 on white */
-  --destructive-foreground: 0 0% 100%;
+  /* Lines. Control borders keep 3:1 against every surface. */
+  --separator: oklch(0.885 var(--n-c) var(--neutral-hue));
+  --border-control: oklch(0.62 var(--n-c) var(--neutral-hue));
 
-  /* Feedback */
-  --success: 152 62% 27%; /* leaf green */
-  --success-foreground: 0 0% 100%;
-  --warning: 26 90% 36%; /* burnt orange, kept apart from a yellow highlight */
-  --warning-foreground: 0 0% 100%;
-  --info: 214 72% 44%; /* ink blue */
-  --info-foreground: 0 0% 100%;
+  /* Neutral fills are translucent, so they read on any surface */
+  --fill: oklch(0.55 calc(var(--n-c) * 2) var(--neutral-hue) / 0.1);
+  --fill-hover: oklch(0.55 calc(var(--n-c) * 2) var(--neutral-hue) / 0.15);
+  --fill-strong: oklch(0.55 calc(var(--n-c) * 2) var(--neutral-hue) / 0.22);
+  --scrim: oklch(0.15 var(--n-c) var(--neutral-hue) / 0.32);
 
-  /* Lines */
-  --border: var(--tint-hue) 20% 90%;
-  --input: var(--tint-hue) 16% 84%; /* a step darker than border, so fields read as fields */
-  --ring: var(--brand-500);
+  /* Accent: `accent` is a fill under white text, `accent-text` reads as text */
+  --accent: var(--accent-base);
+  --accent-pressed: oklch(
+    calc(var(--accent-l) - 0.06) var(--a-c) var(--accent-hue)
+  );
+  --accent-foreground: oklch(1 0 0);
+  --accent-text: oklch(
+    calc(var(--accent-l) - 0.06) var(--a-c) var(--accent-hue)
+  );
+  --accent-soft: oklch(0.955 calc(var(--a-c) * 0.22) var(--accent-hue));
+  --accent-soft-hover: oklch(0.935 calc(var(--a-c) * 0.3) var(--accent-hue));
+  --focus: var(--accent-base);
 
-  /* Shadows are tinted with ink, never pure black */
-  --shadow-color: var(--ink-hue) 30% 20%;
+  /* Status: a solid fill, its text color, and a soft fill */
+  --success: oklch(0.53 0.14 150);
+  --success-foreground: oklch(1 0 0);
+  --success-text: oklch(0.49 0.13 150);
+  --success-soft: oklch(0.955 0.035 150);
+  --warning: oklch(0.56 0.15 55);
+  --warning-foreground: oklch(1 0 0);
+  --warning-text: oklch(0.51 0.14 55);
+  --warning-soft: oklch(0.955 0.035 70);
+  --danger: oklch(0.55 0.19 27);
+  --danger-foreground: oklch(1 0 0);
+  --danger-text: oklch(0.51 0.18 27);
+  --danger-soft: oklch(0.955 0.025 20);
+  --info: oklch(0.54 0.17 245);
+  --info-foreground: oklch(1 0 0);
+  --info-text: oklch(0.5 0.16 245);
+  --info-soft: oklch(0.955 0.025 245);
 
-  --radius: 0.625rem;
+  /* The highlighter, for Mark and text selection */
+  --highlight: oklch(0.9 0.15 98);
+  --highlight-foreground: oklch(0.22 0.03 80);
+
+  --shadow-color: oklch(0.25 calc(var(--n-c) * 2) var(--neutral-hue));
 }
 
-.dark {
+/* Dark: elevation is lightness, so raised and floating surfaces get lighter */
+.dark,
+.light .dark {
   color-scheme: dark;
 
-  /* Surfaces: deep ink, not charcoal */
-  --background: var(--tint-hue) 20% 8%;
-  --foreground: var(--ink-hue) 22% 92%;
-  --surface: var(--tint-hue) 17% 11%;
-  --card: var(--tint-hue) 17% 11%;
-  --card-foreground: var(--ink-hue) 22% 92%;
-  --popover: var(--tint-hue) 17% 12.5%;
-  --popover-foreground: var(--ink-hue) 22% 92%;
-  --muted: var(--tint-hue) 14% 16%;
-  --muted-foreground: var(--ink-hue) 10% 66%;
+  --canvas: oklch(0.155 var(--n-c) var(--neutral-hue));
+  --surface: oklch(0.205 var(--n-c) var(--neutral-hue));
+  --surface-inset: oklch(0.25 var(--n-c) var(--neutral-hue));
+  --overlay: oklch(0.255 var(--n-c) var(--neutral-hue));
 
-  /* Light brand steps with dark text on them; themes usually tune these */
-  --primary: var(--brand-300);
-  --primary-foreground: var(--brand-950);
-  --brand: var(--brand-300);
-  --brand-foreground: var(--brand-950);
-  --highlight: var(--highlight-300);
-  --highlight-foreground: var(--highlight-950);
-  --destructive: 2 62% 67%;
-  --destructive-foreground: 2 70% 14%;
+  --ink: oklch(0.965 calc(var(--n-c) * 0.5) var(--neutral-hue));
+  --ink-secondary: oklch(0.75 var(--n-c) var(--neutral-hue));
+  --ink-tertiary: oklch(0.52 var(--n-c) var(--neutral-hue));
 
-  --success: 150 46% 58%;
-  --success-foreground: 152 60% 10%;
-  --warning: 30 88% 62%;
-  --warning-foreground: 24 80% 12%;
-  --info: 214 85% 70%;
-  --info-foreground: 220 60% 14%;
+  --separator: oklch(0.31 var(--n-c) var(--neutral-hue));
+  --border-control: oklch(0.57 var(--n-c) var(--neutral-hue));
 
-  --border: var(--tint-hue) 14% 18%;
-  --input: var(--tint-hue) 13% 25%;
-  --ring: var(--brand-400);
+  --fill: oklch(0.6 calc(var(--n-c) * 2) var(--neutral-hue) / 0.16);
+  --fill-hover: oklch(0.6 calc(var(--n-c) * 2) var(--neutral-hue) / 0.22);
+  --fill-strong: oklch(0.6 calc(var(--n-c) * 2) var(--neutral-hue) / 0.3);
+  --scrim: oklch(0 0 0 / 0.5);
 
-  --shadow-color: var(--tint-hue) 40% 2%;
+  --accent: var(--accent-base);
+  --accent-pressed: oklch(
+    calc(var(--accent-l) - 0.06) var(--a-c) var(--accent-hue)
+  );
+  --accent-foreground: oklch(1 0 0);
+  --accent-text: oklch(0.77 min(var(--a-c), 0.14) var(--accent-hue));
+  --accent-soft: oklch(0.29 calc(var(--a-c) * 0.4) var(--accent-hue));
+  --accent-soft-hover: oklch(0.33 calc(var(--a-c) * 0.45) var(--accent-hue));
+  --focus: var(--accent-text);
+
+  --success-text: oklch(0.78 0.13 150);
+  --success-soft: oklch(0.29 0.05 150);
+  --warning-text: oklch(0.8 0.12 65);
+  --warning-soft: oklch(0.29 0.05 60);
+  --danger-text: oklch(0.77 0.13 25);
+  --danger-soft: oklch(0.29 0.06 25);
+  --info-text: oklch(0.77 0.11 245);
+  --info-soft: oklch(0.29 0.05 245);
+
+  --highlight: oklch(0.85 0.15 95);
+
+  --shadow-color: oklch(0.08 var(--n-c) var(--neutral-hue));
 }
 
 /*
- * Printed pages (documents, invoices, resumes) are paper, not app: plain neutral
- * greys and a print font, so the preview matches the download.
+ * An accent-colored surface, like a promo card. Inside it the roles point at
+ * white, so text and every button variant stay legible without special cases.
  */
-.force-light-mode,
-.dark .force-light-mode {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --surface: 0 0% 98%;
-  --card-foreground: 0 0% 3.9%;
-  --popover-foreground: 0 0% 3.9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
+.surface-accent {
+  --surface: oklch(calc(var(--accent-l) - 0.05) var(--a-c) var(--accent-hue));
+  --surface-inset: oklch(0 0 0 / 0.12);
+  --overlay: var(--surface);
+  --ink: oklch(1 0 0);
+  --ink-secondary: oklch(1 0 0 / 0.88);
+  --ink-tertiary: oklch(1 0 0 / 0.6);
+  --separator: oklch(1 0 0 / 0.25);
+  --border-control: oklch(1 0 0 / 0.7);
+  --fill: oklch(0 0 0 / 0.12);
+  --fill-hover: oklch(0 0 0 / 0.18);
+  --fill-strong: oklch(0 0 0 / 0.24);
+  --accent: oklch(1 0 0);
+  --accent-pressed: oklch(0.92 0 0);
+  --accent-foreground: var(--surface);
+  --accent-text: oklch(1 0 0);
+  --accent-soft: oklch(0 0 0 / 0.12);
+  --accent-soft-hover: oklch(0 0 0 / 0.18);
+  --focus: oklch(1 0 0);
 
-  font-family: Helvetica, Arial, sans-serif;
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+/* More contrast on request: solid lines, darker secondary text */
+@media (prefers-contrast: more) {
+  :root,
+  .light {
+    --ink-secondary: oklch(0.36 calc(var(--n-c) * 1.5) var(--neutral-hue));
+    --separator: oklch(0.7 var(--n-c) var(--neutral-hue));
+    --border-control: oklch(0.45 var(--n-c) var(--neutral-hue));
+  }
+  .dark {
+    --ink-secondary: oklch(0.85 var(--n-c) var(--neutral-hue));
+    --separator: oklch(0.5 var(--n-c) var(--neutral-hue));
+    --border-control: oklch(0.72 var(--n-c) var(--neutral-hue));
+  }
+}
+
+/*
+ * Density: one set of sizes for a desk, one for touch. Regular on a mouse,
+ * comfortable on a touch screen; `data-density` on any element overrides it.
+ * Type is in rem, so it follows the user's text size.
+ */
+:root,
+[data-density='regular'] {
+  --type-title-1: 1.75rem;
+  --type-title-2: 1.25rem;
+  --type-title-3: 1.0625rem;
+  --type-body: 0.9375rem;
+  --type-subhead: 0.875rem;
+  --type-caption: 0.75rem;
+
+  --control-sm: 1.75rem;
+  --control-md: 2.25rem;
+  --control-lg: 2.75rem;
+  --row: 2.75rem;
+  --inset: 1rem;
+  --radius-control: calc(9px * var(--radius-scale));
+  --radius-card: calc(14px * var(--radius-scale));
+}
+
+@media (pointer: coarse) {
+  :root:not([data-density]) {
+    --type-title-1: 2.125rem;
+    --type-title-2: 1.375rem;
+    --type-title-3: 1.25rem;
+    --type-body: 1.0625rem;
+    --type-subhead: 0.9375rem;
+    --type-caption: 0.8125rem;
+
+    --control-sm: 2rem;
+    --control-md: 2.75rem;
+    --control-lg: 3.25rem;
+    --row: 3rem;
+    --inset: 1rem;
+    --radius-control: calc(12px * var(--radius-scale));
+    --radius-card: calc(18px * var(--radius-scale));
+  }
+}
+
+[data-density='compact'] {
+  --type-title-1: 1.5rem;
+  --type-title-2: 1.125rem;
+  --type-title-3: 0.9375rem;
+  --type-body: 0.875rem;
+  --type-subhead: 0.8125rem;
+  --type-caption: 0.75rem;
+
+  --control-sm: 1.5rem;
+  --control-md: 2rem;
+  --control-lg: 2.5rem;
+  --row: 2.25rem;
+  --inset: 0.75rem;
+  --radius-control: calc(7px * var(--radius-scale));
+  --radius-card: calc(10px * var(--radius-scale));
+}
+
+[data-density='comfortable'] {
+  --type-title-1: 2.125rem;
+  --type-title-2: 1.375rem;
+  --type-title-3: 1.25rem;
+  --type-body: 1.0625rem;
+  --type-subhead: 0.9375rem;
+  --type-caption: 0.8125rem;
+
+  --control-sm: 2rem;
+  --control-md: 2.75rem;
+  --control-lg: 3.25rem;
+  --row: 3rem;
+  --inset: 1rem;
+  --radius-control: calc(12px * var(--radius-scale));
+  --radius-card: calc(18px * var(--radius-scale));
+}
+
+:root {
+  /* Floating panels and sheets keep their shape at every density */
+  --radius-panel: calc(14px * var(--radius-scale));
+  --panel-inset: 0.3125rem;
+  --radius-item: max(calc(var(--radius-panel) - var(--panel-inset) - 1px), 4px);
+  --radius-sheet: calc(22px * var(--radius-scale));
+
+  /*
+   * Motion. Springs from Apple's defaults as CSS curves: critically damped
+   * (no overshoot) for anything that appears, a little bounce only after a
+   * gesture. The JS versions for Motion are in foundations/motion.ts.
+   */
+  --ease-spring: linear(
+    0,
+    0.0454,
+    0.1465,
+    0.2678,
+    0.3895,
+    0.5015,
+    0.5993,
+    0.6819,
+    0.75,
+    0.8052,
+    0.8493,
+    0.884,
+    0.9113,
+    0.9324,
+    0.9487,
+    0.9612,
+    0.9707,
+    0.978,
+    0.9835,
+    0.9877,
+    0.9908,
+    0.9931,
+    0.9949,
+    0.9962,
+    1
+  );
+  --duration-spring: 450ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-press: 100ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
 }
