@@ -43,6 +43,10 @@
   --color-scrim: var(--scrim);
   --color-focus: var(--focus);
 
+  /* The same in every mode, like a switch's thumb */
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+
   /*
    * Accent and status. `bg-accent` is the fill under white text;
    * `text-accent` is the shade that reads as text on any surface.
