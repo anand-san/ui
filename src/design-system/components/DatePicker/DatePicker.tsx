@@ -137,7 +137,7 @@ const DatePickerTrigger = React.forwardRef<
       {...props}
     >
       <CalendarIcon className="text-muted-foreground" />
-      {children}
+      <span className="truncate">{children}</span>
     </button>
   );
 });
