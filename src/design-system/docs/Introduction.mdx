@@ -1,6 +1,6 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Story } from '@storybook/addon-docs/blocks';
 
-import { SettingsScreen } from './Showcase';
+import * as ShowcaseStories from './Showcase.stories';
 
 <Meta title="Introduction" />
 
@@ -8,9 +8,7 @@ import { SettingsScreen } from './Showcase';
 
 One interface for every app: tools and dashboards, consumer apps and content sites. It aims to feel native, the way Apple's platforms do: content first, quiet chrome, motion that springs and can always be interrupted.
 
-<div className="not-prose my-8">
-  <SettingsScreen />
-</div>
+<Story of={ShowcaseStories.Settings} />
 
 ## What it stands on
 

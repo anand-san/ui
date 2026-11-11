@@ -10,6 +10,8 @@
   "tsconfig": "../../../tsconfig.json",
   "titleMap": {
     "Colors": null,
+    "Motion": null,
+    "Settings screen": null,
     "Spacing": null,
     "Typography": null
   },
