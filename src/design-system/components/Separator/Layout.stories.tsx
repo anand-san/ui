@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Separator is a hairline in the border token, horizontal or vertical. It is decorative by default; pass `decorative={false}` when it separates content for screen readers. ScrollArea gives a scrolling region a thin scrollbar that matches both themes.',
+          'Separator is a hairline in the separator role, horizontal or vertical. It is decorative by default; pass `decorative={false}` when it separates content for screen readers. ScrollArea gives a region thin overlay scroll bars, as on the desktop.',
       },
     },
   },
@@ -23,34 +23,36 @@ type Story = StoryObj<typeof meta>;
 export const SeparatorStory: Story = {
   name: 'Separator',
   render: () => (
-    <div className="flex max-w-sm flex-col gap-3 rounded-xl bg-surface p-4">
+    <div className="flex max-w-sm flex-col gap-3 rounded-card bg-surface p-inset">
       <div>
-        <Text variant="body-strong">Senior Product Designer</Text>
-        <Text tone="muted">Northwind</Text>
+        <Text variant="headline">Weekly summary</Text>
+        <Text variant="subhead" tone="secondary">
+          Every Monday at 9:00
+        </Text>
       </div>
       <Separator />
-      <div className="flex h-5 items-center gap-3">
-        <Text tone="muted">Design</Text>
+      <div className="flex h-5 items-center gap-3 text-subhead">
+        <span>Email</span>
         <Separator orientation="vertical" />
-        <Text tone="muted">4 people</Text>
+        <span>Push</span>
         <Separator orientation="vertical" />
-        <Text tone="muted">Updated 3 days ago</Text>
+        <span>In app</span>
       </div>
     </div>
   ),
 };
 
-const NOTES = Array.from({ length: 20 }, (_, i) => `Follow-up note ${i + 1}`);
-
 export const ScrollAreaStory: Story = {
-  name: 'Scroll area',
+  name: 'ScrollArea',
   render: () => (
-    <ScrollArea className="h-64 w-64 rounded-xl border">
-      <div className="flex flex-col p-4">
-        {NOTES.map((note, index) => (
-          <div key={note}>
-            {index > 0 && <Separator className="my-2" />}
-            <Text>{note}</Text>
+    <ScrollArea className="h-56 w-64 rounded-card bg-surface">
+      <div className="flex flex-col p-inset">
+        {Array.from({ length: 30 }, (_, index) => (
+          <div
+            key={index}
+            className="border-b border-separator py-2 text-subhead last:border-0"
+          >
+            Release v1.{30 - index}
           </div>
         ))}
       </div>

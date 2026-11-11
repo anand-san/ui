@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import {
+  Copy,
+  Ellipsis,
+  Info,
+  Pencil,
+  Share,
+  SlidersHorizontal,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -23,6 +31,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -30,6 +39,7 @@ import {
 } from '@/design-system/components/DropdownMenu/DropdownMenu';
 import { Field } from '@/design-system/components/Field/Field';
 import { Input } from '@/design-system/components/Input/Input';
+import { List, ListItem } from '@/design-system/components/List/List';
 import {
   Popover,
   PopoverContent,
@@ -39,19 +49,22 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/design-system/components/Sheet/Sheet';
+import { Switch } from '@/design-system/components/Switch/Switch';
+import { Text } from '@/design-system/components/Text/Text';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/design-system/components/Tooltip/Tooltip';
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -66,7 +79,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Behavior-heavy components wrap Radix primitives for focus handling, keyboard support and positioning; screens import them from `@/design-system`. Floating panels share one look: a rounded-xl popover surface with a border and shadow. Dialogs slide up as a bottom sheet on phones.',
+          'Dialogs and sheets move on springs: they keep their content mounted through the exit, so closing animates too and can be interrupted. On phones a Dialog is a bottom sheet you can drag down to close. Menus, popovers and tooltips are translucent panels that grow from their trigger. Radix handles focus, Escape and outside clicks.',
       },
     },
   },
@@ -80,21 +93,27 @@ export const DialogStory: Story = {
   render: () => (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit details</Button>
+        <Button>Rename project</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit project details</DialogTitle>
+          <DialogTitle>Rename project</DialogTitle>
           <DialogDescription>
-            Changes are saved to your workspace.
+            Everyone on the project sees the new name.
           </DialogDescription>
         </DialogHeader>
         <Field label="Name">
           <Input defaultValue="Website redesign" />
         </Field>
         <DialogFooter>
-          <Button variant="ghost">Cancel</Button>
-          <Button>Save changes</Button>
+          <DialogClose asChild>
+            <Button variant="tinted" tone="neutral">
+              Cancel
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button>Save</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -102,150 +121,161 @@ export const DialogStory: Story = {
 };
 
 export const ConfirmDelete: Story = {
-  name: 'Alert dialog',
+  name: 'AlertDialog',
   render: () => (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="tinted" tone="danger">
           <Trash2 />
-          Delete
+          Delete project
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete this project?</AlertDialogTitle>
+          <AlertDialogTitle>Delete “Website redesign”?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. All of its tasks are deleted too.
+            Its 24 tasks and files go too. This can&apos;t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
+          <AlertDialogAction tone="danger">Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   ),
 };
 
-export const Menu: Story = {
+function SheetDemo({ side }: { side: 'bottom' | 'right' | 'left' }) {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="tinted">
+          <SlidersHorizontal />
+          {side === 'bottom' ? 'Bottom sheet' : `From the ${side}`}
+        </Button>
+      </SheetTrigger>
+      <SheetContent side={side}>
+        <SheetHeader>
+          <SheetTitle>Filters</SheetTitle>
+          <SheetDescription>
+            {side === 'bottom'
+              ? 'Drag the grabber or the title down to close.'
+              : 'Narrow the list to what you need.'}
+          </SheetDescription>
+        </SheetHeader>
+        <List className="bg-surface-inset">
+          <ListItem
+            title="Only mine"
+            trailing={<Switch aria-label="Only mine" />}
+          />
+          <ListItem
+            title="Include archived"
+            trailing={<Switch aria-label="Include archived" />}
+          />
+        </List>
+        <SheetFooter>
+          <Button>Show 24 results</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+export const SheetStory: Story = {
+  name: 'Sheet',
   render: () => (
+    <div className="flex flex-wrap gap-2">
+      <SheetDemo side="bottom" />
+      <SheetDemo side="right" />
+      <SheetDemo side="left" />
+    </div>
+  ),
+};
+
+function MenuDemo() {
+  const [sort, setSort] = useState('updated');
+  const [showDone, setShowDone] = useState(true);
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" shape="pill" aria-label="Actions">
-          <MoreVertical />
+        <Button variant="tinted" tone="neutral" icon aria-label="Actions">
+          <Ellipsis />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-44">
-        <DropdownMenuLabel>Project</DropdownMenuLabel>
+      <DropdownMenuContent align="start">
         <DropdownMenuItem>
           <Pencil />
-          Edit details
+          Rename
+          <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
         </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Copy />
+          Duplicate
+          <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Share />
+            Share
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem>Copy link</DropdownMenuItem>
+            <DropdownMenuItem>Email</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
+        <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
+          <DropdownMenuRadioItem value="updated">
+            Last updated
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          checked={showDone}
+          onCheckedChange={value => setShowDone(value === true)}
+        >
+          Show finished
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem tone="danger">
           <Trash2 />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  ),
-};
-
-function SelectionMenuDemo() {
-  const [status, setStatus] = useState('in-progress');
-  const [showClosed, setShowClosed] = useState(false);
-  const [showArchived, setShowArchived] = useState(true);
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">Board options</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-52">
-        <DropdownMenuLabel>Move to</DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
-          <DropdownMenuRadioItem value="planned">Planned</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="in-progress">
-            In progress
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="done">Done</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>Columns</DropdownMenuLabel>
-        <DropdownMenuCheckboxItem
-          checked={showClosed}
-          onCheckedChange={setShowClosed}
-        >
-          Show closed
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showArchived}
-          onCheckedChange={setShowArchived}
-        >
-          Show archived
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Sort by</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem>Last updated</DropdownMenuItem>
-            <DropdownMenuItem>Name</DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }
 
-export const SelectionMenu: Story = {
-  name: 'Menu with choices',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Radio items for one choice (the status picker), checkbox items for toggles and a submenu for rarely used options.',
-      },
-    },
-  },
-  render: () => <SelectionMenuDemo />,
+export const Menu: Story = {
+  render: () => <MenuDemo />,
 };
 
 export const PopoverAndTooltip: Story = {
-  name: 'Popover and tooltip',
+  name: 'Popover and Tooltip',
   render: () => (
-    <TooltipProvider>
-      <div className="flex gap-3">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline">Hidden columns</Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="text-sm">
-            Closed, Archived. Change this from the board menu.
-          </PopoverContent>
-        </Popover>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="secondary">Hover me</Button>
-          </TooltipTrigger>
-          <TooltipContent>Tooltips use the primary color</TooltipContent>
-        </Tooltip>
-      </div>
-    </TooltipProvider>
-  ),
-};
-
-export const SheetStory: Story = {
-  name: 'Sheet',
-  render: () => (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">Report defaults</Button>
-      </SheetTrigger>
-      <SheetContent close>
-        <SheetHeader>
-          <SheetTitle>Report defaults</SheetTitle>
-          <SheetDescription>Used when creating a new report.</SheetDescription>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
+    <div className="flex items-center gap-3">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="tinted">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent className="flex flex-col gap-1">
+          <Text variant="headline">Website redesign</Text>
+          <Text variant="subhead" tone="secondary">
+            Updated 2 hours ago by Grace. 6 people, due 28 November.
+          </Text>
+        </PopoverContent>
+      </Popover>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="plain" tone="neutral" icon aria-label="About">
+            <Info />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>About this project</TooltipContent>
+      </Tooltip>
+    </div>
   ),
 };

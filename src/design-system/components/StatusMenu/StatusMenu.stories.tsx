@@ -16,10 +16,10 @@ type TaskStatus = 'Planned' | 'In progress' | 'In review' | 'Done' | 'Blocked';
 
 const taskStatuses: StatusOption<TaskStatus>[] = [
   { value: 'Planned', tone: 'neutral' },
-  { value: 'In progress', tone: 'info' },
+  { value: 'In progress', tone: 'accent' },
   { value: 'In review', tone: 'warning' },
   { value: 'Done', tone: 'success' },
-  { value: 'Blocked', tone: 'destructive' },
+  { value: 'Blocked', tone: 'danger' },
 ];
 
 function Controlled({
@@ -95,9 +95,9 @@ export const InACard: Story = {
     },
   },
   render: () => (
-    <div className="flex max-w-md flex-col gap-3 rounded-xl bg-surface p-4">
+    <div className="flex max-w-md flex-col gap-3 rounded-sheet bg-canvas p-4">
       {(['Planned', 'In review'] as const).map(initial => (
-        <Card key={initial} variant="tinted" interactive asChild>
+        <Card key={initial} interactive asChild>
           <a href={`#task-${initial}`}>
             <CardHeader>
               <Text variant="caption">Website redesign</Text>
@@ -122,7 +122,7 @@ export const AppColors: Story = {
     docs: {
       description: {
         story:
-          'When an app has more statuses than tones, give each option a `className` with a soft fill and a text color. Here they are ramps with a dark-mode step; an app would usually define its own tokens, with light and dark values, like `bg-status-done/10 text-status-done`.',
+          'When an app has more statuses than tones, give each option a `className` with a soft fill and a text color. An app would define these as its own tokens in its @theme block, with light and dark values; here they are inline OKLCH values.',
       },
     },
   },
@@ -132,23 +132,27 @@ export const AppColors: Story = {
       options={[
         {
           value: 'Planned',
-          className: 'bg-neutral-500/10 text-neutral-600 dark:text-neutral-300',
+          className: 'bg-fill text-ink-secondary',
         },
         {
           value: 'In progress',
-          className: 'bg-blue-500/10 text-blue-700 dark:text-blue-300',
+          className:
+            'bg-[oklch(0.62_0.17_230/0.14)] text-[oklch(0.48_0.15_230)] dark:text-[oklch(0.8_0.12_230)]',
         },
         {
           value: 'In review',
-          className: 'bg-purple-500/10 text-purple-700 dark:text-purple-300',
+          className:
+            'bg-[oklch(0.6_0.2_300/0.14)] text-[oklch(0.48_0.2_300)] dark:text-[oklch(0.8_0.13_300)]',
         },
         {
           value: 'Done',
-          className: 'bg-green-500/10 text-green-700 dark:text-green-300',
+          className:
+            'bg-[oklch(0.65_0.15_150/0.14)] text-[oklch(0.46_0.13_150)] dark:text-[oklch(0.8_0.13_150)]',
         },
         {
           value: 'Blocked',
-          className: 'bg-red-500/10 text-red-700 dark:text-red-300',
+          className:
+            'bg-[oklch(0.62_0.2_27/0.14)] text-[oklch(0.5_0.19_27)] dark:text-[oklch(0.8_0.12_27)]',
         },
       ]}
     />

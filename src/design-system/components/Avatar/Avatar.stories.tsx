@@ -10,28 +10,14 @@ const meta = {
     docs: {
       description: {
         component:
-          'A person or company. Shows the image when it loads and falls back to initials from `name`, which also becomes the alt text.',
+          'A person or a company. Shows the image when it loads and falls back to initials, in rounded type, when there is none or it fails.',
       },
     },
   },
-  args: {
-    name: 'Northwind',
-    tone: 'info',
-    size: 'md',
-  },
+  args: { name: 'Ada Lovelace', size: 'md', tone: 'neutral' },
   argTypes: {
-    tone: {
-      control: 'select',
-      options: [
-        'neutral',
-        'brand',
-        'success',
-        'warning',
-        'info',
-        'destructive',
-      ],
-    },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg', 'xl'] },
+    tone: { control: 'inline-radio', options: ['neutral', 'accent'] },
   },
 } satisfies Meta<typeof Avatar>;
 
@@ -43,50 +29,23 @@ export const Playground: Story = {};
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-3">
-      <Avatar name="Acme Robotics" tone="info" size="sm" />
-      <Avatar name="Acme Robotics" tone="info" size="md" />
-      <Avatar name="Acme Robotics" tone="info" size="lg" />
+      {(['sm', 'md', 'lg', 'xl'] as const).map(size => (
+        <Avatar key={size} name="Ada Lovelace" size={size} />
+      ))}
     </div>
   ),
 };
 
 export const Tones: Story = {
   render: () => (
-    <div className="flex items-center gap-3 rounded-xl bg-surface p-6">
-      {(
-        [
-          'neutral',
-          'brand',
-          'success',
-          'warning',
-          'info',
-          'destructive',
-        ] as const
-      ).map(tone => (
-        <Avatar key={tone} name={tone} tone={tone} />
-      ))}
+    <div className="flex items-center gap-3">
+      <Avatar name="Grace Hopper" size="lg" />
+      <Avatar name="Northwind" size="lg" tone="accent" />
     </div>
   ),
 };
 
-export const ImageAndFallback: Story = {
-  name: 'Image and fallback',
-  parameters: {
-    docs: {
-      description: {
-        story: 'The second image fails to load, so it falls back to initials.',
-      },
-    },
-  },
-  render: () => (
-    <div className="flex items-center gap-3">
-      <Avatar name="Sketchbook" src="/images/drawing.png" size="lg" />
-      <Avatar
-        name="Broken Image"
-        src="/does-not-exist.png"
-        tone="brand"
-        size="lg"
-      />
-    </div>
-  ),
+export const BrokenImage: Story = {
+  name: 'When the image fails',
+  args: { src: 'https://invalid.example/avatar.png', size: 'lg' },
 };

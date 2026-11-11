@@ -1,19 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Check } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
-import { focusRing } from '@/design-system/foundations/controls';
-
-import { Badge, BadgeDot } from './Badge';
-
-const tones = [
-  'neutral',
-  'brand',
-  'highlight',
-  'success',
-  'warning',
-  'info',
-  'destructive',
-] as const;
+import { Badge } from './Badge';
 
 const meta = {
   title: 'Components/Badge',
@@ -23,20 +11,25 @@ const meta = {
     docs: {
       description: {
         component:
-          'A short label in a pill. Soft is the default and reads well on any surface.',
+          'A short label in a capsule: a status, a count, "New". `soft` is the default and reads on any surface; `solid` is for the rare badge that must stand out. Every tone keeps its text at 4.5:1 on its fill.',
       },
     },
   },
-  args: {
-    children: 'New',
-    tone: 'neutral',
-    variant: 'soft',
-    size: 'sm',
-    dot: false,
-  },
+  args: { children: 'Active', tone: 'neutral', variant: 'soft', size: 'sm' },
   argTypes: {
-    tone: { control: 'select', options: tones },
-    variant: { control: 'inline-radio', options: ['soft', 'solid', 'outline'] },
+    tone: {
+      control: 'select',
+      options: [
+        'neutral',
+        'accent',
+        'success',
+        'warning',
+        'danger',
+        'info',
+        'highlight',
+      ],
+    },
+    variant: { control: 'inline-radio', options: ['soft', 'solid'] },
     size: { control: 'inline-radio', options: ['sm', 'md'] },
     asChild: { control: false },
   },
@@ -47,28 +40,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const TonesAndVariants: Story = {
-  name: 'Tones and variants',
+const tones = [
+  ['neutral', 'Draft'],
+  ['accent', 'In review'],
+  ['success', 'Live'],
+  ['warning', 'Expiring'],
+  ['danger', 'Failed'],
+  ['info', 'Beta'],
+  ['highlight', 'New'],
+] as const;
+
+export const Tones: Story = {
   render: () => (
-    <div className="grid w-fit grid-cols-[6rem_repeat(3,auto)] items-center gap-x-4 gap-y-3 rounded-xl bg-surface p-6">
-      <span />
-      {(['soft', 'solid', 'outline'] as const).map(variant => (
-        <span key={variant} className="text-xs text-muted-foreground">
-          {variant}
-        </span>
-      ))}
-      {tones.map(tone => (
-        <div key={tone} className="contents">
-          <span className="text-sm font-medium">{tone}</span>
-          {(['soft', 'solid', 'outline'] as const).map(variant => (
-            <Badge key={variant} tone={tone} variant={variant}>
-              {tone === 'success'
-                ? 'Saved'
-                : tone === 'destructive'
-                  ? 'Failed'
-                  : tone === 'highlight'
-                    ? 'New'
-                    : 'Label'}
+    <div className="flex flex-col gap-3">
+      {(['soft', 'solid'] as const).map(variant => (
+        <div key={variant} className="flex flex-wrap items-center gap-2">
+          {tones.map(([tone, label]) => (
+            <Badge key={tone} tone={tone} variant={variant}>
+              {label}
             </Badge>
           ))}
         </div>
@@ -82,36 +71,15 @@ export const WithDotOrIcon: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Badge tone="success" dot>
-        Live
+        Online
       </Badge>
-      <Badge tone="warning" dot>
-        Outdated
+      <Badge tone="highlight">
+        <Sparkles />
+        Suggested
       </Badge>
-      <Badge tone="brand">
-        <Check />
-        Tailored
+      <Badge size="md" tone="accent">
+        12 new
       </Badge>
-      <Badge size="md">12</Badge>
     </div>
-  ),
-};
-
-export const AsAMenuTrigger: Story = {
-  name: 'As a menu trigger',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'With `asChild` the badge styles move onto a `<button>`, for a badge that opens a menu.',
-      },
-    },
-  },
-  render: () => (
-    <Badge tone="info" asChild>
-      <button type="button" className={focusRing}>
-        <BadgeDot />
-        In review
-      </button>
-    </Badge>
   ),
 };

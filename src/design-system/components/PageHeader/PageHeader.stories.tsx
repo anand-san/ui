@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Plus, Shield } from 'lucide-react';
+import { ChevronLeft, Plus } from 'lucide-react';
 
 import { Button } from '@/design-system/components/Button/Button';
-import { Card } from '@/design-system/components/Card/Card';
-import { Field } from '@/design-system/components/Field/Field';
-import { Input } from '@/design-system/components/Input/Input';
-import { Textarea } from '@/design-system/components/Input/Textarea';
 
 import { PageHeader } from './PageHeader';
 
@@ -17,13 +13,11 @@ const meta = {
     docs: {
       description: {
         component:
-          'The title block at the top of a page: the `title` type role, an optional muted description, an optional icon tile and actions on the right. Renders an h1; pass `as="h2"` for a step inside a flow, like onboarding.',
+          'The large title at the top of a page, as in a native app: the title is the biggest text on the screen and actions stay small beside it. An `eyebrow` holds a back link or where the page sits. Renders an h1; pass `as="h2"` for a step inside a flow.',
       },
     },
   },
-  args: {
-    title: 'Billing and usage',
-  },
+  args: { title: 'Projects' },
 } satisfies Meta<typeof PageHeader>;
 
 export default meta;
@@ -31,74 +25,37 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const WithDescription: Story = {
-  name: 'With a description',
+export const WithActions: Story = {
+  name: 'With a description and actions',
   args: {
-    title: 'Project details',
-    description:
-      'Give the project a clear name and goal so the team knows what done looks like.',
-  },
-};
-
-export const WithIconAndActions: Story = {
-  name: 'With an icon and actions',
-  args: {
-    icon: <Shield />,
-    title: 'Admin dashboard',
-    description:
-      'Monitor bans, check security status, and execute system maintenance.',
+    title: 'Projects',
+    description: 'Everything your team is working on, newest first.',
     actions: (
-      <Button>
-        <Plus />
-        New note
-      </Button>
+      <>
+        <Button variant="tinted" tone="neutral">
+          Import
+        </Button>
+        <Button>
+          <Plus />
+          New project
+        </Button>
+      </>
     ),
   },
 };
 
-export const AddForm: Story = {
-  name: 'Create form',
-  parameters: {
-    docs: {
-      description: {
-        story: 'The layout of a create page: a PageHeader, then the fields.',
-      },
-    },
+export const WithABackLink: Story = {
+  name: 'With a back link',
+  args: {
+    eyebrow: (
+      <Button variant="link" asChild>
+        <a href="#projects">
+          <ChevronLeft />
+          Projects
+        </a>
+      </Button>
+    ),
+    title: 'Website redesign',
+    description: 'Due 28 November · 6 people',
   },
-  render: () => (
-    <div className="flex max-w-3xl flex-col gap-6">
-      <PageHeader
-        title="Create a project"
-        description="Name the project and describe its goal. You can invite people and add tasks once it exists."
-      />
-      <hr />
-      <div className="flex flex-col gap-4">
-        <Field label="Project name" required>
-          <Input placeholder="e.g. Website redesign" />
-        </Field>
-        <Field label="Goal" required>
-          <Textarea
-            placeholder="What should be true when this project is done?"
-            className="min-h-[200px]"
-          />
-        </Field>
-        <Button size="lg" className="self-start">
-          Create project
-        </Button>
-      </div>
-    </div>
-  ),
-};
-
-export const StepInAFlow: Story = {
-  name: 'Step in a flow',
-  render: () => (
-    <Card variant="outline" className="max-w-xl">
-      <PageHeader
-        as="h2"
-        title="Invite your team"
-        description="Add people by email. They get access to every project in the workspace."
-      />
-    </Card>
-  ),
 };
