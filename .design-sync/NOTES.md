@@ -25,8 +25,9 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
   TS source, `@/` resolved via cfg.tsconfig = tsconfig.json), `types/` holds tsc
   declarations from `.design-sync/tsconfig.ds.json` with `@/` rewritten to relative paths,
   and `node_modules` links to the repo's `node_modules`. Run it before every converter run.
-- Eloovor's `StatusBadge` and pipeline colors stay in the Eloovor app and are no longer in the
-  bundle; san-ui's generic `StatusMenu` is. Designs that used `StatusBadge` need `StatusMenu`.
+- 0.4 (2026-11-11) rebuilt the system: new color roles, type roles, Button and Card variants,
+  `List`, `Surface` and `Gauge` (ScoreRing is gone). Designs in the project made against 0.3
+  use the old class and prop names and need redoing after the next sync.
 - Only a missing `types/design-system/index.d.ts` is fatal; other tsc errors are reported and
   declarations still emit.
 - Reference storybook: `bunx storybook build -o .design-sync/sb-reference`.
@@ -38,7 +39,7 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
 
 - [GENERAL] Five story files each cover a family under one title (Components/Forms,
   Overlays, Feedback, Navigation, Layout). The fork `.design-sync/overrides/source-storybook.mjs`
-  regroups their stories by story id into one card per component (34 cards), and sets
+  regroups their stories by story id into one card per component (36 cards), and sets
   the pane groups. A new story in a grouped file needs an entry in its STORY_COMPONENTS
   map, or the build warns and drops it. Editing the fork re-grades every component.
 - Foundations stories (Colors, Typography, Spacing) are excluded via titleMap null: they
@@ -46,21 +47,19 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
 
 ## Styling
 
-- [GENERAL] `.storybook/preview.tsx` imports `preview.css` (fontsource woff2), so the
-  decorator bundle may fail on the woff2 loader. Harmless: `preview.css` compiles the Eloovor
-  theme in as the default brand, the Brand decorator only swaps themes at runtime, and
-  `withThemeByClassName` uses no class for light, so previews render light Eloovor without them.
+- [GENERAL] `.storybook/preview.css` loads only the tokens: the type is the system font, so
+  there are no font files. The Theme toolbar injects a theme's inputs as an inline style and
+  the Density toolbar sets `data-density`; previews get neither, so they render the default
+  theme at the pointer's density.
 - [GENERAL] `_ds_bundle.css` is Storybook's compiled Tailwind (CSS_FROM_STORYBOOK), so it
-  holds only the utility classes used somewhere in `src` (the `@source` paths in `.storybook/preview.css`), plus
-  tokens, the Eloovor theme and the two fonts (Figtree, Bricolage Grotesque).
+  holds only the utility classes used somewhere in `src` (the `@source` paths in
+  `.storybook/preview.css`), plus the tokens. Tailwind's palette and type sizes are never built.
 
 ## Previews
 
-- [GENERAL] Stories that use `/images/...` (Storybook's `staticDirs: ['../public']`) render a
-  broken image in previews and in claude.ai/design. Fix: own the preview and import the file
-  (`import drawing from '@ds-stories/public/images/drawing.png'`, inlined as a data URL),
-  mirroring the story's JSX. Owned for this: Avatar (ImageAndFallback), EmptyState
-  (WithIllustration, WithANote). Other stories in those files still compose from the story module.
+- [GENERAL] No preview is owned. Stories that use `/images/...` (Storybook's
+  `staticDirs: ['../public']`) would render a broken image; if one comes back, own its preview
+  in `.design-sync/previews/` and import the file instead (inlined as a data URL).
 - Overlay stories (Dialog, Popover and tooltip) render their closed triggers in Storybook, so
   the cards show the triggers too.
 - Card uses `overrides.Card.viewport: "900x900"`: its "Dashboard: layout" story is
@@ -71,8 +70,9 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
 
 - [GENERAL] `extraEntries: ["lucide-react"]` puts the app's whole icon set on
   `window.EloovorDesignSystem` (+~650 KB), since every screen and story uses lucide icons.
-  Badge, Calendar, Sheet and Text are both components and icons: the components win, and
-  the icons are reachable as `BadgeIcon`, `CalendarIcon`, `SheetIcon`, `TextIcon`.
+  Badge, Calendar, Gauge, List, Sheet and Text are both components and icons: the components
+  win, and the icons are reachable as `BadgeIcon`, `CalendarIcon`, `GaugeIcon`, `ListIcon`,
+  `SheetIcon`, `TextIcon`.
   `storyImports.bundle: ["lucide-react"]` makes stories bundle their own icons from source,
   so a story importing the `Calendar` icon still gets the icon.
 - `.design-sync/conventions.md` (cfg.readmeHeader) is the design agent's guide; every class,
@@ -80,23 +80,18 @@ project (2026-10-11, the shadcn `components/ui` era) is not synced from here; le
 
 ## Known warns
 
-- `[EXPORT_COLLISION] lucide-react exports 4 name(s) ... Badge, Calendar, Sheet, Text`: expected,
+- `[EXPORT_COLLISION] lucide-react exports 6 name(s) ... Badge, Calendar, Gauge, List, Sheet, Text`: expected,
   see Bundle contents. Prints on every build.
 - `[REFERENCE_STALE?]` after a config-only rebuild: expected when the DS source didn't change.
-- Build log: `! preview decorator bundle failed ... .woff2`: expected, see Styling.
-- `[CSS_ASSETS] 5 relative url() ref(s)`: the fonts; they are copied to `fonts/` and rewritten.
 
 ## Re-sync risks
 
 - The fork's STORY_COMPONENTS map is keyed by story id. Renaming or adding stories in the
   grouped files (Forms, Overlays, Feedback, Navigation, Layout) needs a matching map edit.
-- Avatar and EmptyState previews are owned and mirror the image stories by hand
-  (ImageAndFallback, WithIllustration, WithANote). If those stories change, update the owned
-  `.tsx` too; `[STORY_CHANGED]` in the compare log flags it.
 - conventions.md names classes from the compiled CSS. If the app stops using a class, Tailwind
   drops it from the build, and the header then names a class that no longer exists. Re-run the
   header validation on every sync.
 - Overlay stories only show closed triggers, so open dialogs, menus and sheets were never
-  visually compared. The single shared stories (Selection, Fields, Popover and tooltip, Progress
-  and scores, Highlighter) were graded once and pixel-matched for the others.
+  visually compared. The shared stories (Fields, Choice controls, Popover and tooltip,
+  Highlighter) are graded once and pixel-matched for the others.
 - Toolchain: playwright 1.63.0 against the cached chromium-1243; Storybook 10.6.2; node 24.14.0.
