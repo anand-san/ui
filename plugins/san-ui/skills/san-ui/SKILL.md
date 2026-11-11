@@ -52,6 +52,8 @@ One interface for every app, with a native feel after Apple's platforms: OKLCH c
 
 The full component guide is in [references/design-system.md](references/design-system.md).
 
+Whole screens built only from these components are in https://github.com/anand-san/ui/tree/main/src/design-system/patterns (Patterns at https://ui.sandilya.dev): settings, dashboard, search and filter, detail, create form, sign in, phone app and pricing page. They don't ship with the registry; to start a new screen, read the closest one and adapt it.
+
 ## Themes
 
 A theme sets five inputs on `:root` and nothing else: `--accent-hue` (0 to 360), `--accent-chroma` (0 to 0.2), `--neutral-hue`, `--neutral-chroma` (0 to 0.03) and `--radius-scale`, plus optionally `--font-sans` and `--font-display`. Every role is derived from them at contrast that holds for any value, so there is nothing to check by hand. Start from `themes/template.css` or use `forest`, `ember` or `graphite`. Domain colors go in the app's own CSS and its `@theme inline` block. Details: [references/setup.md](references/setup.md#themes).

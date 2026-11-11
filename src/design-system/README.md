@@ -22,6 +22,7 @@ design-system/
 │   └── spacing.ts        # spacing scale and roles, density, radius
 ├── lib/                  # cn, hooks, and the modal frame Dialog, AlertDialog and Sheet share
 ├── components/           # one folder per component, with its stories
+├── patterns/             # whole screens built only from the components (not exported)
 └── docs/                 # foundation stories and their helpers (not exported)
 ```
 
@@ -77,6 +78,19 @@ packages/tokens/
 - **Feedback**: `Alert` (a `status`, or an `alert` when `danger`), `Progress`, `Gauge` (a ring meter with a label), `Skeleton`, and `Toaster` for `sonner` toasts.
 - **EmptyState**: `sm` (default) for an empty section in a card, `lg` for a whole page. A large quiet glyph, never a tile.
 - **Layout**: `Separator` and `ScrollArea`.
+
+## Patterns
+
+Whole screens built only from the components, under Patterns in Storybook, with the source in [`patterns/`](patterns/). They stay in this repository, so start a new screen by copying the closest one into the app.
+
+- **Settings screen**: a large title, a segmented control and grouped lists of rows with switches and values.
+- **Dashboard**: a desk tool. A translucent top bar with navigation and an account menu, a period select, stat cards with trends, a list of orders whose status can be changed, and a gauge with progress bars.
+- **Search and filter**: a collection. A search box, a select and a segmented control filter a list with row menus; a removal is confirmed in an AlertDialog. Stories for no results, an empty collection and loading.
+- **Detail screen**: one record. A back link, a status, actions and a menu, tabs for its views, and a side column of properties and linked items. Editing happens in a Dialog.
+- **Create form**: a long form. Fields grouped in sections, a date range, switches, and a submit that lists what's wrong in an Alert and moves focus to it.
+- **Sign in**: a centred form in a card with validation, a loading button and a passkey as the second way in.
+- **Phone app**: touch at comfortable density. A large title, a gauge that follows ticked rows, a bottom tab bar and a bottom Sheet with a form.
+- **Pricing page**: a content site. A header that folds into a menu on phones, a display headline with a `Mark`, plans with the recommended one as the accent card, and questions in an Accordion.
 
 ## Radix, Motion and shadcn
 
