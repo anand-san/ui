@@ -1,6 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 import { focusRing } from '@/design-system/foundations/controls';
+import { cn } from '@/design-system/lib/cn';
 
 /** A top-level item in the navigation bar: a link or a menu trigger */
 export const navigationMenuItemVariants = cva(
@@ -20,5 +21,7 @@ export const navigationMenuItemVariants = cva(
 );
 
 /** A link inside a navigation menu panel */
-export const navigationMenuLinkClass =
-  'block select-none rounded-xl p-3 no-underline outline-hidden transition-colors hover:bg-primary/5 focus-visible:bg-primary/5 data-[active=true]:bg-primary/5';
+export const navigationMenuLinkClass = cn(
+  'block select-none rounded-lg p-3 no-underline transition-colors hover:bg-primary/5 data-[active=true]:bg-primary/5',
+  focusRing,
+);
