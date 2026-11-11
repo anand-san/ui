@@ -25,12 +25,15 @@ export interface ListSectionProps extends Omit<
 > {
   /** A short heading above the group */
   title?: ReactNode;
+  /** Heading level of the title. Defaults to h2, a section of the page. */
+  titleAs?: 'h2' | 'h3' | 'h4';
   /** A note under the group, like what a setting does */
   footer?: ReactNode;
 }
 
 export function ListSection({
   title,
+  titleAs: Heading = 'h2',
   footer,
   className,
   children,
@@ -45,7 +48,7 @@ export function ListSection({
       {...props}
     >
       {title && (
-        <h3
+        <Heading
           id={titleId}
           className={cn(
             textVariants({ variant: 'subhead', tone: 'secondary' }),
@@ -53,7 +56,7 @@ export function ListSection({
           )}
         >
           {title}
-        </h3>
+        </Heading>
       )}
       {children}
       {footer && (
