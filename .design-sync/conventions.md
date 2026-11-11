@@ -22,7 +22,7 @@ san-ui is a shared design system for web apps (extracted from Eloovor, a job sea
 | Fills | `bg-primary text-primary-foreground`, `bg-highlight text-highlight-foreground`; soft tints `bg-primary/5`, `bg-primary/10`, `bg-success/10`, `bg-destructive/10` |
 | Ramps | `bg-brand-50` … `bg-brand-950`, `bg-highlight-50` … `bg-highlight-950`, only when no role fits |
 | Lines | `border-border`, `border-input` |
-| Radius | `rounded-md` fields, `rounded-xl` cards, `rounded-2xl` dialogs, `rounded-full` buttons, badges, avatars |
+| Radius | `rounded-md` fields, `rounded-lg` small cards, `rounded-xl` section cards and floating panels, `rounded-2xl` dialogs and sheets, `rounded-inset` rows inside a menu, `rounded-full` buttons, badges, avatars |
 | Spacing | steps `0.5 1 1.5 2 3 4 6 8` (`gap-3`, `p-4`, `md:p-8`); 12 and 16 exist only for some properties, so grep first. Page: `mx-auto w-full max-w-6xl p-4 md:p-8`; between cards `gap-4`, items in a card `gap-3` |
 
 Rules: semantic colors first, never `slate`, `gray`, `zinc`, `indigo` or `violet`. Use `<Text variant>` for type, not text sizes: `display`, `title`, `heading`, `subheading`, `body-lg`, `body`, `body-strong`, `caption`, `label`, `code`, with `tone` `muted`, `brand`, `success`, `warning`, `info` or `destructive`. Labels are sentence case. Use one `primary` button per view. Use `<Mark>` on a few words, never a whole sentence.

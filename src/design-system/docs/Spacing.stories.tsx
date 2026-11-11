@@ -154,7 +154,7 @@ export const Roles: Story = {
                 <div
                   key={project}
                   className={cn(
-                    'flex flex-col rounded-xl bg-primary/5',
+                    'flex flex-col rounded-lg bg-primary/5',
                     spacing.card.sm.inset,
                     spacing.card.sm.gap,
                   )}

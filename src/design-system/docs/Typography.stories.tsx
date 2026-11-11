@@ -129,7 +129,7 @@ export const InContext: Story = {
               <Text tone="muted">Done</Text>
             </div>
           </div>
-          <div className="flex flex-col gap-1 rounded-xl bg-primary/5 px-3 py-3 md:px-4">
+          <div className="flex flex-col gap-1 rounded-lg bg-primary/5 px-3 py-3 md:px-4">
             <Text variant="caption">Design</Text>
             <Text variant="body-strong">Website redesign</Text>
             <Text variant="caption" className="line-clamp-2">

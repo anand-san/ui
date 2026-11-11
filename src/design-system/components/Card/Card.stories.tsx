@@ -364,7 +364,7 @@ export const Sizes: Story = {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <div className="h-10 rounded-xl bg-primary/5" />
+            <div className="h-10 rounded-lg bg-primary/5" />
           </CardContent>
         </Card>
       ))}
