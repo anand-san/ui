@@ -55,7 +55,11 @@ export const DialogContent = React.forwardRef<
         ref={ref}
         data-slot="dialog-content"
         data-close={close || undefined}
-        className={cn(modalSurfaceVariants({ placement }), className)}
+        className={cn(
+          modalSurfaceVariants({ placement }),
+          '[&>*]:shrink-0',
+          className,
+        )}
         {...props}
       >
         {children}

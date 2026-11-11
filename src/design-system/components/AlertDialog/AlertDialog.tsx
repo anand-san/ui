@@ -48,7 +48,11 @@ export const AlertDialogContent = React.forwardRef<
       <AlertDialogPrimitive.Content
         ref={ref}
         data-slot="alert-dialog-content"
-        className={cn(modalSurfaceVariants({ placement }), className)}
+        className={cn(
+          modalSurfaceVariants({ placement }),
+          '[&>*]:shrink-0',
+          className,
+        )}
         {...props}
       />
     </AlertDialogPortal>
