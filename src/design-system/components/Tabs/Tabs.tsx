@@ -69,7 +69,7 @@ export const TabsList = React.forwardRef<
           shape="pill"
           aria-label="Scroll tabs left"
           onClick={() => scrollBy(-200)}
-          className="sticky left-0 z-10 size-7 shrink-0"
+          className="sticky left-0 z-10 size-7 shrink-0 pointer-coarse:after:hidden"
         >
           <ChevronLeft />
         </Button>
@@ -82,7 +82,7 @@ export const TabsList = React.forwardRef<
           shape="pill"
           aria-label="Scroll tabs right"
           onClick={() => scrollBy(200)}
-          className="sticky right-0 z-10 size-7 shrink-0"
+          className="sticky right-0 z-10 size-7 shrink-0 pointer-coarse:after:hidden"
         >
           <ChevronRight />
         </Button>
