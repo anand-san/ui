@@ -26,13 +26,24 @@
     background-color: var(--canvas);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: var(--type-body);
     line-height: 1.45;
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     caret-color: var(--accent);
     accent-color: var(--accent);
+  }
+
+  /* On body only: on html it would change the rem every token is sized in */
+  body {
+    font-size: var(--type-body);
+  }
+
+  p,
+  li,
+  figcaption,
+  blockquote {
+    text-wrap: pretty;
   }
 
   /* Smooth the jump when the theme switches, like the system does */
