@@ -152,12 +152,18 @@ export function ListItem({
             {!asChild && children}
           </span>
           {(trailing || chevron) && (
-            <span className="flex shrink-0 items-center gap-2 text-ink-secondary">
-              {trailing}
+            <span className="flex max-w-[60%] min-w-0 items-center justify-end gap-2 text-ink-secondary">
+              {typeof trailing === 'string' ? (
+                <span className="truncate">{trailing}</span>
+              ) : (
+                trailing && (
+                  <span className="flex shrink-0 items-center">{trailing}</span>
+                )
+              )}
               {chevron && (
                 <ChevronRight
                   aria-hidden
-                  className="size-4 text-ink-tertiary"
+                  className="size-4 shrink-0 text-ink-tertiary"
                 />
               )}
             </span>
