@@ -1,27 +1,18 @@
-import { cva } from 'class-variance-authority';
-
 import { focusRing } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
 
-/** A top-level item in the navigation bar: a link or a menu trigger */
-export const navigationMenuItemVariants = cva(
-  [
-    'group inline-flex h-9 w-max items-center justify-center gap-2 rounded-full px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-primary/5 data-[state=open]:text-foreground [&_svg]:size-4 [&_svg]:shrink-0',
-    focusRing,
-  ],
-  {
-    variants: {
-      active: {
-        true: 'bg-primary/5 text-foreground',
-        false: '',
-      },
-    },
-    defaultVariants: { active: false },
-  },
+/**
+ * A top-level item in the navigation bar: a link or a menu trigger. Hover
+ * is a grey fill; the current page is the accent, so the two never look
+ * alike. Radix sets `data-active` and `aria-current` on the active link.
+ */
+export const navigationMenuItemClass = cn(
+  'group inline-flex h-control-md w-max cursor-pointer items-center justify-center gap-1.5 rounded-full px-3.5 text-subhead font-medium text-ink-secondary transition-colors duration-(--duration-fast) hover:bg-fill hover:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-fill data-[state=open]:text-ink data-active:bg-accent-soft data-active:text-accent aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent [&_svg]:size-4 [&_svg]:shrink-0',
+  focusRing,
 );
 
 /** A link inside a navigation menu panel */
 export const navigationMenuLinkClass = cn(
-  'block select-none rounded-lg p-3 no-underline transition-colors hover:bg-primary/5 data-[active=true]:bg-primary/5',
+  'block select-none rounded-item p-3 transition-colors duration-(--duration-fast) hover:bg-fill data-active:bg-accent-soft',
   focusRing,
 );

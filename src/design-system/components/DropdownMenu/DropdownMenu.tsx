@@ -1,12 +1,21 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { Check, ChevronRight, Circle } from 'lucide-react';
-import * as React from 'react';
+import { Check, ChevronRight } from 'lucide-react';
+import type { ComponentProps } from 'react';
 
 import {
   floatingPanelClass,
   menuItemClass,
+  menuItemDangerClass,
+  menuLabelClass,
+  menuSeparatorClass,
 } from '@/design-system/foundations/controls';
 import { cn } from '@/design-system/lib/cn';
+
+/**
+ * A menu of actions, as on the desktop: a translucent panel that grows from
+ * its trigger, rows that fill with the accent as the pointer or the keys
+ * move over them, and checks for the options that are on.
+ */
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -15,171 +24,178 @@ const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-export const DropdownMenuContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      data-slot="dropdown-menu-content"
-      className={cn(
-        floatingPanelClass,
-        'min-w-32 overflow-hidden p-1',
-        className,
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-));
-DropdownMenuContent.displayName = 'DropdownMenuContent';
+export function DropdownMenuContent({
+  className,
+  sideOffset = 6,
+  collisionPadding = 8,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.Content
+        sideOffset={sideOffset}
+        collisionPadding={collisionPadding}
+        data-slot="dropdown-menu-content"
+        className={cn(floatingPanelClass, 'min-w-44', className)}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  );
+}
 
-export interface DropdownMenuItemProps extends React.ComponentPropsWithoutRef<
+export interface DropdownMenuItemProps extends ComponentProps<
   typeof DropdownMenuPrimitive.Item
 > {
   /** Indent to line up with checkbox and radio items */
   inset?: boolean;
-  /** `destructive` for delete and other irreversible actions */
-  variant?: 'default' | 'destructive';
+  /** `danger` for delete and other actions that can't be undone */
+  tone?: 'default' | 'danger';
 }
 
-export const DropdownMenuItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  DropdownMenuItemProps
->(({ className, inset, variant = 'default', ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    data-slot="dropdown-menu-item"
-    className={cn(
-      menuItemClass,
-      inset && 'pl-8',
-      variant === 'destructive' &&
-        'text-destructive focus:bg-destructive/10 data-[highlighted]:bg-destructive/10',
-      className,
-    )}
-    {...props}
-  />
-));
-DropdownMenuItem.displayName = 'DropdownMenuItem';
-
-export const DropdownMenuCheckboxItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
->(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.CheckboxItem
-    ref={ref}
-    className={cn(menuItemClass, 'pl-8', className)}
-    {...props}
-  >
-    <span className="absolute left-2 flex size-4 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <Check />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-    {children}
-  </DropdownMenuPrimitive.CheckboxItem>
-));
-DropdownMenuCheckboxItem.displayName = 'DropdownMenuCheckboxItem';
-
-export const DropdownMenuRadioItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
->(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.RadioItem
-    ref={ref}
-    className={cn(menuItemClass, 'pl-8', className)}
-    {...props}
-  >
-    <span className="absolute left-2 flex size-4 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className="size-2! fill-current" />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-    {children}
-  </DropdownMenuPrimitive.RadioItem>
-));
-DropdownMenuRadioItem.displayName = 'DropdownMenuRadioItem';
-
-export const DropdownMenuLabel = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Label
-    ref={ref}
-    className={cn(
-      'px-2 py-1.5 text-xs font-medium text-muted-foreground',
-      inset && 'pl-8',
-      className,
-    )}
-    {...props}
-  />
-));
-DropdownMenuLabel.displayName = 'DropdownMenuLabel';
-
-export const DropdownMenuSeparator = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Separator
-    ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-border', className)}
-    {...props}
-  />
-));
-DropdownMenuSeparator.displayName = 'DropdownMenuSeparator';
-
-export function DropdownMenuShortcut({
+export function DropdownMenuItem({
   className,
+  inset,
+  tone = 'default',
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) {
+}: DropdownMenuItemProps) {
   return (
-    <span
-      className={cn('ml-auto text-xs text-muted-foreground', className)}
+    <DropdownMenuPrimitive.Item
+      data-slot="dropdown-menu-item"
+      className={cn(
+        menuItemClass,
+        inset && 'pl-8',
+        tone === 'danger' && menuItemDangerClass,
+        className,
+      )}
       {...props}
     />
   );
 }
 
-export const DropdownMenuSubTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
-    inset?: boolean;
-  }
->(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
-    ref={ref}
-    className={cn(
-      menuItemClass,
-      'data-[state=open]:bg-primary/5',
-      inset && 'pl-8',
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <ChevronRight className="ml-auto" />
-  </DropdownMenuPrimitive.SubTrigger>
-));
-DropdownMenuSubTrigger.displayName = 'DropdownMenuSubTrigger';
+const indicatorClass =
+  'absolute left-2.5 flex size-4 items-center justify-center';
 
-export const DropdownMenuSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(
-      floatingPanelClass,
-      'min-w-32 overflow-hidden p-1',
-      className,
-    )}
-    {...props}
-  />
-));
-DropdownMenuSubContent.displayName = 'DropdownMenuSubContent';
+export function DropdownMenuCheckboxItem({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) {
+  return (
+    <DropdownMenuPrimitive.CheckboxItem
+      className={cn(menuItemClass, 'pl-8', className)}
+      {...props}
+    >
+      <span className={indicatorClass}>
+        <DropdownMenuPrimitive.ItemIndicator>
+          <Check strokeWidth={2.5} className="text-current!" />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.CheckboxItem>
+  );
+}
+
+/** A choice of one; the chosen one is checked, as in a native menu */
+export function DropdownMenuRadioItem({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {
+  return (
+    <DropdownMenuPrimitive.RadioItem
+      className={cn(menuItemClass, 'pl-8', className)}
+      {...props}
+    >
+      <span className={indicatorClass}>
+        <DropdownMenuPrimitive.ItemIndicator>
+          <Check strokeWidth={2.5} className="text-current!" />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.RadioItem>
+  );
+}
+
+export function DropdownMenuLabel({
+  className,
+  inset,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Label> & { inset?: boolean }) {
+  return (
+    <DropdownMenuPrimitive.Label
+      className={cn(menuLabelClass, inset && 'pl-8', className)}
+      {...props}
+    />
+  );
+}
+
+export function DropdownMenuSeparator({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
+  return (
+    <DropdownMenuPrimitive.Separator
+      className={cn(menuSeparatorClass, className)}
+      {...props}
+    />
+  );
+}
+
+/** A keyboard shortcut at the end of a row, like ⌘K */
+export function DropdownMenuShortcut({
+  className,
+  ...props
+}: ComponentProps<'span'>) {
+  return (
+    <span
+      className={cn(
+        'ml-auto pl-4 text-subhead tracking-wide text-ink-secondary in-data-highlighted:text-current',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function DropdownMenuSubTrigger({
+  className,
+  inset,
+  children,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
+  inset?: boolean;
+}) {
+  return (
+    <DropdownMenuPrimitive.SubTrigger
+      className={cn(
+        menuItemClass,
+        'data-[state=open]:not-data-highlighted:bg-fill',
+        inset && 'pl-8',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <ChevronRight className="ml-auto" />
+    </DropdownMenuPrimitive.SubTrigger>
+  );
+}
+
+export function DropdownMenuSubContent({
+  className,
+  collisionPadding = 8,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        collisionPadding={collisionPadding}
+        className={cn(floatingPanelClass, 'min-w-44', className)}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  );
+}
 
 export {
   DropdownMenu,
