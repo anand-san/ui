@@ -1,73 +1,45 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
+import { SettingsScreen } from './Showcase';
+
 <Meta title="Introduction" />
 
 # san-ui
 
-Shared foundations and components, built for Eloovor and meant for any app. The base (neutrals, feedback colors, type, spacing, radius and every component) is shared; each app brings its brand as a theme. Use the **Brand** toolbar to see the stories in the Eloovor theme or the teal template theme.
+One interface for every app: tools and dashboards, consumer apps and content sites. It aims to feel native, the way Apple's platforms do: content first, quiet chrome, motion that springs and can always be interrupted.
 
-The base is a dashboard page: soft section cards on the page canvas, tinted item cards inside them.
+<div className="not-prose my-8">
+  <SettingsScreen />
+</div>
 
-## Pen and highlighter
+## What it stands on
 
-The base sets a structure every theme fills in:
+- **Roles, not ramps.** Colors name a job (`bg-surface`, `text-ink-secondary`, `bg-accent`). A theme sets an accent hue and how vivid it is; everything else is derived in OKLCH, at contrast that stays WCAG AA for any hue. A test sweeps all 360 hues in light and dark to prove it.
+- **Grouped surfaces.** A tinted canvas with white groups on it, as in a settings screen. In dark mode elevation is lightness. Cards don't nest; inside a card use a List, an inset well or a separator.
+- **Density.** `data-density` sizes type, controls and rows: `regular` for a mouse, `comfortable` for touch (the default on touch screens, so every target is 44px), `compact` for dense tools.
+- **Springs.** Things that appear grow in with a critically damped spring and leave quickly. Sheets slide in from their edge and drag down to close. Bounce is only for motion a gesture started. Reduced motion cross-fades.
+- **Materials.** Menus, popovers and tooltips are translucent panels that grow from their trigger. With reduced transparency or more contrast they turn solid.
+- **The system font.** San Francisco on Apple devices, the platform face elsewhere, with tracking that tightens as text grows.
 
-- **Ink** is the brand color. It carries the main actions, focus rings, checked controls and selection. The greys are tinted toward it (`--tint-hue`), so nothing on screen is a dead neutral grey, and dark mode is deep ink rather than charcoal.
-- **Highlighter** is the second color. It is a fill, never text: marked words (`Mark`), "New" badges, suggestions and text selection. If it is everywhere it stops meaning anything.
-- **Type** pairs a display face for display, title and heading with a sans for everything people read and operate.
-- **Shape**: buttons are pills. Fields are softly rounded, cards a little more, dialogs most. Shadows are tinted with ink and only used on things that float.
-
-Printed pages (`.force-light-mode`) stay plain paper: neutral greys and Helvetica, so a preview matches its PDF.
-
-See **Guides / Used in Eloovor** for how one app puts it together: its theme, its own status colors and its app-level components.
-
-## Foundations
-
-- **Colors**: semantic tokens with light and dark values, three tint steps, and the supported ramps.
-- **Typography**: ten roles, from `display` to `code`. Pick the role, not the size.
-- **Spacing**: ten steps on the 4px grid, plus named roles like page gutter and card padding.
-
-## Components
-
-- **Text**: renders any type scale role. `Mark` is the highlighter.
-- **Card**: soft, tinted, outline and brand cards in three sizes, with header, title, count, description, action, content and footer parts.
-- **Button**: eight variants (including `inverse` for brand banners), five sizes, pill shape and a loading state.
-- **Badge**: seven tones (including `highlight`) in soft, solid and outline.
-- **StatusMenu**: a status badge that opens a menu to change the status, with tones or the app's own colors.
-- **Avatar**: an image with an initials fallback.
-- **Forms**: Field (label, control and message wired together), Input, Textarea, Label, Select, Checkbox, Switch, DatePicker and Calendar.
-- **PageHeader**: the title block of a page or a step.
-- **Overlays**: Dialog, AlertDialog, Sheet, Popover, DropdownMenu and Tooltip.
-- **Navigation**: Tabs, Accordion and NavigationMenu.
-- **Feedback**: Alert, Progress, ScoreRing, Skeleton, EmptyState and Toaster.
-- **Layout**: Separator and ScrollArea.
-
-Visual components are our own code. Behavior-heavy ones (dialogs, menus, popovers) wrap Radix primitives; see the README for why.
+Use the toolbar to switch light and dark, the theme (default, forest, ember, graphite) and the density. Every story should look right in all of them.
 
 ## Using it
 
-The components live in your app, at `src/design-system/` (the shadcn CLI copies them there), so you import them from your own source through the `@/` alias. The `@sandilya/ui` npm package holds only the tokens, themes and Tailwind theme; never import components from it.
-
-```tsx
-import { Card, CardContent, CardHeader, CardTitle } from '@/design-system';
-
-<Card>
-  <CardHeader>
-    <CardTitle icon={<History />} count={4}>
-      Recent
-    </CardTitle>
-  </CardHeader>
-  <CardContent>…</CardContent>
-</Card>;
-```
-
-Use the toolbar to switch between light and dark mode, and between brands. Every story should look right in all of them.
-
-To add it to an app:
+The components are copied into your app at `src/design-system/` by the shadcn CLI, so you own them and import them through the `@/` alias. The `@sandilya/ui` package holds only the tokens, themes and the Tailwind theme.
 
 ```bash
-bun add @sandilya/ui
+bun add @sandilya/ui motion
 bunx shadcn@latest add https://ui.sandilya.dev/r/san-ui.json
 ```
 
-The color tokens, themes and Tailwind theme come from `@sandilya/ui`; the components are copied into the app at `src/design-system/`. The repository README at [github.com/anand-san/ui](https://github.com/anand-san/ui) has the full setup, the rules and the migration guide.
+```tsx
+import { List, ListItem, ListSection, Switch } from '@/design-system';
+
+<ListSection title="Updates">
+  <List>
+    <ListItem title="Weekly summary" trailing={<Switch />} />
+  </List>
+</ListSection>;
+```
+
+The repository README at [github.com/anand-san/ui](https://github.com/anand-san/ui) has the full setup and the rules.

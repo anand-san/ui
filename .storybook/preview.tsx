@@ -1,32 +1,54 @@
 import './preview.css';
 
-import eloovorTheme from '@sandilya/ui/themes/eloovor.css?inline';
-import templateTheme from '@sandilya/ui/themes/template.css?inline';
+import emberTheme from '@sandilya/ui/themes/ember.css?inline';
+import forestTheme from '@sandilya/ui/themes/forest.css?inline';
+import graphiteTheme from '@sandilya/ui/themes/graphite.css?inline';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Decorator, Preview } from '@storybook/react-vite';
 
-// Brand themes are swapped as one <style> tag, so only one is ever applied
-const brands: Record<string, string> = {
-  eloovor: eloovorTheme,
-  template: templateTheme,
+import { TooltipProvider } from '../src/design-system/components/Tooltip/Tooltip';
+
+// A theme is one <style> tag after the tokens, so only one is ever applied.
+// The default theme is the tokens themselves.
+const themes: Record<string, string> = {
+  default: '',
+  forest: forestTheme,
+  ember: emberTheme,
+  graphite: graphiteTheme,
 };
 
-const withBrand: Decorator = (Story, context) => {
-  const brand = (context.globals.brand as string) ?? 'eloovor';
-  let style = document.getElementById('brand-theme');
+const withTheme: Decorator = (Story, context) => {
+  let style = document.getElementById('san-ui-theme');
   if (!style) {
     style = document.createElement('style');
-    style.id = 'brand-theme';
+    style.id = 'san-ui-theme';
     document.head.appendChild(style);
   }
-  style.textContent = brands[brand] ?? brands.eloovor;
+  style.textContent = themes[context.globals.brand as string] ?? '';
   return <Story />;
 };
+
+// Density goes on the root, so menus and dialogs in portals follow it too
+const withDensity: Decorator = (Story, context) => {
+  const density = context.globals.density as string;
+  if (density && density !== 'auto') {
+    document.documentElement.dataset.density = density;
+  } else {
+    delete document.documentElement.dataset.density;
+  }
+  return <Story />;
+};
+
+const withProviders: Decorator = Story => (
+  <TooltipProvider>
+    <Story />
+  </TooltipProvider>
+);
 
 const preview: Preview = {
   parameters: {
     layout: 'padded',
-    // Themes come from the design system's own light and dark tokens
+    // Backgrounds come from the design system's own light and dark tokens
     backgrounds: { disable: true },
     controls: {
       expanded: true,
@@ -37,30 +59,48 @@ const preview: Preview = {
         order: [
           'Introduction',
           'Foundations',
-          ['Colors', 'Typography', 'Spacing'],
+          ['Colors', 'Typography', 'Spacing', 'Motion'],
           'Components',
-          'Guides',
+          'Patterns',
         ],
       },
     },
   },
   globalTypes: {
     brand: {
-      description: 'Brand theme',
+      description: 'Theme',
       toolbar: {
-        title: 'Brand',
+        title: 'Theme',
         icon: 'paintbrush',
         items: [
-          { value: 'eloovor', title: 'Eloovor' },
-          { value: 'template', title: 'Template (teal)' },
+          { value: 'default', title: 'Default (blue)' },
+          { value: 'forest', title: 'Forest' },
+          { value: 'ember', title: 'Ember' },
+          { value: 'graphite', title: 'Graphite' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    density: {
+      description: 'Density',
+      toolbar: {
+        title: 'Density',
+        icon: 'component',
+        items: [
+          { value: 'auto', title: 'Auto (by pointer)' },
+          { value: 'compact', title: 'Compact' },
+          { value: 'regular', title: 'Regular' },
+          { value: 'comfortable', title: 'Comfortable' },
         ],
         dynamicTitle: true,
       },
     },
   },
-  initialGlobals: { brand: 'eloovor' },
+  initialGlobals: { brand: 'default', density: 'auto' },
   decorators: [
-    withBrand,
+    withProviders,
+    withTheme,
+    withDensity,
     withThemeByClassName({
       themes: { light: '', dark: 'dark' },
       defaultTheme: 'light',
