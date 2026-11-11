@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { ElementType, HTMLAttributes, Ref } from 'react';
 
 import {
   defaultTextElement,
@@ -8,26 +8,36 @@ import {
 } from '@/design-system/foundations/typography';
 import { cn } from '@/design-system/lib/cn';
 
-export interface TextProps extends React.HTMLAttributes<HTMLElement> {
+export interface TextProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<HTMLElement>;
   /** The role of the text; sets size, weight and the default element */
   variant?: TextVariant;
   tone?: TextTone;
+  /** Digits of equal width, for numbers that line up or change in place */
+  numeric?: boolean;
   /** Cut overflow to one line with an ellipsis */
   truncate?: boolean;
-  /** Render as a different element, e.g. `as="h2"` on a display number */
-  as?: React.ElementType;
+  /** Render a different element, like `as="h2"` on a `title-1` */
+  as?: ElementType;
 }
 
-export const Text = React.forwardRef<HTMLElement, TextProps>(
-  ({ variant = 'body', tone, truncate, as, className, ...props }, ref) => {
-    const Component = as ?? defaultTextElement[variant];
-    return (
-      <Component
-        ref={ref}
-        className={cn(textVariants({ variant, tone, truncate }), className)}
-        {...props}
-      />
-    );
-  },
-);
-Text.displayName = 'Text';
+export function Text({
+  variant = 'body',
+  tone,
+  numeric,
+  truncate,
+  as,
+  className,
+  ...props
+}: TextProps) {
+  const Component = as ?? defaultTextElement[variant];
+  return (
+    <Component
+      className={cn(
+        textVariants({ variant, tone, numeric, truncate }),
+        className,
+      )}
+      {...props}
+    />
+  );
+}
