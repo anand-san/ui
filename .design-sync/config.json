@@ -10,8 +10,15 @@
   "tsconfig": "../../../tsconfig.json",
   "titleMap": {
     "Colors": null,
+    "Create form": null,
+    "Dashboard": null,
+    "Detail screen": null,
     "Motion": null,
+    "Phone app": null,
+    "Pricing page": null,
+    "Search and filter": null,
     "Settings screen": null,
+    "Sign in": null,
     "Spacing": null,
     "Typography": null
   },

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { SettingsScreen } from './Showcase';
+import { SettingsScreen } from './Settings';
 
 const meta = {
   title: 'Patterns/Settings screen',
